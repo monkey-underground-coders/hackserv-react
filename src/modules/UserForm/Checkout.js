@@ -10,7 +10,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-import AddressForm from './Form';
+import PersonForm from './Form';
 import Review from './Review';
 
 function Copyright() {
@@ -68,7 +68,7 @@ const steps = ['Данные о себе', 'Команды'];
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return <AddressForm />;
+      return <PersonForm />;
     case 1:
       return <Review />;
     default:
@@ -115,6 +115,9 @@ export default function Checkout() {
               <React.Fragment>
                 <Typography variant="h5" gutterBottom>
                   Регистрация прошла успешно.
+                </Typography>
+                <Typography variant="subtitle1">
+                  Ожидайте подтверждения от организатора.
                 </Typography>
               </React.Fragment>
             ) : (

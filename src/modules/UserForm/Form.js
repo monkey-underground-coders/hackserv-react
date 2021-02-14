@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddressForm() {
+export default function PersonForm() {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -93,14 +93,7 @@ export default function AddressForm() {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
-          <Button
-            variant="contained"
-            color="primary"
-          >
-          Загрузить
-          </Button>
-        </Grid>
+        
         <Grid item xs={12}>
           <TextField
             id="outlined-multiline-static"
@@ -111,7 +104,14 @@ export default function AddressForm() {
             fullWidth
           />
         </Grid>
-        
+        <Grid item xs={12} sm={6}>
+          <Button
+            variant="contained"
+            color="primary"
+          >
+          Загрузить резюме
+          </Button>
+        </Grid>
       </Grid>
     </React.Fragment>
   );
