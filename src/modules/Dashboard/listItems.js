@@ -9,7 +9,7 @@ import GavelIcon from '@material-ui/icons/Gavel';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import StarsIcon from '@material-ui/icons/Stars';
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import CallMadeIcon from '@material-ui/icons/CallMade';
 
 export const mainListItems = (
   <div>
@@ -34,6 +34,12 @@ export const secondaryListItems = (
     <ListSubheader inset>Хакатон</ListSubheader>
     <ListItem button>
       <ListItemIcon>
+        <CallMadeIcon />
+      </ListItemIcon>
+      <ListItemText primary="Подать заявку" />
+    </ListItem>
+    <ListItem button>
+      <ListItemIcon>
         <PeopleOutlineIcon />
       </ListItemIcon>
       <ListItemText primary="Все команды" />
@@ -48,7 +54,7 @@ export const secondaryListItems = (
       <ListItemIcon>
         <ListAltIcon />
       </ListItemIcon>
-      <ListItemText primary="Рассписание" />
+      <ListItemText primary="Расписание" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
