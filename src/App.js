@@ -1,8 +1,9 @@
 import './App.css';
 import Checkout from './modules/UserForm/Checkout'
+import Dashboard from './modules/Dashboard/Dashboard'
 
 function App() {
-  return (<Checkout></Checkout>);
+  return (<Dashboard/>);
 }
 
 export default App;
