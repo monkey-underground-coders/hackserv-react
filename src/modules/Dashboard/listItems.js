@@ -10,6 +10,16 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import StarsIcon from '@material-ui/icons/Stars';
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import CallMadeIcon from '@material-ui/icons/CallMade';
+import { Link } from 'react-router-dom';
+
+const styles = {
+  linkDecNone: {
+    outline: 'none',
+    textDecoration: 'none',
+    color: '#000'
+  },
+};
+
 
 export const mainListItems = (
   <div>
@@ -32,12 +42,14 @@ export const mainListItems = (
 export const secondaryListItems = (
   <div>
     <ListSubheader inset>Хакатон</ListSubheader>
-    <ListItem button>
-      <ListItemIcon>
-        <CallMadeIcon />
-      </ListItemIcon>
-      <ListItemText primary="Подать заявку" />
-    </ListItem>
+    <Link to='/dashboard/registration-profile' style={styles.linkDecNone}>
+      <ListItem button>
+        <ListItemIcon>
+          <CallMadeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Подать заявку" />
+      </ListItem>
+    </Link>
     <ListItem button>
       <ListItemIcon>
         <PeopleOutlineIcon />
