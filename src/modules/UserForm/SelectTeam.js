@@ -24,6 +24,7 @@ export default function SimpleSelect() {
   return (
         <FormControl className={classes.formControl}>
             <Select
+            required
             value={age}
             onChange={handleChange}
             displayEmpty

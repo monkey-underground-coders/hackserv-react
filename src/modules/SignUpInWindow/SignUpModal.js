@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: '2px',
+    border: '0.2px solid #fff',
     borderRadius: '4%',
     padding: theme.spacing(2, 4, 3),
   },
@@ -51,6 +51,7 @@ export default function TransitionsModal() {
         BackdropProps={{
           timeout: 500,
         }}
+        disableAutoFocus={false}
       >
         <Fade in={open}>
           <div className={classes.paper}>

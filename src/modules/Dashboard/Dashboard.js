@@ -21,6 +21,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import SignUpModal from '../SignUpInWindow/SignUpModal';
 import SignInModal from '../SignUpInWindow/SignInModal';
+import Checkout from '../UserForm/Checkout'
 
 
 function Copyright() {
@@ -37,7 +38,17 @@ function Copyright() {
 }
 
 const drawerWidth = 240;
+let flag = 0;
 
+function setFlag(a) {
+  flag = a;
+}
+
+function Main () {
+  if (flag == 0){
+    return <Checkout />
+  }
+}
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -170,7 +181,7 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-
+            <Main />
           </Grid>
           <Box pt={4}>
             <Copyright />

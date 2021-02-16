@@ -60,17 +60,7 @@ export default function ControlledAccordions() {
                 autoComplete="no"
             />
             </Grid>
-            <Grid item xs={12} sm={6}>
-            <TextField
-                required
-                id="teamTag"
-                name="teamTag"
-                label="Тэг команды"
-                fullWidth
-                autoComplete="no"
-                inputProps={{ maxLength: 5 }}
-            />
-            </Grid>
+            
             <Grid item xs={12}>
                 <TextField
                     required
