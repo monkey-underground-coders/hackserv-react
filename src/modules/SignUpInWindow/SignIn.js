@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import SignUpModal from '../SignUpInWindow/SignUpModal';
 
 function Copyright() {
   return (
@@ -105,14 +106,12 @@ export default function SignIn() {
             <Grid item>
               <Link href="#" variant="body2">
                 {"Нет аккаунта? Зарегистрируйтесь"}
+                <SignUpModal />
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }

@@ -24,16 +24,6 @@ export default function PersonForm() {
         <Grid item xs={12} sm={4}>
           <TextField
             required
-            id="firstName"
-            name="firstName"
-            label="Имя"
-            fullWidth
-            autoComplete="given-name"
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            required
             id="lastName"
             name="lastName"
             label="Фамилия"
@@ -44,6 +34,15 @@ export default function PersonForm() {
         <Grid item xs={12} sm={4}>
           <TextField
             required
+            id="firstName"
+            name="firstName"
+            label="Имя"
+            fullWidth
+            autoComplete="given-name"
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <TextField
             id="middleName"
             name="middleName"
             label="Отчество"
@@ -56,7 +55,7 @@ export default function PersonForm() {
             required
             id="university"
             name="university"
-            label="Университет/Школа"
+            label="Университет/Школа/Место работы"
             fullWidth
             autoComplete="off"
           />
@@ -72,16 +71,6 @@ export default function PersonForm() {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="email"
-            name="email"
-            label="Email"
-            fullWidth
-            autoComplete="email"
-          />
-        </Grid>
-        <Grid item xs={12} sm={8}>
           <TextField
             required
             id="date"

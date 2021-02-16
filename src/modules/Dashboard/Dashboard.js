@@ -22,6 +22,7 @@ import { mainListItems, secondaryListItems } from './listItems';
 import SignUpModal from '../SignUpInWindow/SignUpModal';
 import SignInModal from '../SignUpInWindow/SignInModal';
 import Checkout from '../UserForm/Checkout'
+import Button from '@material-ui/core/Button';
 
 
 function Copyright() {
@@ -49,6 +50,7 @@ function Main () {
     return <Checkout />
   }
 }
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -126,19 +128,32 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  signUpButton: {
+    marginRight: theme.spacing(4),
+  },
+  signInButton: {
+    marginRight: theme.spacing(2),
+  },
 }));
 
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [openModalIn, setOpenModalIn] = React.useState(false);
+  const [openModalUp, setOpenModalUp] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const handleModalOpenIn = () => {
+    setOpenModalIn(true);
+  };
+  const handleModalOpenUp = () => {
+    setOpenModalUp(true);
+  };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -156,8 +171,14 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <SignUpModal/>
-          <SignInModal/>
+          <Button variant="contained" color="default" className={classes.signUpButton} onClick={handleModalOpenUp}>
+            Зарегистрироваться 
+          </Button>
+          <Button variant="contained" color="default" className={classes.signInButton} onClick={handleModalOpenIn}>
+            Войти 
+          </Button>
+          <SignUpModal openModal={openModalUp} setOpenModal={setOpenModalUp} />
+          <SignInModal openModal={openModalIn} setOpenModal={setOpenModalIn} />
         </Toolbar>
       </AppBar>
       <Drawer

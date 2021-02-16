@@ -23,37 +23,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TransitionsModal() {
+export default function TransitionsModal({openModal, setOpenModal}) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenModal(false);
   };
 
   return (
     <div>
-      <Button variant="contained" color="default" className={classes.signInButton} onClick={handleOpen}>
-        Войти
-      </Button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={open}
+        open={openModal}
         onClose={handleClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
-        disableAutoFocus={false}
+        disableAutoFocus
       >
-        <Fade in={open}>
+        <Fade in={openModal}>
           <div className={classes.paper}>
             <SignIn/>
           </div>

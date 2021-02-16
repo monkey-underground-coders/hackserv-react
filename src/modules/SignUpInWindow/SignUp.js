@@ -92,6 +92,12 @@ export default function SignUp() {
                 label="Я согласен на подтверждение через Email адрес"
               />
             </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                label="Я согласен с политикой конфиденциальности и на обработку моих персональных данных"
+              />
+            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -111,9 +117,6 @@ export default function SignUp() {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }
