@@ -14,6 +14,9 @@ import Container from '@material-ui/core/Container';
 import SignInModal from '../SignUpInWindow/SignInModal';
 import LockIcon from '@material-ui/icons/Lock';
 import { Link } from 'react-router-dom';
+import VkLogo from '../../assets/vk-logo.svg';
+import GoogleLogo from '../../assets/google-logo.svg';
+import GitLogo from '../../assets/GitHub-logo.svg';
 
 function Copyright() {
   return (
@@ -39,12 +42,20 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.primary.main,
   },
+  avatarLogo: {
+    margin: theme.spacing(1),
+    width: theme.spacing(5),
+    height: theme.spacing(5),
+  },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  linkdecor: {
+    color: theme.palette.primary.main,
   },
 }));
 
@@ -61,6 +72,23 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Зарегистрироваться
         </Typography>
+        <Grid container spacing={4} justify={'center'}>
+            <Grid item xs={6} sm={2}>
+              <Link to='/oauth2/authorization/vk'>
+                <Avatar src={VkLogo} className={classes.avatarLogo} />
+              </Link>
+            </Grid>
+            <Grid item xs={6} sm={2}>
+              <Link to='/oauth2/authorization/google'>
+                <Avatar src={GoogleLogo} className={classes.avatarLogo} />
+              </Link>
+            </Grid>
+            <Grid item xs={6} sm={2}>
+              <Link to='/oauth2/authorization/github'>
+                <Avatar src={GitLogo} className={classes.avatarLogo} />
+              </Link>
+            </Grid>
+        </Grid>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -110,7 +138,7 @@ export default function SignUp() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link to='/signin'>
+              <Link to='/user/login' className={classes.linkdecor}>
                 Уже есть аккаунт? Войти
               </Link>
             </Grid>

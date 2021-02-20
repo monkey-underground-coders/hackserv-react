@@ -117,9 +117,9 @@ export default function SignInSide() {
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Link href="#" variant="body2">
+                  <Link href="/user/create" variant="body2">
                     {"Нет аккаунта? Зарегистрируйтесь"}
-                    </Link>
+                  </Link>
                 </Grid>
             </Grid>
             <Box mt={5}>

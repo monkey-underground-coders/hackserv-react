@@ -46,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  linkdecor: {
+    color: theme.palette.primary.main,
+  },
 }));
 
 export default function SignIn() {
@@ -99,12 +102,12 @@ export default function SignIn() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                Забыли пароль?
+              <Link href="#" className={classes.linkdecor} variant="body2">
+                {"Забыли пароль?"}
               </Link>
             </Grid>
             <Grid item>
-              <Link to='/registration'>
+              <Link to="/user/create" className={classes.linkdecor} variant="body2">
                 {"Нет аккаунта? Зарегистрируйтесь"}
               </Link>
             </Grid>
