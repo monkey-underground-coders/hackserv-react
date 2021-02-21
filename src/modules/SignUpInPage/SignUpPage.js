@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,7 +16,8 @@ import VkLogo from '../../assets/vk-logo.svg';
 import GoogleLogo from '../../assets/google-logo.svg';
 import GitLogo from '../../assets/GitHub-logo.svg';
 import { Link } from 'react-router-dom';
-import {signupPost} from '../../Api/api'
+import { userCreate } from '../../Redux/Reducers/users';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,6 +60,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleClick = event => {
+    event.preventDefault();
+    console.log("hello click");
+    dispatch(userCreate({ email, password }));
+  };
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -99,6 +110,8 @@ export default function SignInSide() {
               label="Email"
               name="email"
               autoComplete="email"
+              value={email}
+              onChange={evt => setEmail(evt.target.value)}
               autoFocus
             />
             <TextField
@@ -111,6 +124,8 @@ export default function SignInSide() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={evt => setPassword(evt.target.value)}
             />
             <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -127,7 +142,7 @@ export default function SignInSide() {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={signupPost}
+              onClick={handleClick}
             >
               Зарегистрироваться
             </Button>

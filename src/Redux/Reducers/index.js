@@ -1,8 +1,10 @@
-import {combineReducers} from 'redux'
-import isLogged from './isLogged'
+import {combineReducers} from 'redux';
+import isLogged from './isLogged';
+import users from './users';
 
 const allReducers = combineReducers({
-    isLogged : isLogged,
+    isLogged,
+    users
 });
 
 export default allReducers;
