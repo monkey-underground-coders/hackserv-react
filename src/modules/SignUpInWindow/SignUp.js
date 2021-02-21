@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,6 +17,8 @@ import { Link } from 'react-router-dom';
 import VkLogo from '../../assets/vk-logo.svg';
 import GoogleLogo from '../../assets/google-logo.svg';
 import GitLogo from '../../assets/GitHub-logo.svg';
+import { userCreate } from '../../Redux/Reducers/users';
+import { useDispatch } from 'react-redux';
 
 function Copyright() {
   return (
@@ -61,6 +63,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleClick = event => {
+    event.preventDefault();
+    dispatch(userCreate({ email, password }));
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -93,31 +104,32 @@ export default function SignUp() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={evt => setEmail(evt.target.value)}
+              autoFocus
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Пароль"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="Я согласен на подтверждение через Email адрес"
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Пароль"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={evt => setPassword(evt.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -133,6 +145,7 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleClick}
           >
             Зарегистрироваться
           </Button>

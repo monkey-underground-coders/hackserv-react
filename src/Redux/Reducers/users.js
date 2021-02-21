@@ -4,7 +4,6 @@ import { signupPost } from '../../Api';
 export const userCreate = createAsyncThunk(
     'user/create',
     async ({ email, password }, thunkAPI) => {
-        console.log("hello world");
         const response = await signupPost(email, password);
         return response;
     }

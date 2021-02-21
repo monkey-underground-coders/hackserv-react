@@ -18,6 +18,7 @@ import GitLogo from '../../assets/GitHub-logo.svg';
 import { Link } from 'react-router-dom';
 import { userCreate } from '../../Redux/Reducers/users';
 import { useDispatch } from 'react-redux';
+import SignUp from '../SignUpInWindow/SignUp'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,101 +61,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   const classes = useStyles();
-  const dispatch = useDispatch();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleClick = event => {
-    event.preventDefault();
-    console.log("hello click");
-    dispatch(userCreate({ email, password }));
-  };
 
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5" gutterBottom>
-            Зарегистрироваться
-          </Typography>
-          <Grid container spacing={4} justify={'center'}>
-            <Grid item xs={6} sm={2}>
-              <Link to='/oauth2/authorization/vk'>
-                <Avatar src={VkLogo} className={classes.avatarLogo} />
-              </Link>
-            </Grid>
-            <Grid item xs={6} sm={2}>
-              <Link to='/oauth2/authorization/google'>
-                <Avatar src={GoogleLogo} className={classes.avatarLogo} />
-              </Link>
-            </Grid>
-            <Grid item xs={6} sm={2}>
-              <Link to='/oauth2/authorization/github'>
-                <Avatar src={GitLogo} className={classes.avatarLogo} />
-              </Link>
-            </Grid>
-          </Grid>
-          <form className={classes.form} noValidate>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email"
-              name="email"
-              autoComplete="email"
-              value={email}
-              onChange={evt => setEmail(evt.target.value)}
-              autoFocus
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Пароль"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={evt => setPassword(evt.target.value)}
-            />
-            <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="Я согласен на подтверждение через Email адрес"
-              />
-              <FormControlLabel
-                control={<Checkbox value="privacyPolicyAgreement" color="primary" />}
-                label="Я согласен с политикой конфиденциальности и на обработку моих персональных данных"
-              />
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={handleClick}
-            >
-              Зарегистрироваться
-            </Button>
-            <Grid container>
-              <Grid item>
-                <Link to="/user/login" variant="body2" className={classes.linkdecor}>
-                  {"Уже есть аккаунт? Войти"}
-                </Link>
-              </Grid>
-            </Grid>
-          </form>
-        </div>
+      <Grid item xs={8} md={9} className={classes.image} />
+      <Grid item xs={10} md={3} component={Paper} elevation={6} square>
+        <SignUp />
       </Grid>
     </Grid>
   );
