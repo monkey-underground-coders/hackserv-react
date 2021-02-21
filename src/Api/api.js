@@ -1,7 +1,8 @@
 import * as axios from "axios";
+import { Ip } from '../config' 
 
 const instance = axios.create({
-    baseURL: 'http://95.216.137.74:8080/hackserv-spring/',
+    baseURL: Ip(),
 })
 
 export const signupPost = (userEmail, userPassword) => {
