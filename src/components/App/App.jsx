@@ -1,12 +1,13 @@
-import Dashboard from "@components/Dashboard/Dashboard";
-import { SignUpPage } from "@components/SignUp";
-import { LoginPage } from "@components/Login";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from "react-router-dom";
+
+import Dashboard from "@components/Dashboard/Dashboard";
+import { SignUpPage } from "@components/SignUp";
+import { LoginPage } from "@components/Login";
 
 function App() {
   return (

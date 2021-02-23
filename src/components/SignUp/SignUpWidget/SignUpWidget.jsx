@@ -11,11 +11,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import LockIcon from "@material-ui/icons/Lock";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import VkLogo from "@assets/vk-logo.svg";
 import GoogleLogo from "@assets/google-logo.svg";
 import GitLogo from "@assets/GitHub-logo.svg";
 import { userCreate } from "@redux/users";
-import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

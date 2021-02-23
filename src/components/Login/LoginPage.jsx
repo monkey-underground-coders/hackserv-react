@@ -1,4 +1,5 @@
-import { makePage } from '@components/ImageWidgetPage';
 import LoginWidget from './LoginWidget';
+
+import { makePage } from '@components/ImageWidgetPage';
 
 export default makePage(LoginWidget);
