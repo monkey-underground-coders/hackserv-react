@@ -1,0 +1,1 @@
+export { makePage, default } from './ImageWidgetPage';

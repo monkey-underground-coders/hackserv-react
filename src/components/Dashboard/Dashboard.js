@@ -16,27 +16,12 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { mainListItems, secondaryListItems } from './listItems';
-import SignUpModal from '../SignUpInWindow/SignUpModal';
-import SignInModal from '../SignUpInWindow/SignInModal';
-import Checkout from '../UserForm/Checkout'
+import { SignUpModal } from '@components/SignUp';
+import Checkout from '@components/UserForm/Checkout'
 import Button from '@material-ui/core/Button';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import SignUpPage from '../SignUpInPage/SignUpPage';
-import SignInPage from '../SignUpInPage/SignInPage';
-
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { LoginModal } from '@components/Login';
+import Copyright from '@components/Copyright';
 
 const drawerWidth = 240;
 
@@ -142,6 +127,7 @@ export default function Dashboard() {
   const handleModalOpenUp = () => {
     setOpenModalUp(true);
   };
+
   return (
     <Router>
       <div className={classes.root}>
@@ -167,7 +153,7 @@ export default function Dashboard() {
               Войти 
             </Button>
             <SignUpModal openModal={openModalUp} setOpenModal={setOpenModalUp} />
-            <SignInModal openModal={openModalIn} setOpenModal={setOpenModalIn} />
+            <LoginModal openModal={openModalIn} setOpenModal={setOpenModalIn} />
           </Toolbar>
         </AppBar>
         <Drawer
