@@ -5,7 +5,7 @@ const aliasMap = {
   "@config": 'src/config.js',
   "@assets": 'src/assets',
   "@api": 'src/api',
-  "@utils": 'src/utils.js',
+  "@utils": 'src/utils',
   "@redux": 'src/redux'
 }
 

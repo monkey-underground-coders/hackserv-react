@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { decodeJwt } from "@utils/jwt";
+import { decode as decodeJwt } from "@utils/jwt";
 import { loginPost, updateAccessTokenPost } from "@api";
 
 export const login = createAsyncThunk(
