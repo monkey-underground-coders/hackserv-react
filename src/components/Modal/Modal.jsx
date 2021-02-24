@@ -8,13 +8,14 @@ const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
     border: "0.2px solid #fff",
     borderRadius: "4%",
     padding: theme.spacing(2, 4, 3),
+    outline: 0
   },
   signInButton: {
     marginRight: "1rem",

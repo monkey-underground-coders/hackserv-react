@@ -12,7 +12,6 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Button from '@material-ui/core/Button';
@@ -21,7 +20,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { LoginModal } from '@components/Login';
 import Copyright from '@components/Copyright';
 import { SignUpModal } from '@components/SignUp';
-import Checkout from '@components/UserForm/Checkout'
+import AttendeeForm from '@components/forms/AttendeeForm'
 import { mainListItems, secondaryListItems } from './listItems';
 
 const drawerWidth = 240;
@@ -179,7 +178,7 @@ export default function Dashboard() {
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
               <Switch>
-                <Route path="/dashboard/registration-profile" component={Checkout} />
+                <Route path="/dashboard/registration-profile" component={AttendeeForm} />
               </Switch>
             </Grid>
             <Box pt={4}>
