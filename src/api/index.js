@@ -26,17 +26,20 @@ const defaultBodyHeaders = {
 };
 
 
-export const loginPost = (userEmail, userPassword) => {
+export const loginPost = async (userEmail, userPassword) => {
   const encoded = window.btoa(userEmail + ":" + userPassword);
   const auth = "Basic " + encoded;
-  basicAxios
-    .post("/auth/convert", {
+  console.log(auth);
+  return basicAxios
+    .post("/auth/convert", "", {
       headers: {
         ...defaultBodyHeaders,
         Authorization: auth,
     }})
     .then((res) => {
       console.log(res.data)
-    })};
+      return res.data;
+    })
+};
 
 export const updateAccessTokenPost = (refreshToken) => Promise.reject();
