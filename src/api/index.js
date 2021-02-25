@@ -43,13 +43,12 @@ export const signupPost = (userEmail, userPassword) =>
       return user;
     });
 
-export const loginPost = async (userEmail, userPassword) => {
-  return axiosWithBasic(userEmail, userPassword)
+export const loginPost = (userEmail, userPassword) => 
+  axiosWithBasic(userEmail, userPassword)
     .post("/auth/convert")
     .then((res) => {
       console.log(res.data)
       return res.data;
-    })
-};
+    });
 
 export const updateAccessTokenPost = (refreshToken) => Promise.reject();

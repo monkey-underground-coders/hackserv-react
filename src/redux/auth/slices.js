@@ -31,25 +31,6 @@ export const auth = createSlice({
     userId: 0,
   },
   reducers: {
-    authenticate(state, { payload }) {
-      const {
-        accessToken,
-        accessTokenExpiredAt,
-        refreshToken,
-        refreshTokenExpiredAt,
-      } = payload;
-
-      state.tokens = {
-        accessToken,
-        accessTokenExpiredAt: Date.parse(accessTokenExpiredAt),
-        refreshToken,
-        refreshTokenExpiredAt: Date.parse(refreshTokenExpiredAt),
-      };
-
-      const { userId } = decodeJwt(accessToken);
-
-      state.userId = userId;
-    },
     logout(state) {
       state.userId = 0;
       state.tokens = {
@@ -60,6 +41,27 @@ export const auth = createSlice({
       };
     },
   },
+  extraReducers: {
+    [login.fulfilled]: (state, { payload }) => {
+      const {
+        accessToken,
+        accessTokenExpiringAt,
+        refreshToken,
+        refreshTokenExpiringAt,
+      } = payload;
+    
+      state.tokens = {
+        accessToken,
+        accessTokenExpiredAt: new Date(accessTokenExpiringAt),
+        refreshToken,
+        refreshTokenExpiredAt: new Date(refreshTokenExpiringAt),
+      };
+
+      const { userId } = decodeJwt(accessToken);
+
+      state.userId = userId;
+    }
+  }
 });
 
 const actions = auth.actions;

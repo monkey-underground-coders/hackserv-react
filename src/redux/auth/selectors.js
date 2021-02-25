@@ -7,7 +7,7 @@ const tokensSelector = state => state.auth.tokens;
 
 export const loggedInSelector = createSelector(
   authSelector,
-  auth => auth.userId !== 0 && auth.tokens.accessToken && Date.now() < auth.tokens.accessTokenExpiredAt
+  auth => auth.userId !== 0 && auth.tokens.accessToken && Date.now() < new Date(auth.tokens.accessTokenExpiredAt)
 );
 
 export const accessTokenSelector = state => state.auth.tokens.accessToken;
@@ -16,10 +16,10 @@ export const refreshTokenSelector = state => state.auth.tokens.refreshToken;
 
 export const accessValidSelector = createSelector(
   tokensSelector,
-  ({accessToken, accessTokenExpiredAt}) => accessToken && Date.now() < accessTokenExpiredAt
+  ({accessToken, accessTokenExpiredAt}) => accessToken && Date.now() < new Date(accessTokenExpiredAt)
 );
 
 export const refreshValidSelector = createSelector(
   tokensSelector,
-  ({refreshToken, refreshTokenExpiredAt}) => refreshToken && Date.now() < refreshTokenExpiredAt
+  ({refreshToken, refreshTokenExpiredAt}) => refreshToken && Date.now() < new Date(refreshTokenExpiredAt)
 );
