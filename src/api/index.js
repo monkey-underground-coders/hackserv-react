@@ -1,12 +1,38 @@
 import * as axios from "axios";
 import { Ip } from "../config";
 
-const basicAxios = axios.create({
+
+const defaultHeaders = {};
+
+const defaultBodyHeaders = {
+  ...defaultHeaders,
+  "Content-Type": "application/json",
+};
+
+const basicAxios = () => axios.create({
   baseURL: Ip(),
+  headers: defaultBodyHeaders
+});
+
+const axiosWithBasic = (email, password) => axios.create({
+  baseURL: Ip(),
+  headers: defaultBodyHeaders,
+  auth: {
+    username: email,
+    password
+  }
+});
+
+const mainAxios = (access) => axios.create({
+  baseURL: Ip(),
+  headers: { 
+    ...defaultBodyHeaders,
+    Authorization: `Bearer ${access}`
+  }
 });
 
 export const signupPost = (userEmail, userPassword) =>
-  basicAxios
+  basicAxios()
     .post("/user/create", {
       email: userEmail,
       password: userPassword,
@@ -17,25 +43,9 @@ export const signupPost = (userEmail, userPassword) =>
       return user;
     });
 
-
-const defaultHeaders = {};
-
-const defaultBodyHeaders = {
-  ...defaultHeaders,
-  "Content-Type": "application/json",
-};
-
-
 export const loginPost = async (userEmail, userPassword) => {
-  const encoded = window.btoa(userEmail + ":" + userPassword);
-  const auth = "Basic " + encoded;
-  console.log(auth);
-  return basicAxios
-    .post("/auth/convert", "", {
-      headers: {
-        ...defaultBodyHeaders,
-        Authorization: auth,
-    }})
+  return axiosWithBasic(userEmail, userPassword)
+    .post("/auth/convert")
     .then((res) => {
       console.log(res.data)
       return res.data;
