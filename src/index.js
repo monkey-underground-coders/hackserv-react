@@ -6,7 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import allReducers from '@redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import * as configChecker from './configChecker'
+
+import { configChecker } from '@validation'
 
 configChecker.IpCheck();
 

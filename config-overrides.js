@@ -6,7 +6,8 @@ const aliasMap = {
   "@assets": 'src/assets',
   "@api": 'src/api',
   "@utils": 'src/utils',
-  "@redux": 'src/redux'
+  "@redux": 'src/redux',
+  "@validation" : 'src/validation'
 }
 
 module.exports = alias(aliasMap)

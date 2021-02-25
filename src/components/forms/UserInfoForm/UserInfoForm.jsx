@@ -27,6 +27,10 @@ export default function UserInfoForm() {
             label="Фамилия"
             fullWidth
             autoComplete="family-name"
+            inputProps={{
+              maxlength: 250,
+            }}
+
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -37,6 +41,9 @@ export default function UserInfoForm() {
             label="Имя"
             fullWidth
             autoComplete="given-name"
+            inputProps={{
+              maxlength: 250,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -46,6 +53,9 @@ export default function UserInfoForm() {
             label="Отчество"
             fullWidth
             autoComplete="additional-name"
+            inputProps={{
+              maxlength: 250,
+            }}
           />
         </Grid>
         <Grid item xs={12}>
@@ -56,6 +66,9 @@ export default function UserInfoForm() {
             label="Университет/Школа/Место работы"
             fullWidth
             autoComplete="off"
+            inputProps={{
+              maxlength: 250,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -66,6 +79,10 @@ export default function UserInfoForm() {
             label="Telegram"
             fullWidth
             autoComplete="off"
+            inputProps={{
+              maxlength: 250,
+              pattern: '@[A-Za-z0-9]*'
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -89,7 +106,9 @@ export default function UserInfoForm() {
             rows={4}
             variant="outlined"
             fullWidth
-            
+            inputProps={{
+              maxlength: 250,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>

@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,6 +11,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+import { login } from "@redux/auth/slices"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,6 +40,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LoginWidget() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    dispatch(login({ email, password }));
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -58,6 +70,8 @@ export default function LoginWidget() {
             label="Email"
             name="email"
             autoComplete="email"
+            value={email}
+            onChange={(evt) => setEmail(evt.target.value)}
             autoFocus
           />
           <TextField
@@ -70,6 +84,8 @@ export default function LoginWidget() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={(evt) => setPassword(evt.target.value)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -81,6 +97,7 @@ export default function LoginWidget() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleClick}
           >
             Войти
           </Button>

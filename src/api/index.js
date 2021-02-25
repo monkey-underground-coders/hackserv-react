@@ -17,6 +17,26 @@ export const signupPost = (userEmail, userPassword) =>
       return user;
     });
 
-export const loginPost = (userEmail, userPassword) => Promise.reject();
+
+const defaultHeaders = {};
+
+const defaultBodyHeaders = {
+  ...defaultHeaders,
+  "Content-Type": "application/json",
+};
+
+
+export const loginPost = (userEmail, userPassword) => {
+  const encoded = window.btoa(userEmail + ":" + userPassword);
+  const auth = "Basic " + encoded;
+  basicAxios
+    .post("/auth/convert", {
+      headers: {
+        ...defaultBodyHeaders,
+        Authorization: auth,
+    }})
+    .then((res) => {
+      console.log(res.data)
+    })};
 
 export const updateAccessTokenPost = (refreshToken) => Promise.reject();
