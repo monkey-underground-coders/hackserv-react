@@ -51,4 +51,14 @@ export const loginPost = (userEmail, userPassword) =>
       return res.data;
     });
 
-export const updateAccessTokenPost = (refreshToken) => Promise.reject();
+export const updateAccessTokenPost = (refreshToken) => {
+  alert(refreshToken);
+  return basicAxios()
+    .post("/auth/get_access", {
+      refreshToken,
+    })
+    .then((res) => {
+      console.log(res)
+      return res.data;
+    });
+  }

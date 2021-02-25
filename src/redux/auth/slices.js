@@ -52,9 +52,9 @@ export const auth = createSlice({
     
       state.tokens = {
         accessToken,
-        accessTokenExpiredAt: new Date(accessTokenExpiringAt),
+        accessTokenExpiredAt: accessTokenExpiringAt,
         refreshToken,
-        refreshTokenExpiredAt: new Date(refreshTokenExpiringAt),
+        refreshTokenExpiredAt: refreshTokenExpiringAt,
       };
 
       const { userId } = decodeJwt(accessToken);
