@@ -46,22 +46,20 @@ export const signupPost = (userEmail, userPassword) =>
 export const loginPost = (userEmail, userPassword) => 
   axiosWithBasic(userEmail, userPassword)
     .post("/auth/convert")
-    .then((res) => {
-      const refreshT = res.data.refreshToken;
-      const accessT = res.data.accessToken; 
-      window.localStorage.setItem("accessToken", accessT);
-      window.localStorage.setItem("refreshToken", refreshT);
+    .then((res) => { 
+      window.localStorage.setItem("accessToken", res.data.accessToken);
+      window.localStorage.setItem("refreshToken", res.data.refreshToken);
       return res.data;
     });
 
 export const updateAccessTokenPost = (refreshToken) => {
-  alert(refreshToken);
   return basicAxios()
     .post("/auth/get_access", {
       refreshToken,
     })
     .then((res) => {
-      console.log(res)
+      window.localStorage.setItem("accessToken", res.data.accessToken);
+      window.localStorage.setItem("refreshToken", res.data.refreshToken);
       return res.data;
     });
   }
