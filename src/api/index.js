@@ -31,7 +31,7 @@ const mainAxios = (access) => axios.create({
   }
 });
 
-const localStorageTokensSet = (accessToken, refreshToken) =>{
+const localStorageTokensSet = (accessToken, refreshToken) => {
   window.localStorage.setItem("accessToken", accessToken);
   window.localStorage.setItem("refreshToken", refreshToken);
 }
@@ -56,8 +56,8 @@ export const loginPost = (userEmail, userPassword) =>
       return res.data;
     });
 
-export const updateAccessTokenPost = (refreshToken) => {
-  return basicAxios()
+export const updateAccessTokenPost = (refreshToken) => 
+  basicAxios()
     .post("/auth/get_access", {
       refreshToken,
     })
@@ -65,4 +65,3 @@ export const updateAccessTokenPost = (refreshToken) => {
       localStorageTokensSet(res.data.accessToken, res.data.refreshToken);
       return res.data;
     });
-  }
