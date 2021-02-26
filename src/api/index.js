@@ -31,6 +31,11 @@ const mainAxios = (access) => axios.create({
   }
 });
 
+const localStorageTokensSet = (accessToken, refreshToken) =>{
+  window.localStorage.setItem("accessToken", accessToken);
+  window.localStorage.setItem("refreshToken", refreshToken);
+}
+
 export const signupPost = (userEmail, userPassword) =>
   basicAxios()
     .post("/user/create", {
@@ -47,8 +52,7 @@ export const loginPost = (userEmail, userPassword) =>
   axiosWithBasic(userEmail, userPassword)
     .post("/auth/convert")
     .then((res) => { 
-      window.localStorage.setItem("accessToken", res.data.accessToken);
-      window.localStorage.setItem("refreshToken", res.data.refreshToken);
+      localStorageTokensSet(res.data.accessToken, res.data.refreshToken);
       return res.data;
     });
 
@@ -58,8 +62,7 @@ export const updateAccessTokenPost = (refreshToken) => {
       refreshToken,
     })
     .then((res) => {
-      window.localStorage.setItem("accessToken", res.data.accessToken);
-      window.localStorage.setItem("refreshToken", res.data.refreshToken);
+      localStorageTokensSet(res.data.accessToken, res.data.refreshToken);
       return res.data;
     });
   }
