@@ -47,7 +47,10 @@ export const loginPost = (userEmail, userPassword) =>
   axiosWithBasic(userEmail, userPassword)
     .post("/auth/convert")
     .then((res) => {
-      console.log(res.data)
+      const refreshT = res.data.refreshToken;
+      const accessT = res.data.accessToken; 
+      window.localStorage.setItem("accessToken", accessT);
+      window.localStorage.setItem("refreshToken", refreshT);
       return res.data;
     });
 
