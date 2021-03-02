@@ -1,10 +1,10 @@
 import * as axios from "axios";
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
-import { Ip } from "../config";
+import { Ip } from "@config";
+import { setTokens } from "@redux/auth/actions";
+import { refreshTokenSelector, accessTokenSelector } from "@redux/auth/selectors";
 import store from "@redux";
-import { setTokens } from "@redux/auth/slices";
-import { refreshTokenSelector, accessTokenSelector } from "@redux/auth/selector";
 
 const defaultHeaders = {};
 

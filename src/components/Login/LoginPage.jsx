@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import LoginWidget from './LoginWidget';
 import { makePage } from '@components/ImageWidgetPage';
 import { refreshValidSelector, refreshTokenSelector, accessValidSelector } from '@redux/auth/selectors';
-import { updateAccessToken } from '@redux/auth/slices';
+import { updateAccessToken } from '@redux/auth/thunks';
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {

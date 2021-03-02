@@ -13,7 +13,7 @@ import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import { login } from "@redux/auth/slices"
+import { login } from "@redux/auth/thunks"
 
 const useStyles = makeStyles((theme) => ({
   paper: {

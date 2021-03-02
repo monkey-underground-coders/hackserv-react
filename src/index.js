@@ -10,6 +10,8 @@ import store from '@redux';
 
 configChecker.IpCheck();
 
+console.log(store.getState());
+
 ReactDOM.render(
   <Provider store={store}>
     <App />
