@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from "redux";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import isLogged from "./isLogged";
 import users from "./users";
 import auth from "./auth/slices";
