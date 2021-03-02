@@ -1,12 +1,16 @@
-import { combineReducers } from "redux";
+import { combineReducers, configureStore } from "redux";
 import isLogged from "./isLogged";
 import users from "./users";
 import auth from "./auth/slices";
 
-const allReducers = combineReducers({
+export const allReducers = combineReducers({
   isLogged,
   users,
   auth
 });
 
-export default allReducers;
+const store = configureStore({
+  reducer: allReducers
+});
+
+export default store;

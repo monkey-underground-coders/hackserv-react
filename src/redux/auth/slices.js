@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 
 import { decode as decodeJwt } from "@utils/jwt";
 import { loginPost, updateAccessTokenPost } from "@api";
@@ -19,6 +19,19 @@ export const updateAccessToken = createAsyncThunk(
   }
 );
 
+const innerSetTokens = (state, { accessToken, accessTokenExpiringAt, refreshToken, refreshTokenExpiringAt }) => {
+  state.tokens = {
+    accessToken,
+    accessTokenExpiredAt: accessTokenExpiringAt,
+    refreshToken,
+    refreshTokenExpiredAt: refreshTokenExpiringAt,
+  };
+
+  const { userId } = decodeJwt(accessToken);
+
+  state.userId = userId;
+}
+
 export const auth = createSlice({
   name: "auth",
   initialState: {
@@ -32,34 +45,18 @@ export const auth = createSlice({
   },
   reducers: {
     logout(state) {
-      state.userId = 0;
-      state.tokens = {
-        accessToken: false,
-        accessTokenExpiredAt: false,
-        refreshToken: false,
-        refreshTokenExpiredAt: false,
-      };
+      state = undefined;
     },
+    setTokens(state, { payload }) {
+      innerSetTokens(state, payload);
+    }
   },
   extraReducers: {
     [login.fulfilled]: (state, { payload }) => {
-      const {
-        accessToken,
-        accessTokenExpiringAt,
-        refreshToken,
-        refreshTokenExpiringAt,
-      } = payload;
-    
-      state.tokens = {
-        accessToken,
-        accessTokenExpiredAt: accessTokenExpiringAt,
-        refreshToken,
-        refreshTokenExpiredAt: refreshTokenExpiringAt,
-      };
-
-      const { userId } = decodeJwt(accessToken);
-
-      state.userId = userId;
+      setTokens(state, payload);
+    },
+    [updateAccessToken.fulfilled]: (state, { payload }) => {
+      setTokens(state, payload);
     }
   }
 });
@@ -67,6 +64,7 @@ export const auth = createSlice({
 const actions = auth.actions;
 export const authenticate = actions.authenticate;
 export const logout = actions.logout;
+export const setTokens = actions.setTokens;
 
 const reducer = auth.reducer;
 export default reducer;

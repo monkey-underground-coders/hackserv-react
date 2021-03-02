@@ -3,17 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from '@components/App';
 import reportWebVitals from './reportWebVitals';
-import allReducers from '@redux';
-import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
-import { configChecker } from '@validation'
+import { configChecker } from '@validation';
+import store from '@redux';
 
 configChecker.IpCheck();
-
-const store = configureStore({
-  reducer: allReducers
-});
 
 ReactDOM.render(
   <Provider store={store}>
