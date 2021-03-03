@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { login } from "@redux/auth/thunks"
@@ -38,16 +38,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LoginWidget() {
+export default function LoginWidget({ redirectTo = "/dashboard" }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleClick = (event) => {
     event.preventDefault();
-    dispatch(login({ email, password }));
+    dispatch(login({ email, password }))
+      .then(() => {
+        history.push(redirectTo);
+      });
   };
 
   return (
