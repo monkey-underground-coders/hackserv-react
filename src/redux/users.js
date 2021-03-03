@@ -3,7 +3,7 @@ import {
   createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
-import { signupPost } from "@api";
+import { signupPost } from "@api/auth";
 
 export const userCreate = createAsyncThunk(
   "user/create",
