@@ -1,20 +1,26 @@
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
+import {
+  createWrappedAuthApiInterceptor,
+  createWrappedApiInterceptor,
+} from "@api/helpers";
 import isLogged from "./isLogged";
 import users from "./users";
-import { auth } from "./auth/slices";
+import authReducer from "./auth/slices";
 
-console.log("meow");
-console.log(auth);
+const store = (() => {
+  const reducer = combineReducers({
+    isLogged,
+    users,
+    auth: authReducer,
+  });
 
-export const allReducers = combineReducers({
-  isLogged,
-  users,
-  auth: auth.reducer
-});
+  const store = configureStore({ reducer });
 
-const store = configureStore({
-  reducer: allReducers
-});
+  createWrappedApiInterceptor(store);
+  createWrappedAuthApiInterceptor(store);
+
+  return store;
+})();
 
 export default store;

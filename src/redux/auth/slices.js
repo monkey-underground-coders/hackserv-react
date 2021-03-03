@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { decode as decodeJwt } from "@utils/jwt";
-import { login, updateAccessToken } from './thunks';
-import { setTokens } from './actions';
+import { login, updateAccessToken } from "./thunks";
+import { setTokens } from "./actions";
 
-const innerSetTokens = (state, { accessToken, accessTokenExpiringAt, refreshToken, refreshTokenExpiringAt }) => {
+const innerSetTokens = (
+  state,
+  { accessToken, accessTokenExpiringAt, refreshToken, refreshTokenExpiringAt }
+) => {
   state.tokens = {
     accessToken,
     accessTokenExpiredAt: accessTokenExpiringAt,
@@ -15,7 +18,7 @@ const innerSetTokens = (state, { accessToken, accessTokenExpiringAt, refreshToke
   const { userId } = decodeJwt(accessToken);
 
   state.userId = userId;
-}
+};
 
 export const auth = createSlice({
   name: "auth",
@@ -31,7 +34,7 @@ export const auth = createSlice({
   reducers: {
     logout(state) {
       state = undefined;
-    }
+    },
   },
   extraReducers: {
     [login.fulfilled]: (state, { payload }) => {
@@ -45,8 +48,8 @@ export const auth = createSlice({
     },
     [setTokens]: (state, { payload }) => {
       innerSetTokens(state, payload);
-    }
-  }
+    },
+  },
 });
 
 const actions = auth.actions;
