@@ -1,12 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from '@components/App';
-import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "@components/App";
+import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import { SnackbarProvider } from "notistack";
 
-import { configChecker } from '@validation';
-import store from '@redux';
+import { configChecker } from "@validation";
+import store from "@redux";
 
 configChecker.IpCheck();
 
@@ -14,9 +15,11 @@ console.log(store.getState());
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <SnackbarProvider maxSnack={3} autoHideDuration={3500}>
+      <App />
+    </SnackbarProvider>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

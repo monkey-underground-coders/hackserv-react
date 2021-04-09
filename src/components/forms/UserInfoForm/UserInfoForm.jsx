@@ -1,9 +1,13 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import { DropzoneDialog } from "material-ui-dropzone";
+import { userUploadResume } from "@redux/users";
+import { useDispatch } from "react-redux";
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -13,8 +17,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UserInfoForm() {
+  const [fileUploadDialogOpen, setFileUploadDialogOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
+
+  const onFUSave = (files) => {
+    console.log(files);
+    const file = files[0];
+    return dispatch(userUploadResume({ file }))
+      .then(() => {
+        setFileUploadDialogOpen(false);
+        enqueueSnackbar(`Файл ${file.name} успешно загружен!`, 
+        {
+          variant: "success"
+        });
+      })
+      .catch(() => {});
+  };
+
+  const onFUClose = () => {
+    console.log("close!");
+    setFileUploadDialogOpen(false);
+  };
+
   return (
-    <React.Fragment>
+    <>
       <Typography variant="h6" gutterBottom>
         Заполните данные о себе:
       </Typography>
@@ -30,7 +57,6 @@ export default function UserInfoForm() {
             inputProps={{
               maxlength: 250,
             }}
-
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -81,7 +107,7 @@ export default function UserInfoForm() {
             autoComplete="off"
             inputProps={{
               maxlength: 250,
-              pattern: '@[A-Za-z0-9]*'
+              pattern: "@[A-Za-z0-9]*",
             }}
           />
         </Grid>
@@ -97,7 +123,7 @@ export default function UserInfoForm() {
             }}
           />
         </Grid>
-        
+
         <Grid item xs={12}>
           <TextField
             id="outlined-multiline-static"
@@ -115,11 +141,26 @@ export default function UserInfoForm() {
           <Button
             variant="contained"
             color="primary"
+            onClick={() => setFileUploadDialogOpen(true)}
           >
-          Загрузить резюме
+            Загрузить резюме
           </Button>
         </Grid>
       </Grid>
-    </React.Fragment>
+
+      <DropzoneDialog
+        open={fileUploadDialogOpen}
+        onSave={onFUSave}
+        acceptedFiles={[
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+          "application/pdf", // .pdf
+        ]}
+        showPreviews={true}
+        showAlerts={false}
+        maxFileSize={5242880}
+        onClose={onFUClose}
+        filesLimit={1}
+      />
+    </>
   );
 }

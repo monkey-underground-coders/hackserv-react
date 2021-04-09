@@ -3,13 +3,24 @@ import {
   createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
-import { signupPost } from "@api/auth";
+import { signupPost, postResume } from "@api";
+import { userIdSelector } from "./auth/selectors";
+import { isAnyOf } from "@utils/reduxUtils";
 
 export const userCreate = createAsyncThunk(
   "user/create",
   async ({ email, password }, thunkAPI) => {
     const response = await signupPost(email, password);
     return response;
+  }
+);
+
+export const userUploadResume = createAsyncThunk(
+  "user/cv/upload",
+  async ({ file }, thunkAPI) => {
+    const userId = userIdSelector(thunkAPI.getState());
+    const response = await postResume(file, userId);
+    return response.data;
   }
 );
 
@@ -21,7 +32,7 @@ export const users = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(userCreate.fulfilled, (state, { payload }) => {
+    builder.addCase(isAnyOf(userCreate.fulfilled, userUploadResume.fulfilled), (state, { payload }) => {
       const { id, ...changes } = payload;
       usersAdapter.upsertOne(state, { id, changes });
     });
