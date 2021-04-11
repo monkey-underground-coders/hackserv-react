@@ -1,7 +1,4 @@
-import {
-  createAsyncThunk,
-  createSlice,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getConfig as getConfigRequest } from "@api";
 
 export const getConfig = createAsyncThunk("conf/get", async () => {
@@ -15,7 +12,13 @@ export const conf = createSlice({
   reducers: {},
   extraReducers: {
     [getConfig.fulfilled]: (state, { payload }) => {
-      state = payload;
+      const { maxFileSize, minEmailReq, maxEmailDuration } = payload;
+
+      return {
+        maxFileSize,
+        minEmailReq,
+        maxEmailDuration,
+      };
     },
   },
 });
