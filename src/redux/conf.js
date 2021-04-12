@@ -8,17 +8,25 @@ export const getConfig = createAsyncThunk("conf/get", async () => {
 
 export const conf = createSlice({
   name: "conf",
-  initialState: {},
+  initialState: {
+    container: {},
+    isError: false,
+    errorMessage: null,
+  },
   reducers: {},
   extraReducers: {
     [getConfig.fulfilled]: (state, { payload }) => {
       const { maxFileSize, minEmailReq, maxEmailDuration } = payload;
-
-      return {
+      state.isError = false;
+      state.container = {
         maxFileSize,
         minEmailReq,
         maxEmailDuration,
       };
+    },
+    [getConfig.rejected]: (state, { error }) => {
+      state.isError = true;
+      state.errorMessage = error;
     },
   },
 });

@@ -5,6 +5,11 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { getConfig } from "@redux/conf";
+import { jwt } from "@utils";
+import { setTokens } from "@redux/auth/actions";
+import { getSelf } from "@redux/users";
+import { logout } from "@redux/auth/slices";
+import { localStorageTokensErase } from "@utils/jwt";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -22,17 +27,28 @@ const PreloaderWrapper = ({ children }) => {
 
   useEffect(() => {
     if (!initialLoading) return;
-
-    const actions = [dispatch(getConfig())];
-
-    Promise.all(actions)
-      .catch((e) => {
+    const fetchData = async () => {
+      dispatch(setTokens(jwt.localStorageTokensLoad()));
+      try {
+        const a = await dispatch(getConfig());
+        console.log(a);
+      } catch (e) {
         console.error(e);
         setLoadingCausedError(true);
-      })
-      .finally(() => {
         setInitialLoading(false);
-      });
+        return;
+      }
+      try {
+        const a = await dispatch(getSelf());
+        console.log(a);
+      } catch (e) {
+        console.error("ACHTUNG!", e);
+        dispatch(logout());
+        localStorageTokensErase();
+      }
+      setInitialLoading(false);
+    };
+    fetchData();
   }, [initialLoading]);
 
   return (

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 
 import { decode as decodeJwt } from "@utils/jwt";
 import { login, updateAccessToken } from "./thunks";
@@ -15,40 +15,39 @@ const innerSetTokens = (
     refreshTokenExpiredAt: refreshTokenExpiringAt,
   };
 
-  const { userId } = decodeJwt(accessToken);
+  if (accessToken) {
+    const { userId } = decodeJwt(accessToken);
 
-  state.userId = userId;
+    state.userId = userId;
+  }
 };
+
+const getInitialState = () => ({
+  tokens: {
+    accessToken: false,
+    accessTokenExpiredAt: false,
+    refreshToken: false,
+    refreshTokenExpiredAt: false,
+  },
+  userId: 0,
+});
 
 export const auth = createSlice({
   name: "auth",
-  initialState: {
-    tokens: {
-      accessToken: false,
-      accessTokenExpiredAt: false,
-      refreshToken: false,
-      refreshTokenExpiredAt: false,
-    },
-    userId: 0,
-  },
+  initialState: getInitialState(),
   reducers: {
     logout(state) {
-      state = undefined;
+      return getInitialState();
     },
   },
-  extraReducers: {
-    [login.fulfilled]: (state, { payload }) => {
-      setTokens(state, payload);
-    },
-    [updateAccessToken.fulfilled]: (state, { payload }) => {
-      setTokens(state, payload);
-    },
-    [updateAccessToken.rejected]: (state) => {
-      state = undefined;
-    },
-    [setTokens]: (state, { payload }) => {
-      innerSetTokens(state, payload);
-    },
+  extraReducers: (builder) => {
+    builder.addCase(updateAccessToken.rejected, () => getInitialState());
+    builder.addMatcher(
+      isAnyOf(login.fulfilled, updateAccessToken.fulfilled, setTokens),
+      (state, { payload }) => {
+        innerSetTokens(state, payload);
+      }
+    );
   },
 });
 

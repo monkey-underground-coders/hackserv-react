@@ -4,7 +4,9 @@ import {
   refreshTokenSelector,
   accessTokenSelector,
 } from "@redux/auth/selectors";
-import { mainAxios, localStorageTokensSet } from "./utils";
+import { mainAxios } from "./utils";
+import { logout } from "@redux/auth/slices";
+import { jwt } from "@utils";
 
 const getAccessToken = (store) => accessTokenSelector(store.getState());
 
@@ -19,10 +21,15 @@ export const createWrappedAuthApiInterceptor = (store) => {
         { skipAuthRefresh: true }
       )
       .then((res) => {
-        localStorageTokensSet(res.data);
+        jwt.localStorageTokensSet(store, res.data);
         failedRequest.response.config.headers["Authorization"] =
           "Bearer " + getAccessToken(store);
         return Promise.resolve();
+      })
+      .catch((e) => {
+        console.error(e);
+        store.dispatch(logout());
+        jwt.localStorageTokensErase();
       });
 
   createAuthRefreshInterceptor(mainAxios, refreshAuthLogic);
