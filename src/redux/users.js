@@ -2,29 +2,73 @@ import {
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
+  createSelector,
+  isAnyOf,
 } from "@reduxjs/toolkit";
-import { signupPost } from "@api/auth";
+import { signupPost, getSelfUser } from "@api/auth";
 
 export const userCreate = createAsyncThunk(
-  "user/create",
+  "users/create",
   async ({ email, password }, thunkAPI) => {
-    const response = await signupPost(email, password);
-    return response;
+    try {
+      const response = await signupPost(email, password);
+      return response;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message || e.response.data);
+    }
   }
 );
 
+export const getSelf = createAsyncThunk(
+  "users/getSelf",
+  async (_arg, thunkAPI) => {
+    try {
+      const response = await getSelfUser();
+      return response.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message || e.response.data);
+    }
+  }
+);
+
+const usersSelector = (state) => state.users;
+
+export const isErrorSelector = createSelector(
+  usersSelector,
+  ({ isError }) => isError
+);
+
+export const errorMessageSelector = createSelector(
+  usersSelector,
+  ({ errorMessage }) => errorMessage
+);
+
 export const usersAdapter = createEntityAdapter();
-const initialState = usersAdapter.getInitialState();
 
 export const users = createSlice({
   name: "users",
-  initialState,
+  initialState: {
+    ...usersAdapter.getInitialState(),
+    isError: false,
+    errorMessage: undefined,
+  },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(userCreate.fulfilled, (state, { payload }) => {
-      const { id, ...changes } = payload;
-      usersAdapter.upsertOne(state, { id, changes });
-    });
+    builder.addMatcher(
+      isAnyOf(userCreate.fulfilled, getSelf.fulfilled),
+      (state, { payload }) => {
+        const { id, ...changes } = payload;
+        usersAdapter.upsertOne(state, { id, ...changes });
+        state.isError = false;
+      }
+    );
+    builder.addMatcher(
+      isAnyOf(userCreate.rejected, getSelf.rejected),
+      (state, { payload }) => {
+        state.isError = true;
+        state.errorMessage = payload;
+      }
+    );
   },
 });
 

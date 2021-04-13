@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useStore } from "react-redux";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { getConfig } from "@redux/conf";
+import {
+  getConfig,
+  isErrorSelector as confIsError,
+  errorMessageSelector as confErrorMessage,
+} from "@redux/conf";
+import { tokens } from "@utils";
+import { setTokens } from "@redux/auth/actions";
+import {
+  getSelf,
+  isErrorSelector as usersIsError,
+  errorMessageSelector as usersErrorMessage,
+} from "@redux/users";
+import { logout } from "@redux/auth/slices";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -16,24 +28,36 @@ const useStyles = makeStyles((theme) => ({
 const PreloaderWrapper = ({ children }) => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [loadingCausedError, setLoadingCausedError] = useState(false);
-  const dispatch = useDispatch();
+  const { dispatch, getState } = useStore();
 
   const classes = useStyles();
 
   useEffect(() => {
     if (!initialLoading) return;
+    const fetchData = async () => {
+      dispatch(setTokens(tokens.localStorageLoad()));
 
-    const actions = [dispatch(getConfig())];
-
-    Promise.all(actions)
-      .catch((e) => {
-        console.error(e);
+      await dispatch(getConfig());
+      if (confIsError(getState())) {
+        console.error("Config load error!", confErrorMessage(getState()));
         setLoadingCausedError(true);
-      })
-      .finally(() => {
         setInitialLoading(false);
-      });
-  }, [initialLoading]);
+        return;
+      }
+
+      await dispatch(getSelf());
+      if (usersIsError(getState())) {
+        console.error(
+          "User load error! Emitting logout...",
+          usersErrorMessage(getState())
+        );
+        dispatch(logout());
+      }
+
+      setInitialLoading(false);
+    };
+    fetchData();
+  }, [initialLoading, dispatch, getState]);
 
   return (
     <>

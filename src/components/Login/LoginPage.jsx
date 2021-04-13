@@ -40,7 +40,7 @@ export default function LoginPage() {
   return (
     <>
       <LoginLayout />
-      <Backdrop className={classes.backdrop} open={isRefreshMustProceed}>
+      <Backdrop className={classes.backdrop} open={!!isRefreshMustProceed}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </>

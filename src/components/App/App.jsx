@@ -19,7 +19,7 @@ function App() {
           <Route path="/user/create" component={SignUpPage} />
           <Route path="/user/login" component={LoginPage} />
           <PrivateRoute path="/dashboard" component={Dashboard} />
-          <Redirect from="/" to="/user/login" />
+          <Redirect from="/" to="/dashboard" />
         </Switch>
       </Router>
     </PreloaderWrapper>

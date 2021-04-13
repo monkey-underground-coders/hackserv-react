@@ -1,4 +1,3 @@
-import { setTokens } from "@redux/auth/actions";
 import * as axios from "axios";
 import { Ip } from "@config";
 
@@ -9,10 +8,13 @@ const defaultBodyHeaders = {
   "Content-Type": "application/json",
 };
 
+const okOnly = (status) => status === 200;
+
 export const basicAxios = () =>
   axios.create({
     baseURL: Ip(),
     headers: defaultBodyHeaders,
+    validateStatus: okOnly,
   });
 
 export const axiosWithBasic = (email, password) =>
@@ -23,18 +25,11 @@ export const axiosWithBasic = (email, password) =>
       username: email,
       password,
     },
+    validateStatus: okOnly,
   });
 
 export const mainAxios = axios.create({
   baseURL: Ip(),
   headers: defaultBodyHeaders,
+  validateStatus: okOnly,
 });
-
-export const localStorageTokensSet = (store, tokensBag) => {
-  const { accessToken, refreshToken } = tokensBag;
-
-  window.localStorage.setItem("accessToken", accessToken);
-  window.localStorage.setItem("refreshToken", refreshToken);
-
-  store.dispatch(setTokens(tokensBag));
-};

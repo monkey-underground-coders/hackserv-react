@@ -4,14 +4,12 @@ import {
   createWrappedAuthApiInterceptor,
   createWrappedApiInterceptor,
 } from "@api/helpers";
-import isLogged from "./isLogged";
 import users from "./users";
 import conf from "./conf";
 import authReducer from "./auth/slices";
 
 const store = (() => {
   const reducer = combineReducers({
-    isLogged,
     users,
     conf,
     auth: authReducer,

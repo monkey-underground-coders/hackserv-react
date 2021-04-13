@@ -13,7 +13,7 @@ import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import { login } from "@redux/auth/thunks"
+import { login } from "@redux/auth/thunks";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,10 +48,9 @@ export default function LoginWidget({ redirectTo = "/dashboard" }) {
 
   const handleClick = (event) => {
     event.preventDefault();
-    dispatch(login({ email, password }))
-      .then(() => {
-        history.push(redirectTo);
-      });
+    dispatch(login({ email, password })).then(() => {
+      history.push(redirectTo);
+    });
   };
 
   return (
@@ -107,7 +106,12 @@ export default function LoginWidget({ redirectTo = "/dashboard" }) {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" className={classes.linkdecor} variant="body2">
+              <Link
+                to=""
+                href="#"
+                className={classes.linkdecor}
+                variant="body2"
+              >
                 {"Забыли пароль?"}
               </Link>
             </Grid>
