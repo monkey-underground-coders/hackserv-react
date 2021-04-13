@@ -2,6 +2,7 @@ import {
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
+  createSelector,
   isAnyOf,
 } from "@reduxjs/toolkit";
 import { signupPost, getSelfUser } from "@api/auth";
@@ -9,22 +10,37 @@ import { signupPost, getSelfUser } from "@api/auth";
 export const userCreate = createAsyncThunk(
   "users/create",
   async ({ email, password }, thunkAPI) => {
-    const response = await signupPost(email, password);
-    return response;
+    try {
+      const response = await signupPost(email, password);
+      return response;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message || e.response.data);
+    }
   }
 );
 
 export const getSelf = createAsyncThunk(
   "users/getSelf",
-  async (p, thunkAPI) => {
+  async (_arg, thunkAPI) => {
     try {
       const response = await getSelfUser();
-      console.log("ping");
       return response.data;
     } catch (e) {
-      thunkAPI.rejectWithValue(e);
+      return thunkAPI.rejectWithValue(e.message || e.response.data);
     }
   }
+);
+
+const usersSelector = (state) => state.users;
+
+export const isErrorSelector = createSelector(
+  usersSelector,
+  ({ isError }) => isError
+);
+
+export const errorMessageSelector = createSelector(
+  usersSelector,
+  ({ errorMessage }) => errorMessage
 );
 
 export const usersAdapter = createEntityAdapter();
@@ -32,7 +48,7 @@ export const usersAdapter = createEntityAdapter();
 export const users = createSlice({
   name: "users",
   initialState: {
-    container: usersAdapter.getInitialState(),
+    ...usersAdapter.getInitialState(),
     isError: false,
     errorMessage: undefined,
   },
@@ -41,18 +57,16 @@ export const users = createSlice({
     builder.addMatcher(
       isAnyOf(userCreate.fulfilled, getSelf.fulfilled),
       (state, { payload }) => {
-        console.log("pong");
         const { id, ...changes } = payload;
-        usersAdapter.upsertOne(state.container, { id, ...changes });
+        usersAdapter.upsertOne(state, { id, ...changes });
         state.isError = false;
       }
     );
     builder.addMatcher(
       isAnyOf(userCreate.rejected, getSelf.rejected),
       (state, { payload }) => {
-        console.log("error!");
         state.isError = true;
-        state.errorMessage = payload.message;
+        state.errorMessage = payload;
       }
     );
   },

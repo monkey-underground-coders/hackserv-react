@@ -4,14 +4,22 @@ import { setTokens } from "@redux/auth/actions";
 import { load, save, remove } from "./localStorage";
 
 export const decode = (jwtString) => {
-  const decoded = jwtDecode(jwtString);
-  return {
-    token: jwtString,
-    userId: decoded.sub,
-  };
+  try {
+    const decoded = jwtDecode(jwtString);
+    return {
+      token: jwtString,
+      userId: decoded.sub,
+    };
+  } catch (e) {
+    return {
+      token: null,
+      userId: null,
+    };
+  }
 };
 
-export const localStorageTokensSet = (store, tokensBag) => {
+export const localStorageSet = (store, tokensBag) => {
+  console.log("set");
   const {
     accessToken,
     accessTokenExpiringAt,
@@ -27,7 +35,7 @@ export const localStorageTokensSet = (store, tokensBag) => {
   store.dispatch(setTokens(tokensBag));
 };
 
-export const localStorageTokensLoad = () => {
+export const localStorageLoad = () => {
   const accessToken = load("accessToken.value");
   const accessTokenExpiringAt = load("accessToken.exp");
   const refreshToken = load("refreshToken.value");
@@ -52,7 +60,7 @@ export const localStorageTokensLoad = () => {
   };
 };
 
-export const localStorageTokensErase = () => {
+export const localStorageErase = () => {
   remove("accessToken.value");
   remove("accessToken.exp");
   remove("refreshToken.value");

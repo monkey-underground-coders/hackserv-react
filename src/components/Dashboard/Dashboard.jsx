@@ -18,12 +18,9 @@ import Button from "@material-ui/core/Button";
 import { Switch, Route } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import { LoginModal } from "@components/Login";
 import Copyright from "@components/Copyright";
-import { SignUpModal } from "@components/SignUp";
 import AttendeeForm from "@components/forms/AttendeeForm";
 import { logout } from "@redux/auth/slices";
-import { localStorageTokensErase } from "@utils/jwt";
 import { mainListItems, secondaryListItems } from "./listItems";
 
 const drawerWidth = 240;
@@ -123,7 +120,6 @@ export default function Dashboard() {
   };
   const handleLogoutClick = () => {
     dispatch(logout());
-    localStorageTokensErase();
   };
 
   return (
