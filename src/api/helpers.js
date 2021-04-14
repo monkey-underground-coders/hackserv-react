@@ -29,7 +29,7 @@ export const createWrappedAuthApiInterceptor = (store) => {
       .catch((e) => {
         console.error(e);
         store.dispatch(logout());
-        return Promise.reject();
+        return Promise.reject(e);
       });
 
   createAuthRefreshInterceptor(mainAxios, refreshAuthLogic, {

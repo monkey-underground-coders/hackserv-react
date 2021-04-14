@@ -36,11 +36,12 @@ export const initApplication = createAsyncThunk(
     try {
       await dispatch(getConfig()).then(unwrapResult);
     } catch (e) {
+      console.log("Config loading error!", e);
       return rejectWithValue(e);
     }
 
     try {
-      await dispatch(getSelf());
+      await dispatch(getSelf()).then(unwrapResult);
     } catch (e) {
       console.error("User load error! Emitting logout...", e);
       dispatch(logout());
