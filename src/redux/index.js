@@ -7,12 +7,14 @@ import {
 import users from "./users";
 import conf from "./conf";
 import authReducer from "./auth/slices";
+import app from "./app";
 
 const store = (() => {
   const reducer = combineReducers({
     users,
     conf,
     auth: authReducer,
+    app,
   });
 
   const store = configureStore({ reducer });

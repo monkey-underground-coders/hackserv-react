@@ -19,7 +19,6 @@ export const decode = (jwtString) => {
 };
 
 export const localStorageSet = (store, tokensBag) => {
-  console.log("set");
   const {
     accessToken,
     accessTokenExpiringAt,

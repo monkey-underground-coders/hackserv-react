@@ -1,33 +1,19 @@
-import {
-  createAsyncThunk,
-  createSelector,
-  createSlice,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getConfig as getConfigRequest } from "@api";
 
 export const getConfig = createAsyncThunk(
   "conf/get",
-  async (_arg, thunkAPI) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await getConfigRequest();
       return response.data;
     } catch (e) {
-      return thunkAPI.rejectWithValue(e.message || e.response.data);
+      return rejectWithValue(e.message || e.response.data);
     }
   }
 );
 
-const confSelector = (state) => state.conf;
-
-export const isErrorSelector = createSelector(
-  confSelector,
-  ({ isError }) => isError
-);
-
-export const errorMessageSelector = createSelector(
-  confSelector,
-  ({ errorMessage }) => errorMessage
-);
+export const getConfigSelector = (state) => state.conf;
 
 export const conf = createSlice({
   name: "conf",
@@ -35,9 +21,6 @@ export const conf = createSlice({
     maxFileSize: null,
     minEmailReq: null,
     maxEmailDuration: null,
-
-    isError: false,
-    errorMessage: null,
   },
   reducers: {},
   extraReducers: {
