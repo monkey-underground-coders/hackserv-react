@@ -20,8 +20,8 @@ import { useDispatch } from "react-redux";
 
 import Copyright from "@components/Copyright";
 import AttendeeForm from "@components/forms/AttendeeForm";
-import { logout } from "@redux/auth/slices";
 import { mainListItems, secondaryListItems } from "./listItems";
+import { logout } from "@redux/auth/slices";
 
 const drawerWidth = 240;
 

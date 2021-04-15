@@ -90,10 +90,6 @@ export default function LoginWidget({ redirectTo = "/dashboard" }) {
             value={password}
             onChange={(evt) => setPassword(evt.target.value)}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Запомнить данные"
-          />
           <Button
             type="submit"
             fullWidth

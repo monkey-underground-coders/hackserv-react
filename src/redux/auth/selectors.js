@@ -26,3 +26,8 @@ export const refreshValidSelector = createSelector(
   ({ refreshToken, refreshTokenExpiredAt }) =>
     refreshToken && Date.now() < new Date(refreshTokenExpiredAt)
 );
+
+export const userIdSelector = createSelector(
+  authSelector,
+  auth => auth.userId
+);
