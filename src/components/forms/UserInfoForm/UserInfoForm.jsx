@@ -32,10 +32,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const userInfo = {
+  firstName: "",
+  lastName: "",
+  middleName: "",
+  university: "",
+  telegram: "",
+  dateOfBirth: "2021-04-01",
+  other: "",
+}
+
+const errors = {
+  telegramError: false,
+  dateOfBirthError: false,
+}
+
 export default function UserInfoForm() {
   const [fileUploadDialogOpen, setFileUploadDialogOpen] = useState(false);
-  const [date, setDate] = useState("");
-  const [error, setError] = useState("");
+  const [user, setUser] = useState(userInfo);
+  const [error, setError] = useState(errors);
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
 
@@ -94,6 +109,9 @@ export default function UserInfoForm() {
               inputProps={{
                 maxLength: 250,
               }}
+              onChange={(evt) => {
+                setUser({...user, lastName: evt.target.value});
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -107,6 +125,9 @@ export default function UserInfoForm() {
               inputProps={{
                 maxLength: 250,
               }}
+              onChange={(evt) => {
+                setUser({...user, firstName: evt.target.value});
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -118,6 +139,9 @@ export default function UserInfoForm() {
               autoComplete="additional-name"
               inputProps={{
                 maxLength: 250,
+              }}
+              onChange={(evt) => {
+                setUser({...user, middleName: evt.target.value});
               }}
             />
           </Grid>
@@ -132,37 +156,55 @@ export default function UserInfoForm() {
               inputProps={{
                 maxLength: 250,
               }}
+              onChange={(evt) => {
+                setUser({...user, university: evt.target.value});
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
+              error = {error.telegramError}
               required
               id="telegram"
               name="telegram"
               label="Telegram"
               fullWidth
               autoComplete="off"
+              placeholder="@JustW4it"
               inputProps={{
                 maxLength: 250,
                 pattern: "^@(?=\\w{5,64}\\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$",
+              }}
+              onChange={(evt) => {
+                const reg = /^@(?=\w{5,64}\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$/;
+                if (reg.test(evt.target.value)) {
+                  setUser({...user, telegram: evt.target.value});
+                  setError({...error, telegramError: false});
+                }
+                else {
+                  setError({...error, telegramError: true});
+                }
               }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
+              error={error.dateOfBirthError}
               required
               id="date"
               label="Дата рождения"
               type="date"
-              defaultValue="2017-05-01"
+              defaultValue="2021-04-01"
               InputLabelProps={{
                 shrink: true,
-                error: false,
               }}
               onChange={(evt) => {
-                setDate(evt.target.value);
                 if (Date.now() < new Date(evt.target.value)) {
-                  console.log("Invalid date");
+                  setError({...error, dateOfBirthError: true});
+                }
+                else {
+                  setError({...error, dateOfBirthError: false});
+                  setUser({...user, dateOfBirth: evt.target.value});
                 }
               }}
             />
@@ -170,14 +212,17 @@ export default function UserInfoForm() {
 
           <Grid item xs={12}>
             <TextField
-              id="outlined-multiline-static"
-              label="О себе"
+              id="other"
+              label="Дополнительная информация"
               multiline
               rows={4}
               variant="outlined"
               fullWidth
               inputProps={{
                 maxLength: 250,
+              }}
+              onChange={(evt) => {
+                setUser({...user, other: evt.target.value});
               }}
             />
           </Grid>
