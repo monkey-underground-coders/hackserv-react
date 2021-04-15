@@ -40,6 +40,10 @@ export default function UserInfoForm() {
     setFileUploadDialogOpen(false);
   };
 
+
+  const [date, setDate] = useState("");
+  const [error, setError] = useState("");
+
   return (
     <>
       <Typography variant="h6" gutterBottom>
@@ -55,7 +59,7 @@ export default function UserInfoForm() {
             fullWidth
             autoComplete="family-name"
             inputProps={{
-              maxlength: 250,
+              maxLength: 250,
             }}
           />
         </Grid>
@@ -68,7 +72,7 @@ export default function UserInfoForm() {
             fullWidth
             autoComplete="given-name"
             inputProps={{
-              maxlength: 250,
+              maxLength: 250,
             }}
           />
         </Grid>
@@ -80,7 +84,7 @@ export default function UserInfoForm() {
             fullWidth
             autoComplete="additional-name"
             inputProps={{
-              maxlength: 250,
+              maxLength: 250,
             }}
           />
         </Grid>
@@ -93,7 +97,7 @@ export default function UserInfoForm() {
             fullWidth
             autoComplete="off"
             inputProps={{
-              maxlength: 250,
+              maxLength: 250,
             }}
           />
         </Grid>
@@ -106,8 +110,8 @@ export default function UserInfoForm() {
             fullWidth
             autoComplete="off"
             inputProps={{
-              maxlength: 250,
-              pattern: "@[A-Za-z0-9]*",
+              maxLength: 250,
+              pattern: '@[A-Za-z0-9]*'
             }}
           />
         </Grid>
@@ -117,9 +121,16 @@ export default function UserInfoForm() {
             id="date"
             label="Дата рождения"
             type="date"
-            defaultValue="2017-05-24"
+            defaultValue="2017-05-01"
             InputLabelProps={{
               shrink: true,
+              error: false,
+            }}
+            onChange={(evt) => {
+              setDate(evt.target.value);
+              if (Date.now() < new Date(evt.target.value)){
+                console.log("Invalid date")
+              }
             }}
           />
         </Grid>
@@ -133,7 +144,7 @@ export default function UserInfoForm() {
             variant="outlined"
             fullWidth
             inputProps={{
-              maxlength: 250,
+              maxLength: 250,
             }}
           />
         </Grid>

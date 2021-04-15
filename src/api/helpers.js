@@ -4,13 +4,15 @@ import {
   refreshTokenSelector,
   accessTokenSelector,
 } from "@redux/auth/selectors";
-import { mainAxios, localStorageTokensSet } from "./utils";
+import { mainAxios, basicAxios } from "./utils";
+import { logout } from "@redux/auth/slices";
+import { tokens } from "@utils";
 
 const getAccessToken = (store) => accessTokenSelector(store.getState());
 
 export const createWrappedAuthApiInterceptor = (store) => {
   const refreshAuthLogic = (failedRequest) =>
-    mainAxios
+    basicAxios()
       .post(
         "/auth/get_access",
         {
@@ -19,13 +21,20 @@ export const createWrappedAuthApiInterceptor = (store) => {
         { skipAuthRefresh: true }
       )
       .then((res) => {
-        localStorageTokensSet(res.data);
+        tokens.localStorageSet(store, res.data);
         failedRequest.response.config.headers["Authorization"] =
           "Bearer " + getAccessToken(store);
         return Promise.resolve();
+      })
+      .catch((e) => {
+        console.error(e);
+        store.dispatch(logout());
+        return Promise.reject(e);
       });
 
-  createAuthRefreshInterceptor(mainAxios, refreshAuthLogic);
+  createAuthRefreshInterceptor(mainAxios, refreshAuthLogic, {
+    statusCodes: [401, 403],
+  });
 };
 
 export const createWrappedApiInterceptor = (store) => {

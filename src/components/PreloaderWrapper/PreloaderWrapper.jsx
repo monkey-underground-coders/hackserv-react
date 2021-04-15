@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useStore } from "react-redux";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { getConfig } from "@redux/conf";
+import {
+  loadingSelector,
+  initApplication,
+  errorSelector,
+  AppStateEnum,
+} from "@redux/app";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -14,26 +19,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PreloaderWrapper = ({ children }) => {
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [loadingCausedError, setLoadingCausedError] = useState(false);
-  const dispatch = useDispatch();
+  const { dispatch } = useStore();
+  const loadingState = useSelector(loadingSelector);
+  const error = useSelector(errorSelector);
+
+  useEffect(() => {
+    if (loadingState === AppStateEnum.OFF) {
+      dispatch(initApplication());
+    }
+  }, [loadingState, dispatch]);
 
   const classes = useStyles();
 
-  useEffect(() => {
-    if (!initialLoading) return;
-
-    const actions = [dispatch(getConfig())];
-
-    Promise.all(actions)
-      .catch((e) => {
-        console.error(e);
-        setLoadingCausedError(true);
-      })
-      .finally(() => {
-        setInitialLoading(false);
-      });
-  }, [initialLoading]);
+  const initialLoading =
+    loadingState === AppStateEnum.INITIALIZING ||
+    loadingState === AppStateEnum.OFF;
+  const loadingCausedError = error !== null;
 
   return (
     <>

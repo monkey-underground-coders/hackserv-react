@@ -1,54 +1,54 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 
-import { decode as decodeJwt } from "@utils/jwt";
+import { decode as decodeJwt, localStorageErase } from "@utils/tokens";
 import { login, updateAccessToken } from "./thunks";
 import { setTokens } from "./actions";
 
-const innerSetTokens = (
-  state,
-  { accessToken, accessTokenExpiringAt, refreshToken, refreshTokenExpiringAt }
-) => {
-  state.tokens = {
-    accessToken,
-    accessTokenExpiredAt: accessTokenExpiringAt,
-    refreshToken,
-    refreshTokenExpiredAt: refreshTokenExpiringAt,
-  };
-
-  const { userId } = decodeJwt(accessToken);
-
-  state.userId = userId;
-};
+const getInitialState = () => ({
+  tokens: {
+    accessToken: false,
+    accessTokenExpiredAt: false,
+    refreshToken: false,
+    refreshTokenExpiredAt: false,
+  },
+  userId: 0,
+});
 
 export const auth = createSlice({
   name: "auth",
-  initialState: {
-    tokens: {
-      accessToken: false,
-      accessTokenExpiredAt: false,
-      refreshToken: false,
-      refreshTokenExpiredAt: false,
-    },
-    userId: 0,
-  },
+  initialState: getInitialState(),
   reducers: {
     logout(state) {
-      state = undefined;
+      localStorageErase();
+      return getInitialState();
     },
   },
-  extraReducers: {
-    [login.fulfilled]: (state, { payload }) => {
-      setTokens(state, payload);
-    },
-    [updateAccessToken.fulfilled]: (state, { payload }) => {
-      setTokens(state, payload);
-    },
-    [updateAccessToken.rejected]: (state) => {
-      state = undefined;
-    },
-    [setTokens]: (state, { payload }) => {
-      innerSetTokens(state, payload);
-    },
+  extraReducers: (builder) => {
+    builder.addCase(updateAccessToken.rejected, () => getInitialState());
+    builder.addMatcher(
+      isAnyOf(login.fulfilled, updateAccessToken.fulfilled, setTokens),
+      (state, { payload }) => {
+        const {
+          accessToken,
+          accessTokenExpiringAt,
+          refreshToken,
+          refreshTokenExpiringAt,
+        } = payload;
+
+        state.tokens = {
+          accessToken,
+          accessTokenExpiredAt: accessTokenExpiringAt,
+          refreshToken,
+          refreshTokenExpiredAt: refreshTokenExpiringAt,
+        };
+
+        if (accessToken) {
+          const { userId } = decodeJwt(accessToken);
+
+          state.userId = userId;
+        }
+      }
+    );
   },
 });
 
