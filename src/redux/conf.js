@@ -1,5 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import { getConfig as getConfigRequest } from "@api";
+import { parseDataSize } from "@utils";
 
 export const getConfig = createAsyncThunk(
   "conf/get",
@@ -15,27 +20,37 @@ export const getConfig = createAsyncThunk(
 
 export const getConfigSelector = (state) => state.conf;
 
+export const isErrorOnParseSelector = createSelector(
+  getConfigSelector,
+  ({ errorOnParse }) => errorOnParse
+);
+
+export const maxFileSizeSelector = createSelector(
+  getConfigSelector,
+  ({ maxFileSize }) => maxFileSize
+);
+
 export const conf = createSlice({
   name: "conf",
   initialState: {
     maxFileSize: null,
     minEmailReq: null,
     maxEmailDuration: null,
+
+    errorOnParse: false,
   },
   reducers: {},
   extraReducers: {
     [getConfig.fulfilled]: (state, { payload }) => {
-      const { maxFileSize, minEmailReq, maxEmailDuration } = payload;
-      state.isError = false;
-      state.container = {
-        maxFileSize,
-        minEmailReq,
-        maxEmailDuration,
-      };
-    },
-    [getConfig.rejected]: (state, { payload }) => {
-      state.isError = true;
-      state.errorMessage = payload;
+      try {
+        const { maxFileSize, minEmailReq, maxEmailDuration } = payload;
+        state.maxFileSize = parseDataSize(maxFileSize);
+        state.minEmailReq = minEmailReq;
+        state.maxEmailDuration = maxEmailDuration;
+        state.errorOnParse = false;
+      } catch (e) {
+        state.errorOnParse = true;
+      }
     },
   },
 });

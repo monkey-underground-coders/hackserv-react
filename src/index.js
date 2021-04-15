@@ -4,7 +4,6 @@ import "./index.css";
 import App from "@components/App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import { SnackbarProvider } from "notistack";
 
 import { configChecker } from "@validation";
 import store from "@redux";
@@ -15,9 +14,7 @@ console.log(store.getState());
 
 ReactDOM.render(
   <Provider store={store}>
-    <SnackbarProvider maxSnack={3} autoHideDuration={3500}>
-      <App />
-    </SnackbarProvider>
+    <App />
   </Provider>,
   document.getElementById("root")
 );
