@@ -25,9 +25,9 @@ export const userUploadResume = createAsyncThunk(
 
 export const userDeleteResume = createAsyncThunk(
   "user/cv/delete",
-  async ({ userId }, { dispatch }) => {
-    await deleteResume(userId);
-    return;
+  async ({ userId }) => {
+    const response = await deleteResume(userId);
+    return response.data;
   }
 );
 
@@ -44,13 +44,13 @@ export const getSelf = createAsyncThunk(
 );
 
 // export const getUser = createAsyncThunk(
-//     "users/getUser",
-//     async ({ userId }, { rejectWithValue }) => {
-//       try {
-//         const response = await getUser(userId);
-//         return response.data;
-//       } catch (e) {
-//         return rejectWithValue(e.message || e.response.data);
-//       }
+//   "users/getUser",
+//   async ({ userId }, { rejectWithValue }) => {
+//     try {
+//       const response = await getSelfUser(); // TODO: real call
+//       return response.data;
+//     } catch (e) {
+//       return rejectWithValue(e.message || e.response.data);
 //     }
-//   );
+//   }
+// );

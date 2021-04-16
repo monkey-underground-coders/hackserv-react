@@ -3,32 +3,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import { DropzoneDialog } from "material-ui-dropzone";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { Divider, IconButton } from "@material-ui/core";
-import { DeleteForever } from "@material-ui/icons";
 import clsx from "clsx";
-
-import { maxFileSizeSelector } from "@redux/conf";
-import {
-  userUploadResume,
-  userDeleteResume,
-  getSelfUserSelector,
-} from "@redux/users";
-import { userIdSelector } from "@redux/auth/selectors";
-import { getSelf } from "../../../redux/users";
 
 const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
-  },
-  formButton: {
-    alignItems: "center",
-    display: "flex",
   },
 }));
 
@@ -40,56 +23,20 @@ const userInfo = {
   telegram: "",
   dateOfBirth: "2021-04-01",
   other: "",
-}
+};
 
 const errors = {
   telegramError: false,
   dateOfBirthError: false,
-}
+};
 
-export default function UserInfoForm() {
-  const [fileUploadDialogOpen, setFileUploadDialogOpen] = useState(false);
+export default function UserInfoForm({ currentUser }) {
   const [user, setUser] = useState(userInfo);
   const [error, setError] = useState(errors);
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
 
-  const maxFileSize = useSelector(maxFileSizeSelector);
-  const currentUser = useSelector(getSelfUserSelector);
-  const userId = useSelector(userIdSelector);
   const dispatch = useDispatch();
-
-  const onFUSave = (files) => {
-    const file = files[0];
-    return dispatch(userUploadResume({ file, userId }))
-      .then(unwrapResult)
-      .then(() => {
-        setFileUploadDialogOpen(false);
-        enqueueSnackbar(`Файл ${file.name} успешно загружен!`, {
-          variant: "success",
-        });
-      })
-      .catch(() => {
-        enqueueSnackbar(`Не удалось загрузить файл ${file.name}`, {
-          variant: "error",
-        });
-      });
-  };
-
-  const onFUClose = () => {
-    setFileUploadDialogOpen(false);
-  };
-
-  const onFUAlert = (message, variant) => {
-    if (variant !== "error") return;
-    enqueueSnackbar(message, { variant });
-  };
-
-  const deleteResume = () => {
-    return dispatch(userDeleteResume({ userId })).then(() =>
-      dispatch(getSelf())
-    );
-  };
 
   return (
     <>
@@ -110,7 +57,7 @@ export default function UserInfoForm() {
                 maxLength: 250,
               }}
               onChange={(evt) => {
-                setUser({...user, lastName: evt.target.value});
+                setUser({ ...user, lastName: evt.target.value });
               }}
             />
           </Grid>
@@ -126,7 +73,7 @@ export default function UserInfoForm() {
                 maxLength: 250,
               }}
               onChange={(evt) => {
-                setUser({...user, firstName: evt.target.value});
+                setUser({ ...user, firstName: evt.target.value });
               }}
             />
           </Grid>
@@ -141,7 +88,7 @@ export default function UserInfoForm() {
                 maxLength: 250,
               }}
               onChange={(evt) => {
-                setUser({...user, middleName: evt.target.value});
+                setUser({ ...user, middleName: evt.target.value });
               }}
             />
           </Grid>
@@ -157,13 +104,13 @@ export default function UserInfoForm() {
                 maxLength: 250,
               }}
               onChange={(evt) => {
-                setUser({...user, university: evt.target.value});
+                setUser({ ...user, university: evt.target.value });
               }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
-              error = {error.telegramError}
+              error={error.telegramError}
               required
               id="telegram"
               name="telegram"
@@ -178,11 +125,10 @@ export default function UserInfoForm() {
               onChange={(evt) => {
                 const reg = /^@(?=\w{5,64}\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$/;
                 if (reg.test(evt.target.value)) {
-                  setUser({...user, telegram: evt.target.value});
-                  setError({...error, telegramError: false});
-                }
-                else {
-                  setError({...error, telegramError: true});
+                  setUser({ ...user, telegram: evt.target.value });
+                  setError({ ...error, telegramError: false });
+                } else {
+                  setError({ ...error, telegramError: true });
                 }
               }}
             />
@@ -200,11 +146,10 @@ export default function UserInfoForm() {
               }}
               onChange={(evt) => {
                 if (Date.now() < new Date(evt.target.value)) {
-                  setError({...error, dateOfBirthError: true});
-                }
-                else {
-                  setError({...error, dateOfBirthError: false});
-                  setUser({...user, dateOfBirth: evt.target.value});
+                  setError({ ...error, dateOfBirthError: true });
+                } else {
+                  setError({ ...error, dateOfBirthError: false });
+                  setUser({ ...user, dateOfBirth: evt.target.value });
                 }
               }}
             />
@@ -222,52 +167,12 @@ export default function UserInfoForm() {
                 maxLength: 250,
               }}
               onChange={(evt) => {
-                setUser({...user, other: evt.target.value});
+                setUser({ ...user, other: evt.target.value });
               }}
             />
           </Grid>
         </Grid>
       </div>
-      <Divider variant="middle" flexItem />
-      <div>
-        <Grid container spacing={3}>
-          <Grid item className={clsx(classes.formButton)}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setFileUploadDialogOpen(true)}
-            >
-              Загрузить резюме
-            </Button>
-          </Grid>
-
-          {currentUser.documentResumePath && (
-            <Grid item>
-              <IconButton onClick={deleteResume}>
-                <DeleteForever />
-              </IconButton>
-            </Grid>
-          )}
-        </Grid>
-      </div>
-      <DropzoneDialog
-        open={fileUploadDialogOpen}
-        onSave={onFUSave}
-        acceptedFiles={[
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
-          "application/pdf", // .pdf
-        ]}
-        showPreviews={true}
-        onAlert={onFUAlert}
-        showAlerts={false}
-        maxFileSize={maxFileSize}
-        onClose={onFUClose}
-        filesLimit={1}
-        dialogTitle={"Загрузка резюме"}
-        cancelButtonText={"Отмена"}
-        submitButtonText={"Отправить"}
-        dropzoneText={"Переместите файл в область или нажмите сюда"}
-      />
     </>
   );
 }

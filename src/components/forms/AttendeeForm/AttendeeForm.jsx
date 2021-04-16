@@ -1,27 +1,30 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Paper from '@material-ui/core/Paper';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Paper from "@material-ui/core/Paper";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import { useSelector } from "react-redux";
 
-import PersonForm from '@components/forms/UserInfoForm';
-import Review from '@components/forms/TeamForm';
+import PersonForm from "@components/forms/PersonForm";
+import Review from "@components/forms/TeamForm";
+import { userIdSelector } from "@redux/auth";
+import { getUserByIdSelector } from "@redux/users/selectors";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    position: 'relative',
+    position: "relative",
   },
   layout: {
-    width: 'auto',
+    width: "auto",
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
       width: 600,
-      marginRight: 'auto',
+      marginRight: "auto",
     },
   },
   paper: {
@@ -38,8 +41,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 0, 5),
   },
   buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+    display: "flex",
+    justifyContent: "flex-end",
   },
   button: {
     marginTop: theme.spacing(3),
@@ -47,22 +50,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const steps = ['Данные о себе', 'Команды'];
+const steps = ["Данные о себе", "Команды"];
 
-function getStepContent(step) {
+function getStepContent(step, user) {
   switch (step) {
     case 0:
-      return <PersonForm />;
+      return <PersonForm user={user} />;
     case 1:
       return <Review />;
     default:
-      throw new Error('Unknown step');
+      throw new Error("Unknown step");
   }
 }
 
 export default function AttendeeForm() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
+
+  const userId = useSelector(userIdSelector);
+  const user = useSelector((state) => getUserByIdSelector(state, { userId }));
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -99,7 +105,7 @@ export default function AttendeeForm() {
               </React.Fragment>
             ) : (
               <React.Fragment>
-                {getStepContent(activeStep)}
+                {getStepContent(activeStep, user)}
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
                     <Button onClick={handleBack} className={classes.button}>
@@ -112,7 +118,9 @@ export default function AttendeeForm() {
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? 'Завершить' : 'Следующий'}
+                    {activeStep === steps.length - 1
+                      ? "Завершить"
+                      : "Следующий"}
                   </Button>
                 </div>
               </React.Fragment>

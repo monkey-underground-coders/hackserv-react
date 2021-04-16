@@ -9,3 +9,9 @@ export const getSelfUserSelector = createSelector(
   userIdSelector,
   ({ entities }, uid) => entities[uid]
 );
+
+export const getUserByIdSelector = createSelector(
+  usersSelector,
+  (_, { userId }) => userId,
+  ({ entities }, uid) => entities[uid]
+);

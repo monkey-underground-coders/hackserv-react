@@ -1,6 +1,11 @@
 import { createSlice, createEntityAdapter, isAnyOf } from "@reduxjs/toolkit";
 
-import { userCreate, getSelf, userUploadResume } from "./thunks";
+import {
+  userCreate,
+  getSelf,
+  userUploadResume,
+  userDeleteResume,
+} from "./thunks";
 
 export const usersAdapter = createEntityAdapter();
 
@@ -15,7 +20,8 @@ export const users = createSlice({
       isAnyOf(
         userCreate.fulfilled,
         getSelf.fulfilled,
-        userUploadResume.fulfilled
+        userUploadResume.fulfilled,
+        userDeleteResume.fulfilled
       ),
       (state, { payload }) => {
         const { id, ...changes } = payload;
