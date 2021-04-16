@@ -18,3 +18,11 @@ export const parseDataSize = (size) => {
     }
   }
 };
+
+export const generateResumeFilename = ({ fullName, documentResumePath }) => {
+  const fileName = fullName || "resume";
+  const extension = documentResumePath
+    ? documentResumePath.substring(documentResumePath.lastIndexOf("."))
+    : "";
+  return fileName + extension;
+};

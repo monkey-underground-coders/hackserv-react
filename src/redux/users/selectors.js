@@ -2,7 +2,7 @@ import { createSelector } from "@reduxjs/toolkit";
 
 import { userIdSelector } from "@redux/auth";
 
-const usersSelector = (state) => state.users;
+export const usersSelector = (state) => state.users;
 
 export const getSelfUserSelector = createSelector(
   usersSelector,
@@ -14,4 +14,9 @@ export const getUserByIdSelector = createSelector(
   usersSelector,
   (_, { userId }) => userId,
   ({ entities }, uid) => entities[uid]
+);
+
+export const loadingSelector = createSelector(
+  usersSelector,
+  ({ loading }) => loading
 );

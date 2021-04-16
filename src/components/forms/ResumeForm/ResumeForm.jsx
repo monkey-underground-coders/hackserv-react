@@ -8,13 +8,18 @@ import { useSnackbar } from "notistack";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { IconButton } from "@material-ui/core";
 import { DeleteForever } from "@material-ui/icons";
-import fileDownload from "js-file-download";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import TextField from "@material-ui/core/TextField";
 import clsx from "clsx";
 
 import { maxFileSizeSelector } from "@redux/conf";
-import { userUploadResume, userDeleteResume } from "@redux/users";
-import { getResume } from "@api";
+import {
+  userUploadResume,
+  userDeleteResume,
+  userDownloadResume,
+  loadingSelector,
+} from "@redux/users";
 
 const useStyles = makeStyles(() => ({
   formButton: {
@@ -23,20 +28,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const generateResumeFilename = ({ fullName, documentResumePath }) => {
-  const fileName = fullName || "resume";
-  const extension = documentResumePath
-    ? documentResumePath.substring(documentResumePath.lastIndexOf("."))
-    : "";
-  return fileName + extension;
-};
-
 const ResumeForm = ({ user, allowUpload = true }) => {
   const [fileUploadDialogOpen, setFileUploadDialogOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
 
   const maxFileSize = useSelector(maxFileSizeSelector);
+  const resumeLoading = useSelector(loadingSelector);
   const dispatch = useDispatch();
 
   const userId = user.id;
@@ -83,11 +81,8 @@ const ResumeForm = ({ user, allowUpload = true }) => {
   };
 
   const downloadResume = () => {
-    return getResume(userId)
-      .then((file) => {
-        console.log(file.data);
-        fileDownload(file.data, generateResumeFilename(user));
-      })
+    return dispatch(userDownloadResume({ userId }))
+      .then(unwrapResult)
       .catch(() => {
         enqueueSnackbar(`Не удалось скачать резюме`, {
           variant: "error",
@@ -113,9 +108,15 @@ const ResumeForm = ({ user, allowUpload = true }) => {
           {user.documentResumePath && (
             <>
               <Grid item>
-                <IconButton onClick={downloadResume}>
-                  <GetAppIcon />
-                </IconButton>
+                {!resumeLoading ? (
+                  <IconButton onClick={downloadResume}>
+                    <GetAppIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton>
+                    <CircularProgress color="inherit" size={24} />
+                  </IconButton>
+                )}
               </Grid>
               <Grid item>
                 <IconButton onClick={deleteResume}>
@@ -124,6 +125,22 @@ const ResumeForm = ({ user, allowUpload = true }) => {
               </Grid>
             </>
           )}
+          <Grid item xs={12}>
+            <TextField
+              id="other"
+              label="Если у вас нет резюме, расскажите о себе в этом поле"
+              multiline
+              rows={4}
+              variant="outlined"
+              fullWidth
+              inputProps={{
+                maxLength: 5000,
+              }}
+              //   onChange={(evt) => {
+              //     setUser({ ...user, other: evt.target.value });
+              //   }}
+            />
+          </Grid>
         </Grid>
       </div>
       {allowUpload && (

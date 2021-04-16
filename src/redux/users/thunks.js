@@ -1,7 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import fileDownload from "js-file-download";
 
-import { signupPost, postResume, getSelfUser } from "@api";
-import { deleteResume } from "../../api/user";
+import {
+  signupPost,
+  postResume,
+  deleteResume,
+  getSelfUser,
+  getResume,
+} from "@api";
+import { usersSelector, getUserByIdSelector } from "./selectors";
+import { generateResumeFilename } from "@utils";
 
 export const userCreate = createAsyncThunk(
   "users/create",
@@ -37,6 +45,25 @@ export const getSelf = createAsyncThunk(
     try {
       const response = await getSelfUser();
       return response.data;
+    } catch (e) {
+      return rejectWithValue(e.message || e.response.data);
+    }
+  }
+);
+
+export const userDownloadResume = createAsyncThunk(
+  "users/cv/download",
+  async ({ userId }, { getState, requestId, rejectWithValue }) => {
+    try {
+      const { currentRequestId, loading } = usersSelector(getState());
+      if (loading !== true || requestId !== currentRequestId) {
+        return;
+      }
+      const user = getUserByIdSelector(getState(), { userId });
+      const file = await getResume(userId);
+      console.log(file, user);
+      fileDownload(file.data, generateResumeFilename(user));
+      return "OK";
     } catch (e) {
       return rejectWithValue(e.message || e.response.data);
     }
