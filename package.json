@@ -8,6 +8,7 @@
     "@reduxjs/toolkit": "1.5.0",
     "axios": "^0.21.1",
     "axios-auth-refresh": "^3.1.0",
+    "js-file-download": "^0.4.12",
     "jwt-decode": "^3.1.2",
     "material-ui-dropzone": "^3.5.0",
     "notistack": "^1.0.5",

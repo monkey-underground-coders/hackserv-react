@@ -11,3 +11,8 @@ export const postResume = (file, userId) => {
 };
 
 export const deleteResume = (userId) => mainAxios.delete(`/user/${userId}/cv/`);
+
+export const getResume = (userId) =>
+  mainAxios.get(`/user/${userId}/cv/`, {
+    responseType: "blob",
+  });

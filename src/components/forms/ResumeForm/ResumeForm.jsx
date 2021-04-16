@@ -8,10 +8,13 @@ import { useSnackbar } from "notistack";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { IconButton } from "@material-ui/core";
 import { DeleteForever } from "@material-ui/icons";
+import fileDownload from "js-file-download";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import clsx from "clsx";
 
 import { maxFileSizeSelector } from "@redux/conf";
 import { userUploadResume, userDeleteResume } from "@redux/users";
+import { getResume } from "@api";
 
 const useStyles = makeStyles(() => ({
   formButton: {
@@ -19,6 +22,14 @@ const useStyles = makeStyles(() => ({
     display: "flex",
   },
 }));
+
+const generateResumeFilename = ({ fullName, documentResumePath }) => {
+  const fileName = fullName || "resume";
+  const extension = documentResumePath
+    ? documentResumePath.substring(documentResumePath.lastIndexOf("."))
+    : "";
+  return fileName + extension;
+};
 
 const ResumeForm = ({ user, allowUpload = true }) => {
   const [fileUploadDialogOpen, setFileUploadDialogOpen] = useState(false);
@@ -71,6 +82,19 @@ const ResumeForm = ({ user, allowUpload = true }) => {
       });
   };
 
+  const downloadResume = () => {
+    return getResume(userId)
+      .then((file) => {
+        console.log(file.data);
+        fileDownload(file.data, generateResumeFilename(user));
+      })
+      .catch(() => {
+        enqueueSnackbar(`Не удалось скачать резюме`, {
+          variant: "error",
+        });
+      });
+  };
+
   return (
     <>
       <div>
@@ -87,11 +111,18 @@ const ResumeForm = ({ user, allowUpload = true }) => {
             </Grid>
           )}
           {user.documentResumePath && (
-            <Grid item>
-              <IconButton onClick={deleteResume}>
-                <DeleteForever />
-              </IconButton>
-            </Grid>
+            <>
+              <Grid item>
+                <IconButton onClick={downloadResume}>
+                  <GetAppIcon />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <IconButton onClick={deleteResume}>
+                  <DeleteForever />
+                </IconButton>
+              </Grid>
+            </>
           )}
         </Grid>
       </div>
