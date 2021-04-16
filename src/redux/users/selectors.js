@@ -15,8 +15,3 @@ export const getUserByIdSelector = createSelector(
   (_, { userId }) => userId,
   ({ entities }, uid) => entities[uid]
 );
-
-export const loadingSelector = createSelector(
-  usersSelector,
-  ({ loading }) => loading
-);

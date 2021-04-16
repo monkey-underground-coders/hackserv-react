@@ -11,15 +11,13 @@ import { DeleteForever } from "@material-ui/icons";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
+import fileDownload from "js-file-download";
 import clsx from "clsx";
 
 import { maxFileSizeSelector } from "@redux/conf";
-import {
-  userUploadResume,
-  userDeleteResume,
-  userDownloadResume,
-  loadingSelector,
-} from "@redux/users";
+import { userUploadResume, userDeleteResume } from "@redux/users";
+import { getResume } from "@api";
+import { generateResumeFilename } from "@utils/parse";
 
 const useStyles = makeStyles(() => ({
   formButton: {
@@ -30,11 +28,11 @@ const useStyles = makeStyles(() => ({
 
 const ResumeForm = ({ user, allowUpload = true }) => {
   const [fileUploadDialogOpen, setFileUploadDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
 
   const maxFileSize = useSelector(maxFileSizeSelector);
-  const resumeLoading = useSelector(loadingSelector);
   const dispatch = useDispatch();
 
   const userId = user.id;
@@ -81,12 +79,20 @@ const ResumeForm = ({ user, allowUpload = true }) => {
   };
 
   const downloadResume = () => {
-    return dispatch(userDownloadResume({ userId }))
-      .then(unwrapResult)
+    if (loading) return;
+    setLoading(true);
+
+    return getResume(userId)
+      .then((response) =>
+        fileDownload(response.data, generateResumeFilename(user))
+      )
       .catch(() => {
         enqueueSnackbar(`Не удалось скачать резюме`, {
           variant: "error",
         });
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -108,7 +114,7 @@ const ResumeForm = ({ user, allowUpload = true }) => {
           {user.documentResumePath && (
             <>
               <Grid item>
-                {!resumeLoading ? (
+                {!loading ? (
                   <IconButton onClick={downloadResume}>
                     <GetAppIcon />
                   </IconButton>
