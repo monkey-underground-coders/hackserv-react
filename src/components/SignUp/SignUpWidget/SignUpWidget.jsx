@@ -78,6 +78,11 @@ export default function SignUpWidget() {
             variant: "error",
           });
         }
+        else {
+          enqueueSnackbar("Что-то пошло не так...", {
+            variant: "error",
+          });
+        }
       })
     }
     if (!email.inputValid){
