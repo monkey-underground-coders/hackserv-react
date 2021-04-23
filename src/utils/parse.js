@@ -26,3 +26,13 @@ export const generateResumeFilename = ({ fullName, documentResumePath }) => {
     : "";
   return fileName + extension;
 };
+
+export const parseErrors = (str) => {
+  const dict = {
+    "Email already exist": "Данный email уже занят",
+    "Validation failed for object='createUserRequest'. Error count: 1": "Одно из полей ввода некорректно",
+    "Validation failed for object='createUserRequest'. Error count: 2": "Одно из полей ввода некорректно",
+  }
+
+  return dict[str] || str;
+};

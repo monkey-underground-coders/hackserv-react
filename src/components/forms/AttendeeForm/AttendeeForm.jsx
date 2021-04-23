@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { useSelector } from "react-redux";
 
 import PersonForm from "@components/forms/PersonForm";
-import Review from "@components/forms/TeamForm";
+import TeamForm from "@components/forms/TeamForm";
 import { userIdSelector } from "@redux/auth";
 import { getUserByIdSelector } from "@redux/users/selectors";
 
@@ -57,7 +57,7 @@ function getStepContent(step, user) {
     case 0:
       return <PersonForm user={user} />;
     case 1:
-      return <Review />;
+      return <TeamForm />;
     default:
       throw new Error("Unknown step");
   }

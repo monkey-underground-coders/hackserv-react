@@ -12,11 +12,16 @@ import Container from "@material-ui/core/Container";
 import LockIcon from "@material-ui/icons/Lock";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 import VkLogo from "@assets/vk-logo.svg";
 import GoogleLogo from "@assets/google-logo.svg";
 import GitLogo from "@assets/GitHub-logo.svg";
 import { userCreate } from "@redux/users";
+import { parseErrors } from "@utils/parse"
+import { useInput } from "@validation/formValidation"
+import { FormatListNumberedTwoTone } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,13 +54,42 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUpWidget() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const email = useInput("", {
+    isEmpty: true,
+    isEmail: false,
+  });
+  const password = useInput("", {
+    isEmpty: true,
+    minLength: 5,
+  });
 
   const handleClick = (event) => {
     event.preventDefault();
-    dispatch(userCreate({ email, password }));
+    const emailVal = email.value;
+    const passwordVal = password.value;
+    if (email.inputValid && password.inputValid){
+      dispatch(userCreate({ emailVal, passwordVal }))
+      .then(unwrapResult)
+      .catch((error) => {
+        if (error.message == "Email already exist"){
+          enqueueSnackbar(parseErrors(error.message), {
+            variant: "error",
+          });
+        }
+      })
+    }
+    if (!email.inputValid){
+      enqueueSnackbar(`Email введен некорректно`, {
+        variant: "error",
+      });
+    }
+    if (password.minLengthError){
+      enqueueSnackbar(`Пароль должен быть минимум 5 символов`, {
+        variant: "error",
+      });
+    }
   };
 
   return (
@@ -89,6 +123,7 @@ export default function SignUpWidget() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                error={(email.isEmpty && email.isDirty) || (email.isDirty && email.emailError)}
                 variant="outlined"
                 margin="normal"
                 required
@@ -97,13 +132,14 @@ export default function SignUpWidget() {
                 label="Email"
                 name="email"
                 autoComplete="email"
-                value={email}
-                onChange={(evt) => setEmail(evt.target.value)}
-                autoFocus
+                value={email.value}
+                onBlur={(evt) => email.onBlur(evt)}
+                onChange={(evt) => {email.onChange(evt)}}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={(password.isEmpty && password.isDirty) || (password.isDirty && password.minLengthError)}
                 variant="outlined"
                 margin="normal"
                 required
@@ -113,8 +149,9 @@ export default function SignUpWidget() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                value={password}
-                onChange={(evt) => setPassword(evt.target.value)}
+                value={password.value}
+                onBlur={(evt) => password.onBlur(evt)}
+                onChange={(evt) => password.onChange(evt)}
               />
             </Grid>
             <Grid item xs={12}>
