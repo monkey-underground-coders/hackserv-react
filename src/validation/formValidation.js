@@ -63,7 +63,6 @@ export const useValidation = (value, validators) => {
   useEffect(() => {
     const localErrors = [];
     const localValidationResults = {};
-    console.log(validators);
     for (const validator of validators) {
       const { isOk, errorMessage, name, props } = validator;
       const result = isOk(value, props);

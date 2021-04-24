@@ -97,8 +97,6 @@ export default function SignUpWidget() {
     }
   };
 
-  console.log(password);
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
