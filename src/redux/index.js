@@ -8,6 +8,7 @@ import users from "./users";
 import conf from "./conf";
 import authReducer from "./auth/slices";
 import app from "./app";
+import tracks from "./tracks";
 
 const store = (() => {
   const reducer = combineReducers({
@@ -15,6 +16,7 @@ const store = (() => {
     conf,
     auth: authReducer,
     app,
+    tracks,
   });
 
   const store = configureStore({ reducer });
