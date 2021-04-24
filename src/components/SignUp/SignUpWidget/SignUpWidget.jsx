@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { FormatListNumberedTwoTone } from "@material-ui/icons";
 
 import VkLogo from "@assets/vk-logo.svg";
 import GoogleLogo from "@assets/google-logo.svg";
@@ -26,7 +27,7 @@ import {
   minLength,
   isNotEmpty,
 } from "@validation/formValidation";
-import { FormatListNumberedTwoTone } from "@material-ui/icons";
+import { useMySnackbar } from "@utils/hooks";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -59,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUpWidget() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueError } = useMySnackbar();
 
   const email = useInput("", isNotEmpty(), isEmail());
   const password = useInput("", isNotEmpty(), minLength(5));
@@ -75,25 +76,21 @@ export default function SignUpWidget() {
         .then(unwrapResult)
         .catch((error) => {
           if (error.message === "Email already exist") {
-            enqueueSnackbar(parseErrors(error.message), {
+            enqueueError(parseErrors(error.message), {
               variant: "error",
             });
           } else {
-            enqueueSnackbar("Что-то пошло не так...", {
+            enqueueError("Что-то пошло не так...", {
               variant: "error",
             });
           }
         });
     }
     if (!email.isEmail) {
-      enqueueSnackbar(`Email введен некорректно`, {
-        variant: "error",
-      });
+      enqueueError(`Email введен некорректно`);
     }
     if (!password.minLength) {
-      enqueueSnackbar(`Пароль должен быть минимум 5 символов`, {
-        variant: "error",
-      });
+      enqueueError(`Пароль должен быть минимум 5 символов`);
     }
   };
 

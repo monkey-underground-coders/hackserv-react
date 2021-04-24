@@ -18,6 +18,7 @@ import { maxFileSizeSelector } from "@redux/conf";
 import { userUploadResume, userDeleteResume } from "@redux/users";
 import { getResume } from "@api";
 import { generateResumeFilename } from "@utils/parse";
+import { useMySnackbar } from "@utils/hooks";
 
 const useStyles = makeStyles(() => ({
   formButton: {
@@ -29,7 +30,13 @@ const useStyles = makeStyles(() => ({
 const ResumeForm = ({ user, allowUpload = true }) => {
   const [fileUploadDialogOpen, setFileUploadDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
+  const {
+    enqueueInfo,
+    enqueueSuccess,
+    enqueueError,
+    enqueueSnackbar,
+  } = useMySnackbar();
+
   const classes = useStyles();
 
   const maxFileSize = useSelector(maxFileSizeSelector);
@@ -43,14 +50,10 @@ const ResumeForm = ({ user, allowUpload = true }) => {
       .then(unwrapResult)
       .then(() => {
         setFileUploadDialogOpen(false);
-        enqueueSnackbar(`Файл ${file.name} успешно загружен!`, {
-          variant: "success",
-        });
+        enqueueSuccess(`Файл ${file.name} успешно загружен!`);
       })
       .catch(() => {
-        enqueueSnackbar(`Не удалось загрузить файл ${file.name}`, {
-          variant: "error",
-        });
+        enqueueError(`Не удалось загрузить файл ${file.name}`);
       });
   };
 
@@ -67,14 +70,10 @@ const ResumeForm = ({ user, allowUpload = true }) => {
     return dispatch(userDeleteResume({ userId }))
       .then(unwrapResult)
       .then(() => {
-        enqueueSnackbar(`Резюме успешно удалено`, {
-          variant: "info",
-        });
+        enqueueInfo(`Резюме успешно удалено`);
       })
       .catch(() => {
-        enqueueSnackbar(`Не удалось удалить резюме`, {
-          variant: "error",
-        });
+        enqueueError(`Не удалось удалить резюме`);
       });
   };
 
@@ -87,9 +86,7 @@ const ResumeForm = ({ user, allowUpload = true }) => {
         fileDownload(response.data, generateResumeFilename(user))
       )
       .catch(() => {
-        enqueueSnackbar(`Не удалось скачать резюме`, {
-          variant: "error",
-        });
+        enqueueError(`Не удалось скачать резюме`);
       })
       .finally(() => {
         setLoading(false);

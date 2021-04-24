@@ -22,6 +22,7 @@ import Copyright from "@components/Copyright";
 import AttendeeForm from "@components/forms/AttendeeForm";
 import { mainListItems, secondaryListItems } from "./listItems";
 import { logout } from "@redux/auth/slices";
+import Tracks from "@components/Tracks";
 
 const drawerWidth = 240;
 
@@ -181,14 +182,13 @@ export default function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Switch>
-              <Route
-                path="/dashboard/registration-profile"
-                component={AttendeeForm}
-              />
-            </Switch>
-          </Grid>
+          <Switch>
+            <Route
+              path="/dashboard/registration-profile"
+              component={AttendeeForm}
+            />
+            <Route path="/dashboard/tracks" component={Tracks} />
+          </Switch>
           <Box pt={4}>
             <Copyright />
           </Box>
