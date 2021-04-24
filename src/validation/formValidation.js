@@ -1,66 +1,80 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
+import _ from "lodash";
 
-export const useInput = (initValue, validators) => {
-    const [value, setValue] = useState(initValue);
-    const [isDirty, setDirty] = useState(false);
-    const valid = useValidation(value, validators);
+export const useInput = (initValue, ...validators) => {
+  const [value, setValue] = useState(initValue);
+  const [isDirty, setDirty] = useState(false);
+  const valid = useValidation(value, validators);
 
-    const onChange = (evt) => {
-        setValue(evt.target.value);
-    }
+  const onChange = (evt) => {
+    setValue(evt.target.value);
+  };
 
-    const onBlur = (evt) => {
-        setDirty(true);
-    }
+  const onBlur = (evt) => {
+    setDirty(true);
+  };
 
-    return {
-        value,
-        onChange,
-        onBlur,
-        isDirty,
-        ...valid
-    }
-}
+  return {
+    value,
+    onChange,
+    onBlur,
+    isDirty,
+    ...valid,
+  };
+};
+
+const createValidator = (name, validator, errorMessage) => (props) => (
+  value
+) => ({
+  isOk: validator(value, props || {}),
+  errorMessage:
+    errorMessage instanceof Function
+      ? errorMessage(value, props)
+      : errorMessage,
+  name,
+});
+
+export const isNotEmpty = createValidator(
+  "isNotEmpty",
+  (value) => !!value,
+  "пустое"
+);
+
+export const minLength = createValidator(
+  "minLength",
+  (value, min) => value.length >= min,
+  (_, min) => `длина меньше чем ${min}`
+);
+
+export const isEmail = createValidator(
+  "isEmail",
+  (value) => /^[a-zA-Z0-9]*@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/.test(value),
+  "не является email'ом"
+);
 
 export const useValidation = (value, validators) => {
-    const [isEmpty, setEmpty] = useState(true);
-    const [minLengthError, setMinLengthError] = useState(false);
-    const [emailError, setEmailError] = useState(false);
-    
-    const [inputValid, setInputValid] = useState(false);
+  const [errors, setErrors] = useState([]);
+  const [validationResults, setValidationResults] = useState({});
 
-    useEffect(() => {
-        for (const validator in validators){
-            switch (validator) {
-                case "isEmpty":
-                    value ? setEmpty(false) : setEmpty(true);
-                    break;
-                case "minLength":
-                    value.length < validators[validator] ? setMinLengthError(true) : setMinLengthError(false);
-                    break;
-                case "isEmail":
-                    const reg = /^[a-zA-Z0-9]*@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
-                    reg.test(value) ? setEmailError(false) : setEmailError(true);
-                    break;
-            }
-        }
-    },
-    [value])
-
-    useEffect(() => {
-        if (isEmpty || minLengthError || emailError){
-            setInputValid(false);
-        }
-        else{
-            setInputValid(true);
-        }
-    },
-    [isEmpty, minLengthError, emailError])
-
-    return {
-        isEmpty,
-        minLengthError,
-        emailError,
-        inputValid,
+  useEffect(() => {
+    const localErrors = [];
+    const localValidationResults = {};
+    for (const validator of validators) {
+      console.log(validator);
+      const { isOk, errorMessage, name } = validator(value);
+      if (!isOk) {
+        localErrors.push(errorMessage);
+      }
+      localValidationResults[name] = isOk;
     }
-}
+    setErrors(localErrors);
+    setValidationResults(localValidationResults);
+  }, [value]);
+
+  return {
+    isValid: !errors.length,
+    isError: !!errors.length,
+    errors,
+    ...validationResults,
+  };
+};

@@ -6,12 +6,13 @@ export const trackAdapter = createEntityAdapter({
 
 export const tracks = createSlice({
   name: "tracks",
-  initialState: {
-    ...trackAdapter.getInitialState(),
+  initialState: trackAdapter.getInitialState({
     loading: false,
     currentRequestId: null,
+  }),
+  reducers: {
+    upsertMany: trackAdapter.upsertMany,
   },
-  reducers: {},
   extraReducers: (builder) => {
     // builder.addMatcher(
     //   isAnyOf(
@@ -27,6 +28,9 @@ export const tracks = createSlice({
     // );
   },
 });
+
+const actions = tracks.actions;
+export const upsertMany = actions.upsertMany;
 
 const reducer = tracks.reducer;
 export default reducer;

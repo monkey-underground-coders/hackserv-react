@@ -19,8 +19,13 @@ import VkLogo from "@assets/vk-logo.svg";
 import GoogleLogo from "@assets/google-logo.svg";
 import GitLogo from "@assets/GitHub-logo.svg";
 import { userCreate } from "@redux/users";
-import { parseErrors } from "@utils/parse"
-import { useInput } from "@validation/formValidation"
+import { parseErrors } from "@utils/parse";
+import {
+  useInput,
+  isEmail,
+  minLength,
+  isNotEmpty,
+} from "@validation/formValidation";
 import { FormatListNumberedTwoTone } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
@@ -56,46 +61,43 @@ export default function SignUpWidget() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const email = useInput("", {
-    isEmpty: true,
-    isEmail: false,
-  });
-  const password = useInput("", {
-    isEmpty: true,
-    minLength: 5,
-  });
+  const email = useInput("", isNotEmpty(), isEmail());
+  const password = useInput("", isNotEmpty(), minLength(5));
+
+  const allValid = email.inputValid && password.inputValid;
 
   const handleClick = (event) => {
     event.preventDefault();
     const emailVal = email.value;
     const passwordVal = password.value;
-    if (email.inputValid && password.inputValid){
+    if (allValid) {
       dispatch(userCreate({ emailVal, passwordVal }))
-      .then(unwrapResult)
-      .catch((error) => {
-        if (error.message == "Email already exist"){
-          enqueueSnackbar(parseErrors(error.message), {
-            variant: "error",
-          });
-        }
-        else {
-          enqueueSnackbar("Что-то пошло не так...", {
-            variant: "error",
-          });
-        }
-      })
+        .then(unwrapResult)
+        .catch((error) => {
+          if (error.message === "Email already exist") {
+            enqueueSnackbar(parseErrors(error.message), {
+              variant: "error",
+            });
+          } else {
+            enqueueSnackbar("Что-то пошло не так...", {
+              variant: "error",
+            });
+          }
+        });
     }
-    if (!email.inputValid){
+    if (!email.isEmail) {
       enqueueSnackbar(`Email введен некорректно`, {
         variant: "error",
       });
     }
-    if (password.minLengthError){
+    if (!password.minLength) {
       enqueueSnackbar(`Пароль должен быть минимум 5 символов`, {
         variant: "error",
       });
     }
   };
+
+  console.log(password);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -128,7 +130,10 @@ export default function SignUpWidget() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                error={(email.isEmpty && email.isDirty) || (email.isDirty && email.emailError)}
+                error={
+                  (!email.isNotEmpty && email.isDirty) ||
+                  (email.isDirty && email.isError)
+                }
                 variant="outlined"
                 margin="normal"
                 required
@@ -139,12 +144,17 @@ export default function SignUpWidget() {
                 autoComplete="email"
                 value={email.value}
                 onBlur={(evt) => email.onBlur(evt)}
-                onChange={(evt) => {email.onChange(evt)}}
+                onChange={(evt) => {
+                  email.onChange(evt);
+                }}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                error={(password.isEmpty && password.isDirty) || (password.isDirty && password.minLengthError)}
+                error={
+                  (!password.isNotEmpty && password.isDirty) ||
+                  (password.isDirty && password.isError)
+                }
                 variant="outlined"
                 margin="normal"
                 required
