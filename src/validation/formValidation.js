@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import _ from "lodash";
 
 export const useInput = (initValue, ...validators) => {
   const [value, setValue] = useState(initValue);
@@ -23,16 +22,21 @@ export const useInput = (initValue, ...validators) => {
   };
 };
 
-const createValidator = (name, validator, errorMessage) => (props) => (
-  value
-) => ({
-  isOk: validator(value, props || {}),
-  errorMessage:
+export const createValidator = (name, validator, errorMessage) => {
+  const validatorFunc = (value, props) => validator(value, props || {});
+
+  const errorMessageFunc = (value, props) =>
     errorMessage instanceof Function
       ? errorMessage(value, props)
-      : errorMessage,
-  name,
-});
+      : errorMessage;
+
+  return (props) => ({
+    isOk: validatorFunc,
+    errorMessage: errorMessageFunc,
+    name,
+    props,
+  });
+};
 
 export const isNotEmpty = createValidator(
   "isNotEmpty",
@@ -59,17 +63,18 @@ export const useValidation = (value, validators) => {
   useEffect(() => {
     const localErrors = [];
     const localValidationResults = {};
+    console.log(validators);
     for (const validator of validators) {
-      console.log(validator);
-      const { isOk, errorMessage, name } = validator(value);
-      if (!isOk) {
-        localErrors.push(errorMessage);
+      const { isOk, errorMessage, name, props } = validator;
+      const result = isOk(value, props);
+      if (!result) {
+        localErrors.push(errorMessage(value, props));
       }
-      localValidationResults[name] = isOk;
+      localValidationResults[name] = result;
     }
     setErrors(localErrors);
     setValidationResults(localValidationResults);
-  }, [value]);
+  }, [value, JSON.stringify(validators)]);
 
   return {
     isValid: !errors.length,
