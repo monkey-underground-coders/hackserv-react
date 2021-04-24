@@ -6,16 +6,17 @@ import {
   deleteResume,
   getSelfUser,
   getResume,
+  putData,
 } from "@api";
 
 export const userCreate = createAsyncThunk(
   "users/create",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ emailVal, passwordVal }, { rejectWithValue }) => {
     try {
-      const response = await signupPost(email, password);
-      return response;
+      const response = await signupPost(emailVal, passwordVal);
+      return response.data;
     } catch (e) {
-      return rejectWithValue(e.message || e.response.data);
+      return rejectWithValue(e.response.data || e.message);
     }
   }
 );
@@ -45,6 +46,14 @@ export const getSelf = createAsyncThunk(
     } catch (e) {
       return rejectWithValue(e.message || e.response.data);
     }
+  }
+);
+
+export const userPutData = createAsyncThunk(
+  "user/cv/delete",
+  async ({ userId }) => {
+    const response = await deleteResume(userId);
+    return response.data;
   }
 );
 

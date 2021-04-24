@@ -17,11 +17,12 @@ const useStyles = makeStyles((theme) => ({
 
 const userInfo = {
   firstName: "",
-  lastName: "",
   middleName: "",
-  university: "",
+  lastName: "",
   telegram: "",
   dateOfBirth: "2021-04-01",
+  university: "",
+  resume: "",
   other: "",
 };
 
@@ -124,8 +125,8 @@ export default function UserInfoForm({ currentUser }) {
               }}
               onChange={(evt) => {
                 const reg = /^@(?=\w{5,64}\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$/;
+                setUser({ ...user, telegram: evt.target.value });
                 if (reg.test(evt.target.value)) {
-                  setUser({ ...user, telegram: evt.target.value });
                   setError({ ...error, telegramError: false });
                 } else {
                   setError({ ...error, telegramError: true });

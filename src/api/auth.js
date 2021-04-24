@@ -6,14 +6,6 @@ export const signupPost = (userEmail, userPassword) =>
       email: userEmail,
       password: userPassword,
     })
-    .then((res) => {
-      /**
-       * TODO: Don't handle response in a request, do callbacks in thunk instead
-       */
-      const user = res.data;
-      console.log(user);
-      return user;
-    });
 
 export const loginPost = (userEmail, userPassword) =>
   axiosWithBasic(userEmail, userPassword).post("/auth/convert");
