@@ -65,7 +65,7 @@ export default function SignUpWidget() {
   const email = useInput("", isNotEmpty(), isEmail());
   const password = useInput("", isNotEmpty(), minLength(5));
 
-  const allValid = email.inputValid && password.inputValid;
+  const allValid = email.isValid && password.isValid;
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -75,14 +75,11 @@ export default function SignUpWidget() {
       dispatch(userCreate({ emailVal, passwordVal }))
         .then(unwrapResult)
         .catch((error) => {
+          console.log(error)
           if (error.message === "Email already exist") {
-            enqueueError(parseErrors(error.message), {
-              variant: "error",
-            });
+            enqueueError(parseErrors(error.message));
           } else {
-            enqueueError("Что-то пошло не так...", {
-              variant: "error",
-            });
+            enqueueError("Что-то пошло не так...");
           }
         });
     }
@@ -126,7 +123,6 @@ export default function SignUpWidget() {
             <Grid item xs={12}>
               <TextField
                 error={
-                  (!email.isNotEmpty && email.isDirty) ||
                   (email.isDirty && email.isError)
                 }
                 variant="outlined"
@@ -147,7 +143,6 @@ export default function SignUpWidget() {
             <Grid item xs={12}>
               <TextField
                 error={
-                  (!password.isNotEmpty && password.isDirty) ||
                   (password.isDirty && password.isError)
                 }
                 variant="outlined"

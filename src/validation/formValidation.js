@@ -41,19 +41,19 @@ export const createValidator = (name, validator, errorMessage) => {
 export const isNotEmpty = createValidator(
   "isNotEmpty",
   (value) => !!value,
-  "пустое"
+  "Поле пустое"
 );
 
 export const minLength = createValidator(
   "minLength",
   (value, min) => value.length >= min,
-  (_, min) => `длина меньше чем ${min}`
+  (_, min) => `Длина меньше чем ${min}`
 );
 
 export const isEmail = createValidator(
   "isEmail",
   (value) => /^[a-zA-Z0-9]*@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/.test(value),
-  "не является email'ом"
+  "Не является email'ом"
 );
 
 export const useValidation = (value, validators) => {
