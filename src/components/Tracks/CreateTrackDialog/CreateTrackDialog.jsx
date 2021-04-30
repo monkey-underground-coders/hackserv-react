@@ -1,5 +1,7 @@
 import { TextField } from "@material-ui/core";
 import React, { useState } from "react";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 import {
   isNotEmpty,
@@ -7,18 +9,24 @@ import {
   escapedMaxLength,
 } from "@validation/formValidation";
 import SampleFormDialog from "@components/SampleFormDialog";
-import { useDispatch } from "react-redux";
+import { createNewTrack } from "@redux/tracks/thunks";
+import { useMySnackbar } from "@utils";
 
 const CreateTrackDialog = ({ open, onCancel, onSubmitted }) => {
   const name = useInput("", isNotEmpty(), escapedMaxLength());
   const [uploading, setUploading] = useState(false);
+  const { enqueueError } = useMySnackbar();
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (trackName) => {
+  const handleSubmit = (name) => {
+    if (uploading) return;
     setUploading(true);
-    alert("типо загрузил");
-    setUploading(false);
+    dispatch(createNewTrack({ name }))
+      .then(unwrapResult)
+      .then(onSubmitted)
+      .catch(() => enqueueError("Не удалось создать номинацию"))
+      .finally(() => setUploading(false));
   };
 
   const blockUpload = name.isError;
