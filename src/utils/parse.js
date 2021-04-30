@@ -1,3 +1,5 @@
+import { decode } from "html-entities";
+
 export const parseDataSize = (size) => {
   if (/^\d+$/.test(size)) {
     return parseInt(size);
@@ -30,9 +32,24 @@ export const generateResumeFilename = ({ fullName, documentResumePath }) => {
 export const parseErrors = (str) => {
   const dict = {
     "Email already exist": "Данный email уже занят",
-    "Validation failed for object='createUserRequest'. Error count: 1": "Одно из полей ввода некорректно",
-    "Validation failed for object='createUserRequest'. Error count: 2": "Одно из полей ввода некорректно",
-  }
+    "Validation failed for object='createUserRequest'. Error count: 1":
+      "Одно из полей ввода некорректно",
+    "Validation failed for object='createUserRequest'. Error count: 2":
+      "Одно из полей ввода некорректно",
+  };
 
   return dict[str] || str;
 };
+
+export const decodeEscapedEntity = (value, deep = false) =>
+  Object.fromEntries(
+    Object.entries(value).map(([k, v]) => {
+      if (typeof v === "object") {
+        return [k, deep ? decodeEscapedEntity(v) : v];
+      }
+      if (typeof v === "string") {
+        return [k, decode(v)];
+      }
+      return [k, v];
+    })
+  );

@@ -1,35 +1,21 @@
-import { CircularProgress, makeStyles } from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import Title from "@components/Title/Title";
 import Track from "./Track";
 import { getAllTrackIdsSelector, getAllTracks } from "@redux/tracks";
+import { isSelfAdmin } from "@redux/users";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useMySnackbar } from "@utils/hooks";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-}));
+import PaperList from "../PaperList";
+import CreateTrackDialog from "./CreateTrackDialog";
 
 const Tracks = () => {
-  const classes = useStyles();
-  const [refresh, setRefresh] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { enqueueError } = useMySnackbar();
 
   const tracks = useSelector(getAllTrackIdsSelector);
   const dispatch = useDispatch();
+  const allowEdit = useSelector(isSelfAdmin);
 
   const handleGetTracks = () => {
     return dispatch(getAllTracks())
@@ -37,32 +23,38 @@ const Tracks = () => {
       .catch(() => enqueueError("Не удалось загрузить номинации"));
   };
 
-  useEffect(() => {
-    if (refresh) {
-      handleGetTracks().then(() => setRefresh(false));
-    }
-  }, [refresh]);
+  const handleAppendClick = () => {
+    setDialogOpen(true);
+  };
 
-  let content;
-  if (!refresh && tracks.length) {
-    content = (
-      <List>
-        {tracks.map((t) => (
-          <Track key={t} trackId={t} editAllowed={true} />
-        ))}
-      </List>
-    );
-  } else if (!refresh && !tracks.length) {
-    content = "Номинаций на данный момент нет";
-  } else {
-    content = <CircularProgress />;
-  }
+  const handleAppendClose = () => {
+    setDialogOpen(false);
+  };
 
   return (
-    <Paper className={classes.paper}>
-      <Title>Номинации</Title>
-      {content}
-    </Paper>
+    <>
+      <PaperList
+        title={"Номинации"}
+        isEmpty={!tracks.length}
+        appendAllowed={allowEdit}
+        onGetAllItems={handleGetTracks}
+        onAppendClick={handleAppendClick}
+      >
+        {tracks.map((t) => (
+          <Track key={t} trackId={t} editAllowed={allowEdit} />
+        ))}
+      </PaperList>
+      {allowEdit && (
+        <CreateTrackDialog
+          open={dialogOpen}
+          onCancel={handleAppendClose}
+          onSubmitted={() => {
+            setDialogOpen(false);
+            handleGetTracks();
+          }}
+        />
+      )}
+    </>
   );
 };
 

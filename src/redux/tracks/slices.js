@@ -1,15 +1,14 @@
 import { createSlice, createEntityAdapter, isAnyOf } from "@reduxjs/toolkit";
+import { getAllTracks } from "./thunks";
 
 export const trackAdapter = createEntityAdapter({
+  selectId: (e) => e.id,
   sortComparer: (a, b) => a.trackName.localeCompare(b),
 });
 
 export const tracks = createSlice({
   name: "tracks",
-  initialState: trackAdapter.getInitialState({
-    loading: false,
-    currentRequestId: null,
-  }),
+  initialState: trackAdapter.getInitialState(),
   reducers: {
     upsertMany: trackAdapter.upsertMany,
   },
@@ -26,6 +25,10 @@ export const tracks = createSlice({
     //     usersAdapter.upsertOne(state, { id, ...changes });
     //   }
     // );
+    builder.addCase(getAllTracks.fulfilled, (state, { payload }) => {
+      // const { id, ...changes } = payload;
+      trackAdapter.setAll(state, payload);
+    });
   },
 });
 

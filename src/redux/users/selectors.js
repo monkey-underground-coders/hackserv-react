@@ -15,3 +15,9 @@ export const getUserByIdSelector = createSelector(
   (_, { userId }) => userId,
   ({ entities }, uid) => entities[uid]
 );
+
+export const isSelfAdmin = createSelector(
+  usersSelector,
+  userIdSelector,
+  ({ entities }, uid) => entities[uid].userRole === "ADMIN"
+);
