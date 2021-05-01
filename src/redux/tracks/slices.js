@@ -14,10 +14,11 @@ export const tracks = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getAllTracks.fulfilled, (state, { payload }) => {
-      trackAdapter.setAll(state, payload);
+      trackAdapter.removeAll(state);
+      trackAdapter.setAll(state, payload.tracks);
     });
     builder.addCase(createNewTrack.fulfilled, (state, { payload }) => {
-      trackAdapter.addOne(state, payload);
+      trackAdapter.addOne(state, Object.values(payload.tracks)[0]);
     });
   },
 });

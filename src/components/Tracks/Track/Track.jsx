@@ -2,14 +2,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { ListItem, ListItemText } from "@material-ui/core";
 
-import { getTrackByIdSelector } from "@redux/tracks/selectors";
+import { getTrackByIdSelector } from "@redux/tracks";
 
 const Track = ({ trackId, editAllowed }) => {
   const track = useSelector((state) =>
     getTrackByIdSelector(state, { trackId })
   );
-  console.log(trackId);
-  console.log(track);
   return (
     <ListItem>
       <ListItemText primary={track.trackName} />

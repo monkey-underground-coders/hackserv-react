@@ -9,7 +9,7 @@ import {
   escapedMaxLength,
 } from "@validation/formValidation";
 import SampleFormDialog from "@components/SampleFormDialog";
-import { createNewTrack } from "@redux/tracks/thunks";
+import { createNewTrack } from "@redux/tracks";
 import { useMySnackbar } from "@utils";
 
 const CreateTrackDialog = ({ open, onCancel, onSubmitted }) => {
