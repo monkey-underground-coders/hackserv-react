@@ -52,8 +52,6 @@ export const getSelf = createAsyncThunk(
 export const userPutData = createAsyncThunk(
   "user",
   async ({ userId, userInfo }) => {
-    console.log("thunk = " + userId)
-    console.log(userInfo)
     const response = await putUserInfo(userId, userInfo);
     return response.data;
   }
