@@ -6,7 +6,7 @@ import {
   deleteResume,
   getSelfUser,
   getResume,
-  putData,
+  putUserInfo,
 } from "@api";
 
 export const userCreate = createAsyncThunk(
@@ -50,9 +50,11 @@ export const getSelf = createAsyncThunk(
 );
 
 export const userPutData = createAsyncThunk(
-  "user/cv/delete",
-  async ({ userId }) => {
-    const response = await deleteResume(userId);
+  "user",
+  async ({ userId, userInfo }) => {
+    console.log("thunk = " + userId)
+    console.log(userInfo)
+    const response = await putUserInfo(userId, userInfo);
     return response.data;
   }
 );

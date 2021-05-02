@@ -8,6 +8,17 @@ import { useSnackbar } from "notistack";
 import { unwrapResult } from "@reduxjs/toolkit";
 import clsx from "clsx";
 
+import { parseErrors } from "@utils/parse";
+import {
+  useInput,
+  isEmail,
+  minLength,
+  isNotEmpty,
+  isTelegram,
+  isDateValid,
+} from "@validation/formValidation";
+import { useMySnackbar } from "@utils/hooks";
+
 const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: theme.spacing(3),
@@ -15,29 +26,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const userInfo = {
+const userInfoInit = {
   firstName: "",
   middleName: "",
   lastName: "",
   telegram: "",
   dateOfBirth: "2021-04-01",
-  university: "",
+  workPlace: "",
   resume: "",
-  other: "",
+  otherInfo: "",
 };
 
-const errors = {
-  telegramError: false,
-  dateOfBirthError: false,
-};
-
-export default function UserInfoForm({ currentUser }) {
-  const [user, setUser] = useState(userInfo);
-  const [error, setError] = useState(errors);
-  const { enqueueSnackbar } = useSnackbar();
+export default function UserInfoForm({ user }) {
   const classes = useStyles();
 
   const dispatch = useDispatch();
+  const userId = user.id;
+
+  const [userInfo, setUserInfo] = useState(userInfoInit);
+
+  const lastName = useInput("", isNotEmpty());
+  const firstName = useInput("", isNotEmpty());
+  const middleName = useInput("", isNotEmpty());
+  const workPlace = useInput("", isNotEmpty());
+  const telegram = useInput("", isNotEmpty(), isTelegram());
+  const dateOfBirth = useInput("2021-04-01", isNotEmpty(), isDateValid());
+  const otherInfo = useInput("", isNotEmpty());
 
   return (
     <>
@@ -48,6 +62,7 @@ export default function UserInfoForm({ currentUser }) {
         <Grid container spacing={3}>
           <Grid item xs={12} sm={4}>
             <TextField
+              error={lastName.isDirty && lastName.isError}
               required
               id="lastName"
               name="lastName"
@@ -57,14 +72,19 @@ export default function UserInfoForm({ currentUser }) {
               inputProps={{
                 maxLength: 250,
               }}
+              value={lastName.value}
+              helperText={lastName.isDirty && lastName.isError ? lastName.errors : ""}
               onChange={(evt) => {
-                setUser({ ...user, lastName: evt.target.value });
+                lastName.onChange(evt);
+                setUserInfo({ ...userInfo, lastName: evt.target.value })
               }}
+              onBlur={(evt) => lastName.onBlurPut(userId, userInfo)}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
               required
+              error={firstName.isDirty && firstName.isError}
               id="firstName"
               name="firstName"
               label="Имя"
@@ -73,9 +93,12 @@ export default function UserInfoForm({ currentUser }) {
               inputProps={{
                 maxLength: 250,
               }}
+              helperText={firstName.isDirty && firstName.isError ? firstName.errors : ""}
               onChange={(evt) => {
-                setUser({ ...user, firstName: evt.target.value });
+                firstName.onChange(evt);
+                setUserInfo({ ...userInfo, firstName: evt.target.value })
               }}
+              onBlur={(evt) => firstName.onBlurPut(userId, userInfo)}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -89,29 +112,35 @@ export default function UserInfoForm({ currentUser }) {
                 maxLength: 250,
               }}
               onChange={(evt) => {
-                setUser({ ...user, middleName: evt.target.value });
+                middleName.onChange(evt);
+                setUserInfo({ ...userInfo, middleName: evt.target.value })
               }}
+              onBlur={(evt) => middleName.onBlurPut(userId, userInfo)}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               required
-              id="university"
-              name="university"
+              error={workPlace.isDirty && workPlace.isError}
+              id="workPlace"
+              name="workPlace"
               label="Университет/Школа/Место работы"
               fullWidth
               autoComplete="off"
               inputProps={{
                 maxLength: 250,
               }}
+              helperText={workPlace.isDirty && workPlace.isError ? workPlace.errors : ""}
               onChange={(evt) => {
-                setUser({ ...user, university: evt.target.value });
+                workPlace.onChange(evt);
+                setUserInfo({ ...userInfo, workPlace: evt.target.value })
               }}
+              onBlur={(evt) => workPlace.onBlurPut(userId, userInfo)}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
-              error={error.telegramError}
+              error={telegram.isDirty && telegram.isError}
               required
               id="telegram"
               name="telegram"
@@ -123,42 +152,41 @@ export default function UserInfoForm({ currentUser }) {
                 maxLength: 250,
                 pattern: "^@(?=\\w{5,64}\\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$",
               }}
+              helperText={
+                telegram.isDirty && telegram.isError ? telegram.errors[0] : ""
+              }
               onChange={(evt) => {
-                const reg = /^@(?=\w{5,64}\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$/;
-                setUser({ ...user, telegram: evt.target.value });
-                if (reg.test(evt.target.value)) {
-                  setError({ ...error, telegramError: false });
-                } else {
-                  setError({ ...error, telegramError: true });
-                }
+                telegram.onChange(evt);
+                setUserInfo({ ...userInfo, telegram: evt.target.value })
               }}
+              onBlur={(evt) => telegram.onBlurPut(userId, userInfo)}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
-              error={error.dateOfBirthError}
+              error={dateOfBirth.isDirty && dateOfBirth.isError}
               required
-              id="date"
+              id="dateOfBirth"
               label="Дата рождения"
               type="date"
               defaultValue="2021-04-01"
               InputLabelProps={{
                 shrink: true,
               }}
+              helperText={
+                dateOfBirth.isDirty && dateOfBirth.isError ? dateOfBirth.errors[0] : ""
+              }
               onChange={(evt) => {
-                if (Date.now() < new Date(evt.target.value)) {
-                  setError({ ...error, dateOfBirthError: true });
-                } else {
-                  setError({ ...error, dateOfBirthError: false });
-                  setUser({ ...user, dateOfBirth: evt.target.value });
-                }
+                dateOfBirth.onChange(evt);
+                setUserInfo({ ...userInfo, dateOfBirth: evt.target.value })
               }}
+              onBlur={(evt) => dateOfBirth.onBlurPut(userId, userInfo)}
             />
           </Grid>
 
           <Grid item xs={12}>
             <TextField
-              id="other"
+              id="otherInfo"
               label="Дополнительная информация"
               multiline
               rows={4}
@@ -168,8 +196,10 @@ export default function UserInfoForm({ currentUser }) {
                 maxLength: 250,
               }}
               onChange={(evt) => {
-                setUser({ ...user, other: evt.target.value });
+                otherInfo.onChange(evt);
+                setUserInfo({ ...userInfo, otherInfo: evt.target.value })
               }}
+              onBlur={(evt) => otherInfo.onBlurPut(userId, userInfo)}
             />
           </Grid>
         </Grid>

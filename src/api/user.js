@@ -16,3 +16,11 @@ export const getResume = (userId) =>
   mainAxios.get(`/user/${userId}/cv/`, {
     responseType: "blob",
   });
+
+export const putUserInfo = (userId, userInfo) => {
+  return mainAxios.put(`/user/${userId}`, userInfo, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};

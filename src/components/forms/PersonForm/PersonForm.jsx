@@ -21,7 +21,7 @@ const PersonForm = ({ user }) => {
 
   return (
     <div className={classes.root}>
-      <UserInfoForm currentUser={user} />
+      <UserInfoForm user={user} />
       <Divider variant="fullWidth" className={classes.divider} />
       <ResumeForm user={user} allowUpload={true} />
     </div>
