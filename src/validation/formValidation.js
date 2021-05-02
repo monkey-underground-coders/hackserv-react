@@ -1,3 +1,4 @@
+import { encode } from "html-entities";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -38,7 +39,7 @@ export const useInput = (initValue, ...validators) => {
 };
 
 export const createValidator = (name, validator, errorMessage) => {
-  const validatorFunc = (value, props) => validator(value, props || {});
+  const validatorFunc = (value, props) => validator(value, props);
 
   const errorMessageFunc = (value, props) =>
     errorMessage instanceof Function
@@ -63,6 +64,18 @@ export const minLength = createValidator(
   "minLength",
   (value, min) => value.length >= min,
   (_, min) => `Длина меньше чем ${min}`
+);
+
+export const maxLength = createValidator(
+  "maxLength",
+  (value, max) => value.length <= max,
+  (_, max) => `Длина больше чем ${max}`
+);
+
+export const escapedMaxLength = createValidator(
+  "escapedMaxLength",
+  (value, max) => encode(value).length <= (max || 250),
+  "Слишком большой ввод"
 );
 
 export const isEmail = createValidator(
@@ -92,6 +105,9 @@ export const useValidation = (value, validators) => {
     const localValidationResults = {};
     for (const validator of validators) {
       const { isOk, errorMessage, name, props } = validator;
+      if (isOk === undefined || typeof name !== "string") {
+        throw Error("Invalid validator " + validator);
+      }
       const result = isOk(value, props);
       if (!result) {
         localErrors.push(errorMessage(value, props));
@@ -106,6 +122,7 @@ export const useValidation = (value, validators) => {
     isValid: !errors.length,
     isError: !!errors.length,
     errors,
+    defaultError: errors.length ? errors[0] : null,
     ...validationResults,
   };
 };

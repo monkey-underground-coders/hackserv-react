@@ -9,6 +9,7 @@ import conf from "./conf";
 import authReducer from "./auth/slices";
 import app from "./app";
 import tracks from "./tracks";
+import voteCriteria from "./voteCriteria";
 
 const store = (() => {
   const reducer = combineReducers({
@@ -17,6 +18,7 @@ const store = (() => {
     auth: authReducer,
     app,
     tracks,
+    voteCriteria,
   });
 
   const store = configureStore({ reducer });

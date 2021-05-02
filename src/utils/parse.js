@@ -1,3 +1,6 @@
+import { decode } from "html-entities";
+import { normalize } from "normalizr";
+
 export const parseDataSize = (size) => {
   if (/^\d+$/.test(size)) {
     return parseInt(size);
@@ -30,9 +33,43 @@ export const generateResumeFilename = ({ fullName, documentResumePath }) => {
 export const parseErrors = (str) => {
   const dict = {
     "Email already exist": "Данный email уже занят",
-    "Validation failed for object='createUserRequest'. Error count: 1": "Одно из полей ввода некорректно",
-    "Validation failed for object='createUserRequest'. Error count: 2": "Одно из полей ввода некорректно",
-  }
+    "Validation failed for object='createUserRequest'. Error count: 1":
+      "Одно из полей ввода некорректно",
+    "Validation failed for object='createUserRequest'. Error count: 2":
+      "Одно из полей ввода некорректно",
+  };
 
   return dict[str] || str;
+};
+
+export const decodeEscapedEntity = (value, deep = false) => {
+  const processEntity = (v) => {
+    if (Array.isArray(v)) {
+      return decodeEscapedEntity(v);
+    }
+    if (typeof v === "object") {
+      return deep ? decodeEscapedEntity(v) : v;
+    }
+    if (typeof v === "string") {
+      return decode(v);
+    }
+    return v;
+  };
+
+  if (Array.isArray(value)) {
+    return value.map(processEntity);
+  } else {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, processEntity(v)])
+    );
+  }
+};
+
+export const normalizeToolkit = (data, schema) => {
+  const { entities } = normalize(data, schema);
+  return entities;
+};
+
+export const normalizeToolkitDecode = (data, schema, deep = true) => {
+  return normalizeToolkit(decodeEscapedEntity(data, deep), schema);
 };
