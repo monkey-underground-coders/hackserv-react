@@ -1,14 +1,16 @@
-import { basicAxios, axiosWithBasic, mainAxios } from "./utils";
+import { basicAxios, mainAxios } from "./utils";
 
 export const signupPost = (userEmail, userPassword) =>
-  basicAxios()
-    .post("/user/create", {
-      email: userEmail,
-      password: userPassword,
-    })
+  basicAxios().post("/user/create", {
+    email: userEmail,
+    password: userPassword,
+  });
 
 export const loginPost = (userEmail, userPassword) =>
-  axiosWithBasic(userEmail, userPassword).post("/auth/convert");
+  basicAxios().post("/auth/convert", {
+    email: userEmail,
+    password: userPassword,
+  });
 
 export const updateAccessTokenPost = (refreshToken) =>
   basicAxios().post("/auth/get_access", {
