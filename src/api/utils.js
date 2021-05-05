@@ -17,17 +17,6 @@ export const basicAxios = () =>
     validateStatus: okOnly,
   });
 
-export const axiosWithBasic = (email, password) =>
-  axios.create({
-    baseURL: Ip(),
-    headers: defaultBodyHeaders,
-    auth: {
-      username: email,
-      password,
-    },
-    validateStatus: okOnly,
-  });
-
 export const mainAxios = axios.create({
   baseURL: Ip(),
   headers: defaultBodyHeaders,
