@@ -32,7 +32,6 @@ export const useInput = (initValue, ...validators) => {
       dispatch(userPutData({ userId, userInfo }))
       .then(unwrapResult)
       .catch((err) => {
-        console.log(err);
         enqueueError(err.message);
       })
       .finally(() => {
