@@ -4,13 +4,19 @@ import { useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 import { userPutData } from "@redux/users";
+import { useMySnackbar } from "@utils/hooks";
+
+export const isAllDisabled = () => {
+  
+}
 
 export const useInput = (initValue, ...validators) => {
   const [value, setValue] = useState(initValue);
   const [isDirty, setDirty] = useState(false);
+  const [isDisabled, setDisabled] = useState(false);
   const valid = useValidation(value, validators);
   const dispatch = useDispatch();
-
+  const { enqueueError } = useMySnackbar();
   const onChange = (evt) => {
     setValue(evt.target.value);
   };
@@ -21,11 +27,18 @@ export const useInput = (initValue, ...validators) => {
 
   const onBlurPut = (userId, userInfo) => {
     setDirty(true);
-    dispatch(userPutData({ userId, userInfo }))
-    .then(unwrapResult)
-    .catch((err) => {
-      console.log(err)
-    })
+    if (valid.isValid === true) {
+      setDisabled(true);
+      dispatch(userPutData({ userId, userInfo }))
+      .then(unwrapResult)
+      .catch((err) => {
+        console.log(err);
+        enqueueError(err.message);
+      })
+      .finally(() => {
+        setDisabled(false);
+      })
+    }
   };
 
   return {
@@ -34,6 +47,7 @@ export const useInput = (initValue, ...validators) => {
     onBlur,
     onBlurPut,
     isDirty,
+    isDisabled,
     ...valid,
   };
 };

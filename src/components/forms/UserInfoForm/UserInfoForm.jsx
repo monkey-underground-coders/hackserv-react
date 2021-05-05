@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import { useDispatch } from "react-redux";
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { useSnackbar } from "notistack";
 import { unwrapResult } from "@reduxjs/toolkit";
 import clsx from "clsx";
@@ -53,6 +54,8 @@ export default function UserInfoForm({ user }) {
   const dateOfBirth = useInput("2021-04-01", isNotEmpty(), isDateValid());
   const otherInfo = useInput("", isNotEmpty());
 
+  const allDisabled = lastName.isDisabled || firstName.isDisabled || middleName.isDisabled || workPlace.isDisabled || telegram.isDisabled || dateOfBirth.isDisabled || otherInfo.isDisabled;
+
   return (
     <>
       <Typography variant="h6" gutterBottom>
@@ -74,11 +77,12 @@ export default function UserInfoForm({ user }) {
               }}
               value={lastName.value}
               helperText={lastName.isDirty && lastName.isError ? lastName.errors : ""}
+              disabled={allDisabled}
               onChange={(evt) => {
                 lastName.onChange(evt);
                 setUserInfo({ ...userInfo, lastName: evt.target.value })
               }}
-              onBlur={(evt) => lastName.onBlurPut(userId, userInfo)}
+              onBlur={(evt) => lastName.onBlurPut(userId, userInfo, allDisabled)}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -94,6 +98,7 @@ export default function UserInfoForm({ user }) {
                 maxLength: 250,
               }}
               helperText={firstName.isDirty && firstName.isError ? firstName.errors : ""}
+              disabled={allDisabled}
               onChange={(evt) => {
                 firstName.onChange(evt);
                 setUserInfo({ ...userInfo, firstName: evt.target.value })
@@ -111,6 +116,7 @@ export default function UserInfoForm({ user }) {
               inputProps={{
                 maxLength: 250,
               }}
+              disabled={allDisabled}
               onChange={(evt) => {
                 middleName.onChange(evt);
                 setUserInfo({ ...userInfo, middleName: evt.target.value })
@@ -131,6 +137,7 @@ export default function UserInfoForm({ user }) {
                 maxLength: 250,
               }}
               helperText={workPlace.isDirty && workPlace.isError ? workPlace.errors : ""}
+              disabled={allDisabled}
               onChange={(evt) => {
                 workPlace.onChange(evt);
                 setUserInfo({ ...userInfo, workPlace: evt.target.value })
@@ -155,6 +162,7 @@ export default function UserInfoForm({ user }) {
               helperText={
                 telegram.isDirty && telegram.isError ? telegram.errors[0] : ""
               }
+              disabled={allDisabled}
               onChange={(evt) => {
                 telegram.onChange(evt);
                 setUserInfo({ ...userInfo, telegram: evt.target.value })
@@ -176,6 +184,7 @@ export default function UserInfoForm({ user }) {
               helperText={
                 dateOfBirth.isDirty && dateOfBirth.isError ? dateOfBirth.errors[0] : ""
               }
+              disabled={allDisabled}
               onChange={(evt) => {
                 dateOfBirth.onChange(evt);
                 setUserInfo({ ...userInfo, dateOfBirth: evt.target.value })
@@ -195,6 +204,7 @@ export default function UserInfoForm({ user }) {
               inputProps={{
                 maxLength: 250,
               }}
+              disabled={allDisabled}
               onChange={(evt) => {
                 otherInfo.onChange(evt);
                 setUserInfo({ ...userInfo, otherInfo: evt.target.value })
@@ -203,6 +213,7 @@ export default function UserInfoForm({ user }) {
             />
           </Grid>
         </Grid>
+        { allDisabled && <LinearProgress /> }
       </div>
     </>
   );
