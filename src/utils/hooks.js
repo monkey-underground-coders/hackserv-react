@@ -1,4 +1,6 @@
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
+import { useDispatch } from "react-redux";
 
 export const useMySnackbar = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -24,4 +26,27 @@ export const useMySnackbar = () => {
     enqueueWarning,
     enqueueSnackbar,
   };
+};
+
+export const useGenericHandleBlurAction = (action, onFulfulled, onError) => {
+  const dispatch = useDispatch();
+  const { enqueueError } = useMySnackbar();
+
+  const handleBlurAction = ({ setDisabled }) => {
+    setDisabled(true);
+    dispatch(action)
+      .then(unwrapResult)
+      .then((v) => {
+        if (onFulfulled !== undefined) onFulfulled(v);
+      })
+      .catch((err) => {
+        if (onError !== undefined) onError(err);
+        else enqueueError(err.message);
+      })
+      .finally(() => {
+        setDisabled(false);
+      });
+  };
+
+  return handleBlurAction;
 };

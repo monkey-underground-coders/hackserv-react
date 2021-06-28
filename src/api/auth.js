@@ -7,10 +7,15 @@ export const signupPost = (userEmail, userPassword) =>
   });
 
 export const loginPost = (userEmail, userPassword) =>
-  basicAxios().post("/auth/convert", {
-    email: userEmail,
-    password: userPassword,
-  });
+  basicAxios()
+    .post("/auth/convert", {
+      email: userEmail,
+      password: userPassword,
+    })
+    .catch((e) => {
+      console.log(e);
+      throw e;
+    });
 
 export const updateAccessTokenPost = (refreshToken) =>
   basicAxios().post("/auth/get_access", {

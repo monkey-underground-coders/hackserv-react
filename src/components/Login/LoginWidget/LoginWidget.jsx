@@ -1,10 +1,7 @@
-import { React, useState } from "react";
+import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -12,8 +9,14 @@ import Container from "@material-ui/core/Container";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { Field, Formik } from "formik";
+import { LinearProgress } from "@material-ui/core";
+import { TextField } from "formik-material-ui";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 import { login } from "@redux/auth/thunks";
+import { useMySnackbar } from "@utils/hooks";
+import { emailPasswordSchema } from "@schemas";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-  linkdecor: {
+  linkDecor: {
     color: theme.palette.primary.main,
   },
 }));
@@ -42,15 +45,21 @@ export default function LoginWidget({ redirectTo = "/dashboard" }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
+  const { enqueueError } = useMySnackbar();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleClick = (event) => {
-    event.preventDefault();
-    dispatch(login({ email, password })).then(() => {
-      history.push(redirectTo);
-    });
+  const onSubmit = ({ email, password }, bag) => {
+    return dispatch(login({ email, password }))
+      .then(unwrapResult)
+      .then(() => {
+        history.push(redirectTo);
+      })
+      .catch((e) => {
+        if (e.message.endsWith("401")) {
+          enqueueError("Неверный email или пароль");
+        } else {
+          enqueueError("Возникла непредвиденная ошибка");
+        }
+      });
   };
 
   return (
@@ -63,65 +72,72 @@ export default function LoginWidget({ redirectTo = "/dashboard" }) {
         <Typography component="h1" variant="h5">
           Войти
         </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            autoComplete="email"
-            value={email}
-            onChange={(evt) => setEmail(evt.target.value)}
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Пароль"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(evt) => setPassword(evt.target.value)}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleClick}
-          >
-            Войти
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link
-                to=""
-                href="#"
-                className={classes.linkdecor}
-                variant="body2"
+        <Formik
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+          validationSchema={emailPasswordSchema}
+          onSubmit={onSubmit}
+        >
+          {({ handleSubmit, isSubmitting }) => (
+            <form onSubmit={handleSubmit}>
+              <Field
+                component={TextField}
+                variant="outlined"
+                margin="normal"
+                name="email"
+                label="Email"
+                type="email"
+                fullWidth
+                autoComplete="username"
+                autoFocus
+              />
+              <Field
+                component={TextField}
+                variant="outlined"
+                margin="normal"
+                name="password"
+                label="Пароль"
+                type="password"
+                fullWidth
+                required
+                autoComplete="current-password"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
               >
-                {"Забыли пароль?"}
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link
-                to="/user/create"
-                className={classes.linkdecor}
-                variant="body2"
-              >
-                {"Нет аккаунта? Зарегистрируйтесь"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
+                Войти
+              </Button>
+              {isSubmitting && <LinearProgress />}
+              <Grid container>
+                <Grid item xs>
+                  <Link
+                    to=""
+                    href="#"
+                    className={classes.linkDecor}
+                    variant="body2"
+                  >
+                    {"Забыли пароль?"}
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link
+                    to="/user/create"
+                    className={classes.linkDecor}
+                    variant="body2"
+                  >
+                    {"Нет аккаунта? Зарегистрируйтесь"}
+                  </Link>
+                </Grid>
+              </Grid>
+            </form>
+          )}
+        </Formik>
       </div>
     </Container>
   );

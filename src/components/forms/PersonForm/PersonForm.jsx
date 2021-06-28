@@ -1,9 +1,13 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
+import { Formik } from "formik";
 
 import UserInfoForm from "@components/forms/UserInfoForm";
 import ResumeForm from "@components/forms/ResumeForm";
+import { StepperNavBar } from "@components/StepperPage";
+import { userDetailedInfoSchema } from "@schemas";
+import { LinearProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,12 +23,35 @@ const useStyles = makeStyles((theme) => ({
 const PersonForm = ({ user }) => {
   const classes = useStyles();
 
+  const yesterday = (() => {
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+    return date;
+  })();
+
+  const onSubmit = (values, bag) => {}; // TODO: make logic
+
   return (
-    <div className={classes.root}>
-      <UserInfoForm user={user} />
-      <Divider variant="fullWidth" className={classes.divider} />
-      <ResumeForm user={user} allowUpload={true} />
-    </div>
+    <Formik
+      initialValues={{
+        dateOfBirth: `${yesterday.getFullYear()}-${
+          yesterday.getMonth() + 1
+        }-${yesterday.getDate()}`,
+        ...user,
+      }}
+      validationSchema={userDetailedInfoSchema}
+      onSubmit={onSubmit}
+    >
+      {({ handleSubmit, isSubmitting }) => (
+        <form className={classes.root} onSubmit={handleSubmit}>
+          <UserInfoForm />
+          <Divider variant="fullWidth" className={classes.divider} />
+          <ResumeForm user={user} allowUpload={true} />
+          <StepperNavBar />
+          {isSubmitting && <LinearProgress />}
+        </form>
+      )}
+    </Formik>
   );
 };
 
