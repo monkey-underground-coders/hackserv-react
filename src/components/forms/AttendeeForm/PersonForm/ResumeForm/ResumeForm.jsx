@@ -30,12 +30,8 @@ const useStyles = makeStyles(() => ({
 const ResumeForm = ({ user, allowUpload = true }) => {
   const [fileUploadDialogOpen, setFileUploadDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const {
-    enqueueInfo,
-    enqueueSuccess,
-    enqueueError,
-    enqueueSnackbar,
-  } = useMySnackbar();
+  const { enqueueInfo, enqueueSuccess, enqueueError, enqueueSnackbar } =
+    useMySnackbar();
 
   const classes = useStyles();
 

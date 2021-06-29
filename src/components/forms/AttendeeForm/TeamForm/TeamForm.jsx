@@ -1,8 +1,9 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 
-import Accordion from './Accordion';
+import Accordion from "./Accordion";
+import { StepperNavBar } from "@components/StepperPage";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -20,13 +21,14 @@ export default function TeamForm() {
   const classes = useStyles();
 
   return (
-    <React.Fragment>
+    <>
       <Typography variant="h6" gutterBottom>
         Выбор или создание команды
       </Typography>
-      
-      <Accordion/>
-      
-    </React.Fragment>
+
+      <Accordion />
+
+      <StepperNavBar />
+    </>
   );
 }

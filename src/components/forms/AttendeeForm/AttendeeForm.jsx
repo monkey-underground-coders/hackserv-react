@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import PersonForm from "@components/forms/PersonForm";
-import TeamForm from "@components/forms/TeamForm";
+import PersonForm from "./PersonForm";
+import TeamForm from "./TeamForm";
 import { userIdSelector } from "@redux/auth";
 import { getUserByIdSelector } from "@redux/users/selectors";
 import { DefaultStepperPage } from "@components/StepperPage";

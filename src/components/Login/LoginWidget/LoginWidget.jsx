@@ -47,8 +47,8 @@ export default function LoginWidget({ redirectTo = "/dashboard" }) {
   const history = useHistory();
   const { enqueueError } = useMySnackbar();
 
-  const onSubmit = ({ email, password }, bag) => {
-    return dispatch(login({ email, password }))
+  const onSubmit = ({ email, password }, bag) =>
+    dispatch(login({ email, password }))
       .then(unwrapResult)
       .then(() => {
         history.push(redirectTo);
@@ -60,7 +60,6 @@ export default function LoginWidget({ redirectTo = "/dashboard" }) {
           enqueueError("Возникла непредвиденная ошибка");
         }
       });
-  };
 
   return (
     <Container component="main" maxWidth="xs">

@@ -14,8 +14,8 @@ const useStyles = makeStyles((theme) => ({
   },
   layout: {
     width: "auto",
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
+    marginLeft: "auto",
+    marginRight: "auto",
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
       width: 600,
       marginRight: "auto",
@@ -50,7 +50,8 @@ export default function StepperPage({ steps, title, ending, ...rest }) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const ActiveContent = steps[activeStep].component;
+  const ActiveContent =
+    activeStep < steps.length ? steps[activeStep].component : null;
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);

@@ -34,7 +34,7 @@ const StepperNavBar = () => {
         onClick={handleNext}
         className={classes.button}
       >
-        {currentStep === steps.length - 1 ? "Завершить" : "Следующий"}
+        {currentStep === steps - 1 ? "Завершить" : "Следующий"}
       </Button>
     </div>
   );

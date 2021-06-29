@@ -2,12 +2,12 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
 import { Formik } from "formik";
+import { LinearProgress } from "@material-ui/core";
 
-import UserInfoForm from "@components/forms/UserInfoForm";
-import ResumeForm from "@components/forms/ResumeForm";
+import UserInfoForm from "./UserInfoForm";
+import ResumeForm from "./ResumeForm";
 import { StepperNavBar } from "@components/StepperPage";
 import { userDetailedInfoSchema } from "@schemas";
-import { LinearProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
