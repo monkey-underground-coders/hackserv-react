@@ -43,6 +43,7 @@ export const parseErrors = (str) => {
 };
 
 export const decodeEscapedEntity = (value, deep = false) => {
+  if (value === null || value === undefined) return value;
   const processEntity = (v) => {
     if (Array.isArray(v)) {
       return decodeEscapedEntity(v);

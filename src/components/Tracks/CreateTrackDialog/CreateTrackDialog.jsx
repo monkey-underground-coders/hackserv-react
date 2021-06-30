@@ -9,28 +9,26 @@ import { Field } from "formik";
 import { TextField } from "formik-material-ui";
 
 const CreateTrackDialog = ({ open, onCancel, onSubmitted }) => {
-  const [uploading, setUploading] = useState(false);
   const { enqueueError } = useMySnackbar();
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (name) => {
-    if (uploading) return;
-    setUploading(true);
+  const handleSubmit = (name) =>
     dispatch(createNewTrack({ name }))
       .then(unwrapResult)
       .then(onSubmitted)
-      .catch(() => enqueueError("Не удалось создать номинацию"))
-      .finally(() => setUploading(false));
-  };
+      .catch((e) => {
+        console.error(e);
+        enqueueError("Не удалось создать номинацию");
+      });
 
   return (
     <SampleFormDialog
+      initialValues={{ trackName: "" }}
       open={open}
       onClose={onCancel}
       onSubmit={(values, bag) => handleSubmit(values.trackName)}
       title="Добавить номинацию"
-      uploading={uploading}
     >
       <Field
         component={TextField}

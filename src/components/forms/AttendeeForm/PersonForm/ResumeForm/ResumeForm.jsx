@@ -40,8 +40,7 @@ const ResumeForm = ({ user, allowUpload = true }) => {
 
   const userId = user.id;
 
-  const onFUSave = (files) => {
-    const file = files[0];
+  const onFUSave = ([file]) => {
     return dispatch(userUploadResume({ file, userId }))
       .then(unwrapResult)
       .then(() => {

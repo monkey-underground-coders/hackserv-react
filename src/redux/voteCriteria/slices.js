@@ -15,7 +15,7 @@ export const voteCriteria = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getAllTracks.fulfilled, (state, { payload }) => {
       voteCriteriaAdapter.removeAll(state);
-      voteCriteriaAdapter.setAll(state, payload.criterias);
+      voteCriteriaAdapter.setAll(state, payload.criterias ?? []);
     });
   },
 });

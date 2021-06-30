@@ -3,7 +3,7 @@ import { getAllTracks, createNewTrack } from "./thunks";
 
 export const trackAdapter = createEntityAdapter({
   selectId: (e) => e.id,
-  sortComparer: (a, b) => a.trackName.localeCompare(b),
+  sortComparer: (a, b) => a.trackName.localeCompare(b.trackName),
 });
 
 export const tracks = createSlice({
@@ -15,7 +15,7 @@ export const tracks = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getAllTracks.fulfilled, (state, { payload }) => {
       trackAdapter.removeAll(state);
-      trackAdapter.setAll(state, payload.tracks);
+      trackAdapter.setAll(state, payload.tracks ?? []);
     });
     builder.addCase(createNewTrack.fulfilled, (state, { payload }) => {
       trackAdapter.addOne(state, Object.values(payload.tracks)[0]);

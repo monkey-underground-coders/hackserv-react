@@ -18,23 +18,19 @@ const Tracks = ({ globalAppend = true }) => {
   const dispatch = useDispatch();
   const allowEdit = useSelector(isSelfAdmin);
 
-  const handleGetTracks = () => {
-    return dispatch(getAllTracks())
+  const handleGetTracks = () =>
+    dispatch(getAllTracks())
       .then(unwrapResult)
       .catch(() => enqueueError("Не удалось загрузить номинации"));
-  };
 
-  const handleAppendClick = () => {
-    setDialogOpen(true);
-  };
+  const handleAppendClick = () => setDialogOpen(true);
 
-  const handleAppendClose = () => {
-    setDialogOpen(false);
-  };
+  const handleAppendClose = () => setDialogOpen(false);
+
   return (
     <>
       <PaperList
-        title={"Номинации"}
+        title="Номинации"
         isEmpty={!tracks.length}
         appendAllowed={allowEdit}
         onGetAllItems={handleGetTracks}
@@ -54,7 +50,7 @@ const Tracks = ({ globalAppend = true }) => {
           onCancel={handleAppendClose}
           onSubmitted={() => {
             setDialogOpen(false);
-            handleGetTracks();
+            return handleGetTracks();
           }}
         />
       )}

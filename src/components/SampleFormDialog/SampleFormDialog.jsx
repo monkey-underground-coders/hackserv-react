@@ -40,18 +40,14 @@ const SampleFormDialog = ({
 }) => {
   const classes = useStyles();
   return (
-    <Formik
-      initialValues={initialValues || {}}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {({ handleSubmit, isSubmitting, isValid }) => (
-        <form onSubmit={handleSubmit}>
-          <Dialog
-            open={open}
-            onClose={onClose}
-            aria-labelledby="form-dialog-title"
-          >
+    <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {({ handleSubmit, isSubmitting, isValid }) => (
+          <form onSubmit={handleSubmit}>
             <DialogTitle id="form-dialog-title">{title}</DialogTitle>
             <DialogContent>
               {contextText && (
@@ -83,10 +79,10 @@ const SampleFormDialog = ({
                 )}
               </div>
             </DialogActions>
-          </Dialog>
-        </form>
-      )}
-    </Formik>
+          </form>
+        )}
+      </Formik>
+    </Dialog>
   );
 };
 
