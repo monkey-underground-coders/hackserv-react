@@ -28,7 +28,7 @@ export const useMySnackbar = () => {
   };
 };
 
-export const useGenericHandleBlurAction = (action, onFulfulled, onError) => {
+export const useGenericHandleBlurAction = (action, onFulfilled, onError) => {
   const dispatch = useDispatch();
   const { enqueueError } = useMySnackbar();
 
@@ -37,7 +37,7 @@ export const useGenericHandleBlurAction = (action, onFulfulled, onError) => {
     dispatch(action)
       .then(unwrapResult)
       .then((v) => {
-        if (onFulfulled !== undefined) onFulfulled(v);
+        if (onFulfilled !== undefined) onFulfilled(v);
       })
       .catch((err) => {
         if (onError !== undefined) onError(err);

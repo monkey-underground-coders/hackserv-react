@@ -50,8 +50,7 @@ export default function StepperPage({ steps, title, ending, ...rest }) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const ActiveContent =
-    activeStep < steps.length ? steps[activeStep].component : null;
+  const ActiveContent = steps[activeStep]?.component;
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);

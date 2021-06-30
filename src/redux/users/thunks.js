@@ -51,9 +51,13 @@ export const getSelf = createAsyncThunk(
 
 export const userPutData = createAsyncThunk(
   "user",
-  async ({ userId, userInfo }) => {
-    const response = await putUserInfo(userId, userInfo);
-    return response.data;
+  async ({ userId, userInfo }, { rejectWithValue }) => {
+    try {
+      const response = await putUserInfo(userId, userInfo);
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e.message || e.response.data);
+    }
   }
 );
 

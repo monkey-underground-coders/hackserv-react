@@ -15,9 +15,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StepperNavBar = () => {
+const StepperNavBar = ({ jumpOnNextOnClick = true }) => {
   const classes = useStyles();
-  const { currentStep, steps, handleNext, handleBack } =
+  const { currentStep, steps, handleBack, handleNext } =
     useContext(StepContext);
 
   return (
@@ -31,7 +31,7 @@ const StepperNavBar = () => {
         variant="contained"
         color="primary"
         type="submit"
-        onClick={handleNext}
+        onClick={jumpOnNextOnClick ? handleNext : undefined}
         className={classes.button}
       >
         {currentStep === steps - 1 ? "Завершить" : "Следующий"}

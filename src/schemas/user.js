@@ -18,7 +18,7 @@ export const userDetailedInfoSchema = yup.object().shape({
   lastName: yup.string().max(200).required(),
   telegram: yup
     .string()
-    .matches(/^@(?=\\w{5,64}\\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$/, {
+    .matches(/^@(?=\w{5,64}\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$/, {
       message: "Требуется telegram-id, начинающийся с @",
     })
     .required(),
