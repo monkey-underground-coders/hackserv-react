@@ -8,6 +8,7 @@ import {
   DialogTitle,
   makeStyles,
 } from "@material-ui/core";
+import { Formik } from "formik";
 import React from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: -12,
   },
 }));
-
 const SampleFormDialog = ({
   open,
   onClose,
@@ -35,35 +35,58 @@ const SampleFormDialog = ({
   title,
   contextText,
   children,
-  uploading,
-  blockUpload,
+  validationSchema,
+  initialValues,
 }) => {
   const classes = useStyles();
   return (
-    <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">{title}</DialogTitle>
-      <DialogContent>
-        {contextText && <DialogContentText>{contextText}</DialogContentText>}
-        {children}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary" disabled={uploading || false}>
-          Отменить
-        </Button>
-        <div className={classes.wrapper}>
-          <Button
-            onClick={onSubmit}
-            color="primary"
-            disabled={uploading || blockUpload || false}
+    <Formik
+      initialValues={initialValues || {}}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit}
+    >
+      {({ handleSubmit, isSubmitting, isValid }) => (
+        <form onSubmit={handleSubmit}>
+          <Dialog
+            open={open}
+            onClose={onClose}
+            aria-labelledby="form-dialog-title"
           >
-            Отправить
-          </Button>
-          {uploading && (
-            <CircularProgress size={24} className={classes.buttonProgress} />
-          )}
-        </div>
-      </DialogActions>
-    </Dialog>
+            <DialogTitle id="form-dialog-title">{title}</DialogTitle>
+            <DialogContent>
+              {contextText && (
+                <DialogContentText>{contextText}</DialogContentText>
+              )}
+              {children}
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={onClose}
+                color="primary"
+                disabled={isSubmitting || false}
+              >
+                Отменить
+              </Button>
+              <div className={classes.wrapper}>
+                <Button
+                  type="submit"
+                  color="primary"
+                  disabled={isSubmitting || !isValid || false}
+                >
+                  Отправить
+                </Button>
+                {isSubmitting && (
+                  <CircularProgress
+                    size={24}
+                    className={classes.buttonProgress}
+                  />
+                )}
+              </div>
+            </DialogActions>
+          </Dialog>
+        </form>
+      )}
+    </Formik>
   );
 };
 

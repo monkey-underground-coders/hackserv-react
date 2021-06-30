@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Divider } from "@material-ui/core";
 import { unwrapResult } from "@reduxjs/toolkit";
 
-import Track from "./Track";
+import TrackListItem from "./TrackListItem";
 import { getAllTrackIdsSelector, getAllTracks } from "@redux/tracks";
 import { isSelfAdmin } from "@redux/users";
 import { useMySnackbar } from "@utils/hooks";
@@ -43,7 +43,7 @@ const Tracks = ({ globalAppend = true }) => {
       >
         {tracks.map((t) => (
           <div key={t}>
-            <Track trackId={t} editAllowed={allowEdit} />
+            <TrackListItem trackId={t} editAllowed={allowEdit} />
             <Divider />
           </div>
         ))}

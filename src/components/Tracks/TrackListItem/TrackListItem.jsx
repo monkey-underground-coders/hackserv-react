@@ -4,7 +4,7 @@ import { ListItem, ListItemText } from "@material-ui/core";
 
 import { getTrackByIdSelector } from "@redux/tracks";
 
-const Track = ({ trackId, editAllowed }) => {
+const TrackListItem = ({ trackId, editAllowed }) => {
   const track = useSelector((state) =>
     getTrackByIdSelector(state, { trackId })
   );
@@ -15,4 +15,4 @@ const Track = ({ trackId, editAllowed }) => {
   );
 };
 
-export default Track;
+export default TrackListItem;
