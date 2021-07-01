@@ -9,8 +9,11 @@ import { isSelfAdmin } from "@redux/users";
 import { useMySnackbar } from "@utils/hooks";
 import PaperList from "@components/PaperList";
 import CreateTrackDialog from "./CreateTrackDialog";
+import { Route, useRouteMatch, Switch } from "react-router-dom";
+import Track from "./Track/Track";
 
 const Tracks = ({ globalAppend = true }) => {
+  const match = useRouteMatch();
   const [dialogOpen, setDialogOpen] = useState(false);
   const { enqueueError } = useMySnackbar();
 
@@ -28,33 +31,38 @@ const Tracks = ({ globalAppend = true }) => {
   const handleAppendClose = () => setDialogOpen(false);
 
   return (
-    <>
-      <PaperList
-        title="Номинации"
-        isEmpty={!tracks.length}
-        appendAllowed={allowEdit}
-        onGetAllItems={handleGetTracks}
-        onAppendClick={handleAppendClick}
-        globalAppend={globalAppend}
-      >
-        {tracks.map((t) => (
-          <div key={t}>
-            <TrackListItem trackId={t} editAllowed={allowEdit} />
-            <Divider />
-          </div>
-        ))}
-      </PaperList>
-      {allowEdit && (
-        <CreateTrackDialog
-          open={dialogOpen}
-          onCancel={handleAppendClose}
-          onSubmitted={() => {
-            setDialogOpen(false);
-            return handleGetTracks();
-          }}
-        />
-      )}
-    </>
+    <Switch>
+      <Route path={`${match.path}/:trackId`}>
+        <Track allowEdit={allowEdit} />
+      </Route>
+      <Route path={`${match.path}`}>
+        <PaperList
+          title="Номинации"
+          isEmpty={!tracks.length}
+          appendAllowed={allowEdit}
+          onGetAllItems={handleGetTracks}
+          onAppendClick={handleAppendClick}
+          globalAppend={globalAppend}
+        >
+          {tracks.map((t, index) => (
+            <div key={t}>
+              {index !== 0 && <Divider />}
+              <TrackListItem trackId={t} editAllowed={allowEdit} />
+            </div>
+          ))}
+        </PaperList>
+        {allowEdit && (
+          <CreateTrackDialog
+            open={dialogOpen}
+            onCancel={handleAppendClose}
+            onSubmitted={() => {
+              setDialogOpen(false);
+              return handleGetTracks();
+            }}
+          />
+        )}
+      </Route>
+    </Switch>
   );
 };
 
