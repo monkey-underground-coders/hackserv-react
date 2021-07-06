@@ -32,14 +32,16 @@ const EntityRenderFetch = ({
   );
 };
 
-export const withEntityRenderFetch = (Component, idField, action) => (props) =>
-  (
-    <EntityRenderFetch
-      component={Component}
-      action={action}
-      idField={idField}
-      {...props}
-    />
-  );
+export const withEntityRenderFetch =
+  (Component, idField, action) => (props) => {
+    return (
+      <EntityRenderFetch
+        component={Component}
+        action={action}
+        idField={idField}
+        {...props}
+      />
+    );
+  };
 
 export default EntityRenderFetch;
