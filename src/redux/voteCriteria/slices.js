@@ -1,5 +1,5 @@
 import { createSlice, createEntityAdapter, isAnyOf } from "@reduxjs/toolkit";
-import { getAllTracks } from "@redux/tracks";
+import { getAllTracks, putTrack } from "@redux/tracks";
 
 export const voteCriteriaAdapter = createEntityAdapter({
   selectId: (e) => e.id,
@@ -16,6 +16,9 @@ export const voteCriteria = createSlice({
     builder.addCase(getAllTracks.fulfilled, (state, { payload }) => {
       voteCriteriaAdapter.removeAll(state);
       voteCriteriaAdapter.setAll(state, payload.criterias ?? []);
+    });
+    builder.addCase(putTrack.fulfilled, (state, { payload }) => {
+      voteCriteriaAdapter.upsertMany(state, payload.criterias ?? []);
     });
   },
 });

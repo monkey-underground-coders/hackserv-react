@@ -79,7 +79,7 @@ const SingleEditableField = ({
         onSubmit={handleSubmit}
       >
         {({ handleSubmit, isSubmitting, isValid, initialValues, values }) => {
-          const isDoneVisible = initialValues.field !== values.field;
+          const isUndoVisible = initialValues.field !== values.field;
 
           return (
             <form onSubmit={handleSubmit} className={classes.container}>
@@ -89,35 +89,33 @@ const SingleEditableField = ({
                 fullWidth={fullWidth}
                 {...editProps}
               />
-              <IconButton
-                type="submit"
-                disabled={isSubmitting}
-                className={
-                  !isDoneVisible
-                    ? classes.doneButton
-                    : classes.doneButtonShifted
-                }
-              >
-                <DoneIcon />
-              </IconButton>
               {isSubmitting ? (
-                <IconButton>
+                <IconButton className={classes.doneButtonShifted}>
                   <CircularProgress size="10" />
                 </IconButton>
               ) : (
                 <IconButton
-                  disabled={!isValid}
-                  onClick={handleUndoButtonClick}
-                  aria-label="undo"
+                  type="submit"
+                  disabled={isSubmitting}
                   className={
-                    !isDoneVisible
-                      ? classes.undoButtonHidden
-                      : classes.undoButton
+                    !isUndoVisible
+                      ? classes.doneButton
+                      : classes.doneButtonShifted
                   }
                 >
-                  <RotateLeftIcon />
+                  <DoneIcon />
                 </IconButton>
               )}
+              <IconButton
+                disabled={!isValid}
+                onClick={handleUndoButtonClick}
+                aria-label="undo"
+                className={
+                  !isUndoVisible ? classes.undoButtonHidden : classes.undoButton
+                }
+              >
+                <RotateLeftIcon />
+              </IconButton>
             </form>
           );
         }}

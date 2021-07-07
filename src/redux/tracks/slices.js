@@ -1,5 +1,5 @@
 import { createSlice, createEntityAdapter, isAnyOf } from "@reduxjs/toolkit";
-import { getAllTracks, createNewTrack } from "./thunks";
+import { getAllTracks, createNewTrack, putTrack } from "./thunks";
 
 export const trackAdapter = createEntityAdapter({
   selectId: (e) => e.id,
@@ -19,6 +19,9 @@ export const tracks = createSlice({
     });
     builder.addCase(createNewTrack.fulfilled, (state, { payload }) => {
       trackAdapter.addOne(state, Object.values(payload.tracks)[0]);
+    });
+    builder.addCase(putTrack.fulfilled, (state, { payload }) => {
+      trackAdapter.upsertOne(state, Object.values(payload.tracks)[0]);
     });
   },
 });

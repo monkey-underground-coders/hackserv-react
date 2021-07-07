@@ -13,7 +13,7 @@ const Title = ({ children }) => {
   return (
     <Typography
       component="h2"
-      variant="h6"
+      variant="h4"
       color="primary"
       gutterBottom
       className={classes.typography}

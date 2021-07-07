@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { userCreate } from "@redux/users";
 import { parseErrors } from "@utils/parse";
@@ -11,9 +11,11 @@ import CenteredPaper from "@components/CenteredPaper";
 import NotFoundPage from "@components/NotFoundPage";
 import RenderFetch from "@components/RenderFetch";
 import EntityRenderFetch from "@components/RenderFetch/EntityRenderFetch";
-import { getAllTracks } from "@redux/tracks";
+import { getAllTracks, putTrack } from "@redux/tracks";
 import { withEntityRenderFetch } from "@components/RenderFetch/EntityRenderFetch/EntityRenderFetch";
 import SingleEditableField from "@components/SingleEditableField";
+import { unwrapResult } from "@reduxjs/toolkit";
+import CriteriaList from "./CriteriaList";
 
 const useStyles = makeStyles((theme) => ({
   // paper: {
@@ -45,21 +47,34 @@ const useStyles = makeStyles((theme) => ({
 
 const Track = ({ entityId, editAllowed }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { enqueueError } = useMySnackbar();
+
   const track = useSelector((state) =>
     getTrackByIdSelector(state, { trackId: entityId })
   );
   if (!track?.id) {
     return <NotFoundPage />;
   }
-  const { trackName } = track;
+  const { trackName, criteriaList: criteriaIdsList } = track;
+
+  const handleTrackNameChange = (value) =>
+    dispatch(putTrack({ trackId: entityId, trackName: value }))
+      .then(unwrapResult)
+      .catch(enqueueError);
+
   return (
     <CenteredPaper>
       <SingleEditableField
         initialValue={trackName}
-        initialEdit={true}
         fullWidth={true}
+        onSubmit={handleTrackNameChange}
       />
       meow meow meow
+      <CriteriaList
+        criteriaIdsList={criteriaIdsList}
+        editAllowed={editAllowed}
+      />
     </CenteredPaper>
   );
 };
