@@ -4,7 +4,7 @@ import Divider from "@material-ui/core/Divider";
 import { Formik } from "formik";
 import { LinearProgress } from "@material-ui/core";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { pick } from "lodash";
+import { pick, mapValues } from "lodash";
 
 import UserInfoForm from "./UserInfoForm";
 import ResumeForm from "./ResumeForm";
@@ -50,7 +50,6 @@ const PersonForm = ({ user }) => {
       .then(() => handleNext())
       .catch(enqueueError);
   // const onSubmit = async () => handleNext();\
-
   return (
     <Formik
       initialValues={{
@@ -59,15 +58,18 @@ const PersonForm = ({ user }) => {
           `${yesterday.getFullYear()}-${
             yesterday.getMonth() + 1
           }-${yesterday.getDate()}`,
-        ...pick(user, [
-          "firstName",
-          "middleName",
-          "lastName",
-          "telegram",
-          "workPlace",
-          "resume",
-          "otherInfo",
-        ]),
+        ...mapValues(
+          pick(user, [
+            "firstName",
+            "middleName",
+            "lastName",
+            "telegram",
+            "workPlace",
+            "resume",
+            "otherInfo",
+          ]),
+          (v) => v ?? ""
+        ),
       }}
       validationSchema={userDetailedInfoSchema}
       onSubmit={onSubmit}
