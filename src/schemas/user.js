@@ -1,5 +1,11 @@
 import * as yup from "yup";
 
+yup.setLocale({
+  mixed: {
+      required: 'Это обязательное поле'
+    }
+});
+
 export const emailPasswordSchema = yup.object().shape({
   email: yup.string().email().max(200).required(),
   password: yup.string().min(3).max(128).required(),
