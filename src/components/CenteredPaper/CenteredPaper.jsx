@@ -26,13 +26,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CenteredPaper = ({ title, children }) => {
+const CenteredPaper = ({ title = "", children }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.layout}>
       <Paper className={classes.paper}>
-        {title !== undefined && <Title>{title}</Title>}
+        {title && <Title>{title}</Title>}
         {children}
       </Paper>
     </div>

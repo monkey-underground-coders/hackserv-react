@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userCreate } from "@redux/users";
 import { parseErrors } from "@utils/parse";
 import { useInput, isEmail, minLength, isNotEmpty } from "@validation";
-import { useMySnackbar } from "@utils/hooks";
+import { useMySnackbar, useParamSelector } from "@utils/hooks";
 import { getTrackByIdSelector } from "@redux/tracks/selectors";
 import CenteredPaper from "@components/CenteredPaper";
 import NotFoundPage from "@components/NotFoundPage";
@@ -16,6 +16,7 @@ import { withEntityRenderFetch } from "@components/RenderFetch/EntityRenderFetch
 import SingleEditableField from "@components/SingleEditableField";
 import { unwrapResult } from "@reduxjs/toolkit";
 import CriteriaList from "./CriteriaList";
+import { titleSchema } from "@schemas/track";
 
 const useStyles = makeStyles((theme) => ({
   // paper: {
@@ -50,9 +51,8 @@ const Track = ({ entityId, editAllowed }) => {
   const dispatch = useDispatch();
   const { enqueueError } = useMySnackbar();
 
-  const track = useSelector((state) =>
-    getTrackByIdSelector(state, { trackId: entityId })
-  );
+  const track = useParamSelector(getTrackByIdSelector, { trackId: entityId });
+
   if (!track?.id) {
     return <NotFoundPage />;
   }
@@ -64,18 +64,26 @@ const Track = ({ entityId, editAllowed }) => {
       .catch(enqueueError);
 
   return (
-    <CenteredPaper>
-      <SingleEditableField
-        initialValue={trackName}
-        fullWidth={true}
-        onSubmit={handleTrackNameChange}
-      />
-      meow meow meow
-      <CriteriaList
-        criteriaIdsList={criteriaIdsList}
-        editAllowed={editAllowed}
-      />
-    </CenteredPaper>
+    <>
+      <CenteredPaper>
+        <SingleEditableField
+          initialValue={trackName}
+          onSubmit={handleTrackNameChange}
+          normalComponentProps={{
+            gutterBottom: false,
+          }}
+          name="trackName"
+          validationSchema={titleSchema}
+          fullWidth
+        />
+      </CenteredPaper>
+      <CenteredPaper>
+        <CriteriaList
+          criteriaIdsList={criteriaIdsList}
+          editAllowed={editAllowed}
+        />
+      </CenteredPaper>
+    </>
   );
 };
 
