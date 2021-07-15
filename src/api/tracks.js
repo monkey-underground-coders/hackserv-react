@@ -11,3 +11,5 @@ export const putTrack = (trackId, { trackName }) =>
   mainAxios.put(`/track/${trackId}`, {
     trackName,
   });
+
+export const deleteTrack = (id) => mainAxios.delete(`/track/${id}`);

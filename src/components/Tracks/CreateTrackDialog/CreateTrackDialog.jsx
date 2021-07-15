@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 
 import SampleFormDialog from "@components/SampleFormDialog";
 import { createNewTrack } from "@redux/tracks";
-import { useMySnackbar } from "@utils";
+import { useMySnackbar } from "@utils/hooks";
 import { Field } from "formik";
 import { TextField } from "formik-material-ui";
+import { titleSchemaTrack } from "@schemas/track";
 
 const CreateTrackDialog = ({ open, onCancel, onSubmitted }) => {
   const { enqueueError } = useMySnackbar();
@@ -29,6 +30,7 @@ const CreateTrackDialog = ({ open, onCancel, onSubmitted }) => {
       onClose={onCancel}
       onSubmit={(values, bag) => handleSubmit(values.trackName)}
       title="Добавить номинацию"
+      validationSchema={titleSchemaTrack}
     >
       <Field
         component={TextField}

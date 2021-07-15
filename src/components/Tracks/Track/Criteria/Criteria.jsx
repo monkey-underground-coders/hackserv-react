@@ -1,18 +1,24 @@
 import React, { useState } from "react";
-import { Box, Divider, Grid, IconButton, makeStyles } from "@material-ui/core";
+import { Divider, Grid, makeStyles } from "@material-ui/core";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import EditIcon from "@material-ui/icons/Edit";
-import DoneIcon from "@material-ui/icons/Done";
-
-import { getCriteriaById } from "@redux/voteCriteria";
-import { useParamSelector } from "@utils/hooks";
-import FormField from "@components/FormField";
+import { useDispatch } from "react-redux";
 import { Form, Formik } from "formik";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { isEqual } from "lodash";
+
+import {
+  deleteCriteria,
+  getCriteriaById,
+  putCriteria,
+} from "@redux/voteCriteria";
+import { useMySnackbar, useParamSelector } from "@utils/hooks";
+import FormField from "@components/FormField";
 import FormikFormControls from "@components/FormControls/FormikFormControls";
+import { criteriaSchema } from "@schemas/criteria";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightRegular,
   },
   description: {
-    fontSize: theme.typography.pxToRem(12),
+    fontSize: theme.typography.pxToRem(14),
     fontWeight: theme.typography.fontWeightRegular,
-    color: theme.palette.text.secondary,
+    // color: theme.palette.text.secondary,
   },
   empty: {
     fontSize: theme.typography.pxToRem(12),
@@ -50,13 +56,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Criteria = ({ id, editAllowed }) => {
-  const { name, description, maxValue } = useParamSelector(getCriteriaById, {
+const Criteria = ({ id, editAllowed, expanded, onExpanded }) => {
+  const [edit, setEdit] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const dispatch = useDispatch();
+  const classes = useStyles();
+  const { enqueueError } = useMySnackbar();
+
+  const selected = useParamSelector(getCriteriaById, {
     id,
   });
-  const classes = useStyles();
 
-  const [edit, setEdit] = useState(false);
+  const { name, maxValue } = selected;
+  const description = selected.description ?? "";
 
   const handleEventStopPropagation = (event) => event.stopPropagation();
 
@@ -65,18 +77,43 @@ const Criteria = ({ id, editAllowed }) => {
     setEdit(!edit);
   };
 
+  const handleSubmit = async (values, bag) => {
+    if (!isEqual(values, { name, description, maxValue })) {
+      try {
+        await dispatch(putCriteria({ ...values, id })).then(unwrapResult);
+      } catch (e) {
+        console.error(e);
+        enqueueError("Не удалось изменить критерий");
+      }
+    }
+    setEdit(false);
+  };
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      await dispatch(deleteCriteria({ id })).then(unwrapResult);
+    } catch (err) {
+      console.error(err);
+      enqueueError("Не удалось удалить критерий");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
     <Formik
       initialValues={{ name, description, maxValue }}
-      onSubmit={(values, bag) => {
-        console.log(values);
-        setEdit(!edit);
-        return Promise.resolve();
-      }}
+      onSubmit={handleSubmit}
+      validationSchema={criteriaSchema}
     >
       {({ submitForm, resetForm }) => (
-        <Accordion className={classes.root}>
-          <Form>
+        <Form>
+          <Accordion
+            expanded={expanded === id}
+            onChange={onExpanded(id)}
+            className={classes.root}
+          >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -92,30 +129,42 @@ const Criteria = ({ id, editAllowed }) => {
                     onClick={handleEventStopPropagation}
                     onFocus={handleEventStopPropagation}
                     fullWidth
+                    required
                   >
                     <Typography className={classes.heading}>
                       {name} ({maxValue})
                     </Typography>
                   </FormField>
                 </div>
-                <FormikFormControls
-                  edit={edit}
-                  onEdit={handleEditButtonClick}
-                  resetProps={{
-                    onFocus: handleEventStopPropagation,
-                    onClick: (event) => {
-                      event.stopPropagation();
-                      resetForm();
-                    },
-                  }}
-                  submitProps={{
-                    onFocus: handleEventStopPropagation,
-                    onClick: (event) => {
-                      event.stopPropagation();
-                      submitForm();
-                    },
-                  }}
-                />
+                {editAllowed && (
+                  <FormikFormControls
+                    edit={edit}
+                    onEdit={handleEditButtonClick}
+                    isDeleting={deleting}
+                    onDelete={handleDelete}
+                    resetProps={{
+                      onFocus: handleEventStopPropagation,
+                      onClick: (event) => {
+                        event.stopPropagation();
+                        resetForm();
+                      },
+                    }}
+                    submitProps={{
+                      onFocus: handleEventStopPropagation,
+                      onClick: (event) => {
+                        event.stopPropagation();
+                        submitForm();
+                      },
+                    }}
+                    deleteProps={{
+                      onFocus: handleEventStopPropagation,
+                      onClick: (event) => {
+                        event.stopPropagation();
+                        handleDelete();
+                      },
+                    }}
+                  />
+                )}
               </div>
             </AccordionSummary>
             <AccordionDetails className={classes.accordionDetails}>
@@ -148,14 +197,15 @@ const Criteria = ({ id, editAllowed }) => {
                     label="Числовое значение"
                     type="number"
                     fullWidth
+                    required
                   >
                     {maxValue}
                   </FormField>
                 </Grid>
               </Grid>
             </AccordionDetails>
-          </Form>
-        </Accordion>
+          </Accordion>
+        </Form>
       )}
     </Formik>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { CssBaseline, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 
 import Title from "@components/Title";

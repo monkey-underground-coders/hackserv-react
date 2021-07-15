@@ -20,6 +20,7 @@ const Tracks = ({ globalAppend = true }) => {
   const tracks = useSelector(getAllTrackIdsSelector);
   const dispatch = useDispatch();
   const allowEdit = useSelector(isSelfAdmin);
+  // const allowEdit = false;
 
   const handleGetTracks = () =>
     dispatch(getAllTracks())
@@ -33,7 +34,7 @@ const Tracks = ({ globalAppend = true }) => {
   return (
     <Switch>
       <Route path={`${match.path}/:trackId`}>
-        <Track allowEdit={allowEdit} />
+        <Track editAllowed={allowEdit} />
       </Route>
       <Route path={`${match.path}`}>
         <PaperList

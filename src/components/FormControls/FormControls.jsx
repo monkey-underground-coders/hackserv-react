@@ -1,11 +1,9 @@
 import React from "react";
 import { CircularProgress, IconButton, makeStyles } from "@material-ui/core";
-import { Formik, Field } from "formik";
-import { TextField } from "formik-material-ui";
 import EditIcon from "@material-ui/icons/Edit";
 import DoneIcon from "@material-ui/icons/Done";
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
-import { useMySnackbar } from "@utils/hooks";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 const useStyles = makeStyles((theme) => ({
   container: ({ edit }) => ({
@@ -43,31 +41,59 @@ const FormControls = ({
   onEdit,
   isSubmitting,
   isValid,
+  isDeleting,
+  onDelete = null,
   editProps = {},
+  deleteProps = {},
   resetProps = {},
   submitProps = {},
 }) => {
   const classes = useStyles({ edit });
+
+  const handleDeleteClick = () => {
+    if (!isDeleting) {
+      onDelete();
+    }
+  };
 
   return (
     <>
       <IconButton
         disabled={!isValid}
         type="reset"
-        className={!isDirty ? classes.undoButtonHidden : classes.undoButton}
+        className={
+          !isDirty || !edit ? classes.undoButtonHidden : classes.undoButton
+        }
         {...resetProps}
       >
         <RotateLeftIcon />
       </IconButton>
       {!edit && (
-        <IconButton
-          onClick={onEdit}
-          aria-label="edit"
-          className={classes.editButton}
-          {...editProps}
-        >
-          <EditIcon />
-        </IconButton>
+        <>
+          <IconButton
+            onClick={onEdit}
+            aria-label="edit"
+            className={classes.editButton}
+            {...editProps}
+          >
+            <EditIcon />
+          </IconButton>
+          {onDelete &&
+            (isDeleting ? (
+              <IconButton className={classes.editButton}>
+                <CircularProgress size="10" />
+              </IconButton>
+            ) : (
+              <IconButton
+                onClick={handleDeleteClick}
+                aria-label="delete"
+                className={classes.editButton}
+                {...deleteProps}
+              >
+                <DeleteForeverIcon />
+              </IconButton>
+            ))}
+        </>
       )}
       {edit &&
         (isSubmitting ? (

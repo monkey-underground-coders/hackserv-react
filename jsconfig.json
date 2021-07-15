@@ -13,8 +13,14 @@
       "@assets/*": [
         "./src/assets/*"
       ],
+      "@api": [
+        "./src/api/index.js"
+      ],
       "@api/*": [
         "./src/api/*"
+      ],
+      "@utils": [
+        "./src/utils/index.js"
       ],
       "@utils/*": [
         "./src/utils/*"

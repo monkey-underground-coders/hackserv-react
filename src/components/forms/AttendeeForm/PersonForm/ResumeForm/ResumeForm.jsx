@@ -4,7 +4,6 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { DropzoneDialog } from "material-ui-dropzone";
 import { useDispatch, useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { IconButton } from "@material-ui/core";
 import { DeleteForever } from "@material-ui/icons";

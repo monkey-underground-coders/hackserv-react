@@ -1,5 +1,7 @@
-import { createSlice, createEntityAdapter, isAnyOf } from "@reduxjs/toolkit";
-import { getAllTracks, createNewTrack, putTrack } from "./thunks";
+import { createNewCriteria, deleteCriteria } from "@redux/voteCriteria";
+import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+
+import { getAllTracks, createNewTrack, putTrack, deleteTrack } from "./thunks";
 
 export const trackAdapter = createEntityAdapter({
   selectId: (e) => e.id,
@@ -12,17 +14,39 @@ export const tracks = createSlice({
   reducers: {
     upsertMany: trackAdapter.upsertMany,
   },
-  extraReducers: (builder) => {
-    builder.addCase(getAllTracks.fulfilled, (state, { payload }) => {
+  extraReducers: {
+    // @ts-ignore
+    [getAllTracks.fulfilled]: (state, { payload }) => {
       trackAdapter.removeAll(state);
       trackAdapter.setAll(state, payload.tracks ?? []);
-    });
-    builder.addCase(createNewTrack.fulfilled, (state, { payload }) => {
+    },
+    // @ts-ignore
+    [createNewTrack.fulfilled]: (state, { payload }) => {
       trackAdapter.addOne(state, Object.values(payload.tracks)[0]);
-    });
-    builder.addCase(putTrack.fulfilled, (state, { payload }) => {
+    },
+    // @ts-ignore
+    [putTrack.fulfilled]: (state, { payload }) => {
       trackAdapter.upsertOne(state, Object.values(payload.tracks)[0]);
-    });
+    },
+    // @ts-ignore
+    [createNewCriteria.fulfilled]: (state, { payload }) => {
+      const { track, id } = Object.values(payload.criterias)[0];
+      console.log(state.entities, payload);
+      state.entities[track].criteriaList.push(id);
+    },
+    // @ts-ignore
+    [deleteCriteria.fulfilled]: (state, { payload }) => {
+      const { id } = payload;
+      for (const trackId of state.ids) {
+        const track = state.entities[trackId];
+        track.criteriaList = track.criteriaList.filter((i) => i !== id);
+      }
+    },
+    // @ts-ignore
+    [deleteTrack.fulfilled]: (state, { payload }) => {
+      const { trackId } = payload;
+      trackAdapter.removeOne(state, trackId);
+    },
   },
 });
 

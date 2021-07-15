@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TeamForm() {
+  // eslint-disable-next-line no-unused-vars
   const classes = useStyles();
 
   return (

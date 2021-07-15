@@ -1,3 +1,4 @@
+import React from "react";
 import NotFoundPage from "@components/NotFoundPage";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
@@ -25,9 +26,14 @@ const EntityRenderFetch = ({
 
   const handleFetch = (id) => dispatch(action({ id })).then(unwrapResult);
 
+  const props = {
+    [idField]: +idParam,
+    ...rest,
+  };
+
   return (
     <RenderFetch onFetch={handleFetch}>
-      <Component entityId={+idParam} {...rest} />
+      <Component {...props} />
     </RenderFetch>
   );
 };

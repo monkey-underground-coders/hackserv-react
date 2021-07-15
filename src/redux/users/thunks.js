@@ -5,12 +5,12 @@ import {
   postResume,
   deleteResume,
   getSelfUser,
-  getResume,
   putUserInfo,
 } from "@api";
 
 export const userCreate = createAsyncThunk(
   "users/create",
+  // @ts-ignore
   async ({ emailVal, passwordVal }, { rejectWithValue }) => {
     try {
       const response = await signupPost(emailVal, passwordVal);
@@ -23,6 +23,7 @@ export const userCreate = createAsyncThunk(
 
 export const userUploadResume = createAsyncThunk(
   "user/cv/upload",
+  // @ts-ignore
   async ({ file, userId }) => {
     const response = await postResume(file, userId);
     return response.data;
@@ -31,6 +32,7 @@ export const userUploadResume = createAsyncThunk(
 
 export const userDeleteResume = createAsyncThunk(
   "user/cv/delete",
+  // @ts-ignore
   async ({ userId }) => {
     const response = await deleteResume(userId);
     return response.data;
@@ -51,6 +53,7 @@ export const getSelf = createAsyncThunk(
 
 export const userPutData = createAsyncThunk(
   "user",
+  // @ts-ignore
   async ({ userId, userInfo }, { rejectWithValue }) => {
     try {
       const response = await putUserInfo(userId, userInfo);
@@ -60,15 +63,3 @@ export const userPutData = createAsyncThunk(
     }
   }
 );
-
-// export const getUser = createAsyncThunk(
-//   "users/getUser",
-//   async ({ userId }, { rejectWithValue }) => {
-//     try {
-//       const response = await getSelfUser(); // TODO: real call
-//       return response.data;
-//     } catch (e) {
-//       return rejectWithValue(e.message || e.response.data);
-//     }
-//   }
-// );

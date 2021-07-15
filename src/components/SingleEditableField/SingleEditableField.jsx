@@ -27,6 +27,7 @@ const SingleEditableField = ({
   editProps = {},
   name = "field",
   fullWidth = true,
+  disableEdit = false,
 }) => {
   const [edit, setEdit] = useState(initialEdit);
 
@@ -49,30 +50,38 @@ const SingleEditableField = ({
 
   const handleEditButtonClick = () => setEdit(true);
 
-  return (
-    <Formik
-      initialValues={{ [name]: initialValue }}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-      enableReinitialize
-    >
-      <Form className={classes.container}>
-        {edit ? (
-          <Field
-            component={TextField}
-            name={name}
-            fullWidth={fullWidth}
-            {...editProps}
-          />
-        ) : (
-          <NormalComponent {...normalComponentProps}>
-            {initialValue}
-          </NormalComponent>
-        )}
-        <FormikFormControls edit={edit} onEdit={handleEditButtonClick} />
-      </Form>
-    </Formik>
-  );
+  if (disableEdit) {
+    return (
+      <NormalComponent {...normalComponentProps}>
+        {initialValue}
+      </NormalComponent>
+    );
+  } else {
+    return (
+      <Formik
+        initialValues={{ [name]: initialValue }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+        enableReinitialize
+      >
+        <Form className={classes.container}>
+          {edit ? (
+            <Field
+              component={TextField}
+              name={name}
+              fullWidth={fullWidth}
+              {...editProps}
+            />
+          ) : (
+            <NormalComponent {...normalComponentProps}>
+              {initialValue}
+            </NormalComponent>
+          )}
+          <FormikFormControls edit={edit} onEdit={handleEditButtonClick} />
+        </Form>
+      </Formik>
+    );
+  }
 };
 
 export default SingleEditableField;
