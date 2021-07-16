@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSelfUserSelector } from "@redux/users";
 import { teamCreate } from "@redux/teams";
 import { unwrapResult } from "@reduxjs/toolkit";
+import ActionButton from "@components/ActionButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -132,13 +133,14 @@ export default function ControlledAccordions() {
               <SelectTeam />
             </Grid>
             <Grid item xs={12}>
-              <Button
+              <ActionButton
+                component={Button}
                 className={classes.button}
                 variant="contained"
                 color="primary"
               >
                 Присоедениться
-              </Button>
+              </ActionButton>
             </Grid>
           </Grid>
         </AccordionDetails>
