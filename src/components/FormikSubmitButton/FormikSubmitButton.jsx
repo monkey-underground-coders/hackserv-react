@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useFormikContext } from "formik";
 import { Button, CircularProgress, makeStyles } from "@material-ui/core";
 import { green } from "@material-ui/core/colors";
@@ -7,6 +7,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     alignItems: "center",
+    width: "100%",
   },
   wrapper: {
     margin: theme.spacing(1),
@@ -25,8 +26,6 @@ const useStyles = makeStyles((theme) => ({
 const FormikFormControls = ({
   component: Component = Button,
   children,
-  mainProps = {},
-  loadingProps = {},
   ...rest
 }) => {
   const classes = useStyles();
@@ -34,16 +33,11 @@ const FormikFormControls = ({
   return (
     <div className={classes.root}>
       <div className={classes.wrapper}>
-        <Component
-          type="submit"
-          disabled={!isValid || isSubmitting}
-          {...mainProps}
-          {...rest}
-        >
+        <Component type="submit" disabled={!isValid || isSubmitting} {...rest}>
           {children}
         </Component>
-        {true && (
-          <CircularProgress size="24" className={classes.buttonProgress} />
+        {isSubmitting && (
+          <CircularProgress size={24} className={classes.buttonProgress} />
         )}
       </div>
     </div>
