@@ -17,6 +17,7 @@ import { teamCreate } from "@redux/teams";
 import { unwrapResult } from "@reduxjs/toolkit";
 import ActionButton from "@components/ActionButton";
 import FormikSubmitButton from "@components/FormikSubmitButton";
+import { teamCreateSchema } from "@schemas/teams";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,6 +73,7 @@ export default function ControlledAccordions() {
               name: "",
               description: "",
             }}
+            validationSchema={teamCreateSchema}
             onSubmit={handleCreateTeam}
           >
             <Form>
