@@ -10,6 +10,7 @@ import authReducer from "./auth/slices";
 import app from "./app";
 import tracks from "./tracks";
 import voteCriteria from "./voteCriteria";
+import teams from "./teams";
 
 const store = (() => {
   const reducer = combineReducers({
@@ -19,6 +20,7 @@ const store = (() => {
     app,
     tracks,
     voteCriteria,
+    teams,
   });
 
   const store = configureStore({ reducer });
