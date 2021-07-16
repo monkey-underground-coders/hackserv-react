@@ -33,7 +33,7 @@ const SampleFormDialog = ({
   onClose,
   onSubmit,
   title,
-  contextText,
+  contextText = null,
   children,
   validationSchema,
   initialValues,

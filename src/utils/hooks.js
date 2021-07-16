@@ -1,6 +1,6 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const useMySnackbar = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -49,4 +49,8 @@ export const useGenericHandleBlurAction = (action, onFulfilled, onError) => {
   };
 
   return handleBlurAction;
+};
+
+export const useParamSelector = (selector, params) => {
+  return useSelector((state) => selector(state, params));
 };
