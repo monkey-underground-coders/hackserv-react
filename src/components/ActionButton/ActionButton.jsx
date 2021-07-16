@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { useMySnackbar } from "@utils";
 
 const ActionButton = ({
+  component: Component = IconButton,
   action,
   postAction = null,
   children,
@@ -36,15 +37,15 @@ const ActionButton = ({
 
   if (executing) {
     return (
-      <IconButton {...loadingProps}>
+      <Component {...loadingProps}>
         <CircularProgress size="10" />
-      </IconButton>
+      </Component>
     );
   } else {
     return (
-      <IconButton onClick={handleClick} {...mainProps}>
+      <Component onClick={handleClick} {...mainProps}>
         {children}
-      </IconButton>
+      </Component>
     );
   }
 };
