@@ -81,7 +81,6 @@ export default function ControlledAccordions() {
                 <Grid item xs={12} sm={6}>
                   <Field
                     component={TextField}
-                    required
                     name="name"
                     label="Название команды"
                     fullWidth
@@ -92,8 +91,7 @@ export default function ControlledAccordions() {
                 <Grid item xs={12}>
                   <Field
                     component={TextField}
-                    required
-                    name="descriptionTeam"
+                    name="description"
                     label="О команде"
                     multiline
                     rows={4}

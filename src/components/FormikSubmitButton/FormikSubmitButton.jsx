@@ -1,7 +1,6 @@
 import React from "react";
 import { useFormikContext } from "formik";
 import { Button, CircularProgress, makeStyles } from "@material-ui/core";
-import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
   },
   buttonProgress: {
-    color: green[500],
     position: "absolute",
     top: "50%",
     left: "50%",
