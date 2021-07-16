@@ -16,6 +16,7 @@ import { getSelfUserSelector } from "@redux/users";
 import { teamCreate } from "@redux/teams";
 import { unwrapResult } from "@reduxjs/toolkit";
 import ActionButton from "@components/ActionButton";
+import FormikSubmitButton from "@components/FormikSubmitButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,14 +100,13 @@ export default function ControlledAccordions() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Button
+                  <FormikSubmitButton
                     className={classes.button}
                     variant="contained"
                     color="primary"
-                    type="submit"
                   >
                     Создать
-                  </Button>
+                  </FormikSubmitButton>
                 </Grid>
               </Grid>
             </Form>
@@ -133,14 +133,13 @@ export default function ControlledAccordions() {
               <SelectTeam />
             </Grid>
             <Grid item xs={12}>
-              <ActionButton
-                component={Button}
+              <Button
                 className={classes.button}
                 variant="contained"
                 color="primary"
               >
                 Присоедениться
-              </ActionButton>
+              </Button>
             </Grid>
           </Grid>
         </AccordionDetails>
