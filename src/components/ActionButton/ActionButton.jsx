@@ -39,7 +39,7 @@ const ActionButton = ({
   if (executing) {
     return (
       <Component {...loadingProps} {...rest}>
-        <CircularProgress size="10" />
+        <CircularProgress size={24} />
       </Component>
     );
   } else {

@@ -81,7 +81,7 @@ const FormControls = ({
           {onDelete &&
             (isDeleting ? (
               <IconButton className={classes.editButton}>
-                <CircularProgress size="10" />
+                <CircularProgress size={24} />
               </IconButton>
             ) : (
               <IconButton
