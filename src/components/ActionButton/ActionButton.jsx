@@ -13,6 +13,7 @@ const ActionButton = ({
   errorMessage,
   mainProps = {},
   loadingProps = {},
+  ...rest
 }) => {
   const [executing, setExecuting] = useState(false);
   const dispatch = useDispatch();
@@ -37,13 +38,13 @@ const ActionButton = ({
 
   if (executing) {
     return (
-      <Component {...loadingProps}>
+      <Component {...loadingProps} {...rest}>
         <CircularProgress size="10" />
       </Component>
     );
   } else {
     return (
-      <Component onClick={handleClick} {...mainProps}>
+      <Component onClick={handleClick} {...mainProps} {...rest}>
         {children}
       </Component>
     );
