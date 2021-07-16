@@ -100,13 +100,11 @@ export default function ControlledAccordions() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <FormikSubmitButton
-                    className={classes.button}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Создать
-                  </FormikSubmitButton>
+                  <div className={classes.button}>
+                    <FormikSubmitButton variant="contained" color="primary">
+                      Создать
+                    </FormikSubmitButton>
+                  </div>
                 </Grid>
               </Grid>
             </Form>

@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Divider } from "@material-ui/core";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { Route, useRouteMatch, Switch } from "react-router-dom";
 
 import TrackListItem from "./TrackListItem";
 import { getAllTrackIdsSelector, getAllTracks } from "@redux/tracks";
-import { isSelfAdmin } from "@redux/users";
 import { useMySnackbar } from "@utils/hooks";
 import PaperList from "@components/PaperList";
 import CreateTrackDialog from "./CreateTrackDialog";
-import { Route, useRouteMatch, Switch } from "react-router-dom";
 import Track from "./Track/Track";
+import { isSelfAdmin } from "@redux/users";
 
 const Tracks = ({ globalAppend = true }) => {
   const match = useRouteMatch();
