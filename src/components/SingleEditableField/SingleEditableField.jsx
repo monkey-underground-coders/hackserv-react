@@ -8,7 +8,6 @@ import { useMySnackbar } from "@utils/hooks";
 import FormikFormControls from "@components/FormControls/FormikFormControls";
 
 const useStyles = makeStyles((theme) => ({
-  // @ts-ignore
   container: ({ edit }) => ({
     display: "flex",
     flexDirection: "row",

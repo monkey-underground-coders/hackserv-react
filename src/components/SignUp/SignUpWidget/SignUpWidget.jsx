@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { Field, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import { TextField, CheckboxWithLabel } from "formik-material-ui";
 
 import VkLogo from "@assets/vk-logo.svg";
@@ -94,9 +94,18 @@ export default function SignUpWidget() {
             </Link>
           </Grid>
         </Grid>
-        <Formik validationSchema={registrationSchema} onSubmit={onSubmit}>
-          {({ handleSubmit, isSubmitting }) => {
-            <form onSubmit={handleSubmit}>
+        <Formik
+          initialValues={{
+            email: "",
+            password: "",
+            confirmPassword: "",
+            privacyPolicyAgreement: false,
+          }}
+          validationSchema={registrationSchema}
+          onSubmit={onSubmit}
+        >
+          {({ isSubmitting }) => (
+            <Form>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Field
@@ -112,7 +121,19 @@ export default function SignUpWidget() {
                   <Field
                     component={TextField}
                     name="password"
+                    type="password"
                     label="Пароль"
+                    autoComplete="new-password"
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    component={TextField}
+                    name="confirmPassword"
+                    type="password"
+                    label="Повторите пароль"
                     autoComplete="new-password"
                     fullWidth
                     required
@@ -148,8 +169,8 @@ export default function SignUpWidget() {
                   </Link>
                 </Grid>
               </Grid>
-            </form>;
-          }}
+            </Form>
+          )}
         </Formik>
       </div>
     </Container>

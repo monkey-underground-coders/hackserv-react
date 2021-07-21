@@ -1,5 +1,5 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
-import { deleteTrack, getAllTracks, putTrack } from "@redux/tracks/thunks";
+import { deleteTrack, getAllTracks, getTrackById, putTrack } from "@redux/tracks/thunks";
 import { createNewCriteria, deleteCriteria, putCriteria } from "./thunks";
 
 export const voteCriteriaAdapter = createEntityAdapter({
@@ -14,28 +14,25 @@ export const voteCriteria = createSlice({
     upsertMany: voteCriteriaAdapter.upsertMany,
   },
   extraReducers: {
-    // @ts-ignore
     [getAllTracks.fulfilled]: (state, { payload }) => {
       voteCriteriaAdapter.removeAll(state);
       voteCriteriaAdapter.setAll(state, payload.criterias ?? []);
     },
-    // @ts-ignore
     [putTrack.fulfilled]: (state, { payload }) => {
       voteCriteriaAdapter.upsertMany(state, payload.criterias ?? []);
     },
-    // @ts-ignore
+    [getTrackById.fulfilled]: (state, { payload }) => {
+      voteCriteriaAdapter.upsertMany(state, payload.criterias ?? []);
+    },
     [createNewCriteria.fulfilled]: (state, { payload }) => {
       voteCriteriaAdapter.addOne(state, Object.values(payload.criterias)[0]);
     },
-    // @ts-ignore
     [putCriteria.fulfilled]: (state, { payload }) => {
       voteCriteriaAdapter.upsertOne(state, Object.values(payload.criterias)[0]);
     },
-    // @ts-ignore
     [deleteCriteria.fulfilled]: (state, { payload }) => {
       voteCriteriaAdapter.removeOne(state, payload.id);
     },
-    // @ts-ignore
     [deleteTrack.fulfilled]: (state, { payload }) => {
       const { trackId } = payload;
       voteCriteriaAdapter.removeMany(

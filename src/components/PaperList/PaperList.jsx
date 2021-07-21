@@ -33,7 +33,7 @@ const PaperList = ({
   title,
   isEmpty,
   appendAllowed,
-  onGetAllItems,
+  onGetAllItems = () => Promise.resolve(),
   onAppendClick,
   globalAppend = false,
   children,

@@ -22,7 +22,6 @@ const TrackListItem = ({ trackId, editAllowed }) => {
       {editAllowed && (
         <ListItemSecondaryAction>
           <ActionButton
-            // @ts-ignore
             action={deleteTrack({ trackId })}
             errorMessage="Не удалось удалить номинацию"
           >

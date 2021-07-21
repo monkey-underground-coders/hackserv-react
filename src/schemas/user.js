@@ -2,8 +2,8 @@ import * as yup from "yup";
 
 yup.setLocale({
   mixed: {
-      required: 'Это обязательное поле'
-    }
+    required: "Это обязательное поле",
+  },
 });
 
 export const emailPasswordSchema = yup.object().shape({
@@ -12,6 +12,10 @@ export const emailPasswordSchema = yup.object().shape({
 });
 
 export const registrationSchema = emailPasswordSchema.shape({
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Пароли не одинаковы")
+    .required(),
   privacyPolicyAgreement: yup
     .bool()
     .default(false)

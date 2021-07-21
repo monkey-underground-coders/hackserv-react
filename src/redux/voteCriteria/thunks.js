@@ -11,7 +11,6 @@ import { normalizeToolkitDecode } from "@utils/parse";
 
 export const createNewCriteria = createAsyncThunk(
   "voteCriteria/create",
-  // @ts-ignore
   async ({ trackId, name, maxValue }, { rejectWithValue }) => {
     try {
       const response = await createCriteria({ trackId, name, maxValue });
@@ -24,7 +23,6 @@ export const createNewCriteria = createAsyncThunk(
 
 export const putCriteria = createAsyncThunk(
   "voteCriteria/put",
-  // @ts-ignore
   async ({ id, name, description, maxValue }, { rejectWithValue }) => {
     try {
       const response = await putCriteriaApi(id, {
@@ -41,7 +39,6 @@ export const putCriteria = createAsyncThunk(
 
 export const deleteCriteria = createAsyncThunk(
   "voteCriteria/delete",
-  // @ts-ignore
   async ({ id }, { rejectWithValue }) => {
     try {
       await deleteCriteriaApi(id);

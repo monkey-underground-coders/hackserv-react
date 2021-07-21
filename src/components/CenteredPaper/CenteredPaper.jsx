@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 
 import Title from "@components/Title";
+import SecondaryTitle from "@components/SecondaryTitle";
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -26,13 +27,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CenteredPaper = ({ title = "", children }) => {
+const CenteredPaper = ({ title = "", children, secondary }) => {
   const classes = useStyles();
+
+  const TitleComponent = secondary ? SecondaryTitle : Title;
 
   return (
     <div className={classes.layout}>
       <Paper className={classes.paper}>
-        {title && <Title>{title}</Title>}
+        {title && <TitleComponent>{title}</TitleComponent>}
         {children}
       </Paper>
     </div>

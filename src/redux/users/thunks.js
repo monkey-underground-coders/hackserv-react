@@ -10,10 +10,9 @@ import {
 
 export const userCreate = createAsyncThunk(
   "users/create",
-  // @ts-ignore
-  async ({ emailVal, passwordVal }, { rejectWithValue }) => {
+  async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await signupPost(emailVal, passwordVal);
+      const response = await signupPost(email, password);
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data || e.message);
@@ -23,7 +22,6 @@ export const userCreate = createAsyncThunk(
 
 export const userUploadResume = createAsyncThunk(
   "user/cv/upload",
-  // @ts-ignore
   async ({ file, userId }) => {
     const response = await postResume(file, userId);
     return response.data;
@@ -32,7 +30,6 @@ export const userUploadResume = createAsyncThunk(
 
 export const userDeleteResume = createAsyncThunk(
   "user/cv/delete",
-  // @ts-ignore
   async ({ userId }) => {
     const response = await deleteResume(userId);
     return response.data;
@@ -53,7 +50,6 @@ export const getSelf = createAsyncThunk(
 
 export const userPutData = createAsyncThunk(
   "user",
-  // @ts-ignore
   async ({ userId, userInfo }, { rejectWithValue }) => {
     try {
       const response = await putUserInfo(userId, userInfo);

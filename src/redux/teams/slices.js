@@ -1,4 +1,5 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import { getTrackById } from "@redux/tracks";
 import { teamCreate } from "./thunks";
 
 export const teamAdapter = createEntityAdapter({
@@ -11,9 +12,11 @@ export const teams = createSlice({
   initialState: teamAdapter.getInitialState(),
   reducers: {},
   extraReducers: {
-    // @ts-ignore
     [teamCreate.fulfilled]: (state, { payload }) => {
       teamAdapter.addOne(state, payload);
+    },
+    [getTrackById.fulfilled]: (state, { payload }) => {
+      teamAdapter.upsertMany(state, payload.teams ?? []);
     },
   },
 });

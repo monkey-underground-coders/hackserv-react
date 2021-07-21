@@ -4,7 +4,6 @@ import { decodeEscapedEntity } from "@utils";
 
 export const teamCreate = createAsyncThunk(
   "teams/create",
-  // @ts-ignore
   async ({ name, captainId }, { rejectWithValue }) => {
     try {
       const response = await teamCreateAPI({ name, captainId });

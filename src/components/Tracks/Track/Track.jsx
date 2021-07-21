@@ -1,16 +1,18 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { List } from "@material-ui/core";
 
 import { useMySnackbar, useParamSelector } from "@utils/hooks";
 import { getTrackByIdSelector } from "@redux/tracks/selectors";
 import CenteredPaper from "@components/CenteredPaper";
 import NotFoundPage from "@components/NotFoundPage";
-import { getAllTracks, putTrack } from "@redux/tracks";
+import { getTrackById, putTrack } from "@redux/tracks";
 import { withEntityRenderFetch } from "@components/RenderFetch/EntityRenderFetch/EntityRenderFetch";
 import SingleEditableField from "@components/SingleEditableField";
 import CriteriaList from "./CriteriaList";
 import { titleSchemaTrack } from "@schemas/track";
+import TeamsList from "@components/TeamsList";
 
 const Track = ({ trackId, editAllowed }) => {
   const dispatch = useDispatch();
@@ -21,12 +23,14 @@ const Track = ({ trackId, editAllowed }) => {
   if (!track?.id) {
     return <NotFoundPage />;
   }
-  const { trackName, criteriaList: criteriaIdsList } = track;
+  const {
+    trackName,
+    criteriaList: criteriaIdsList,
+    teams: teamIdsList,
+  } = track;
 
   const handleTrackNameChange = (value) =>
-    // @ts-ignore
     dispatch(putTrack({ trackId, trackName: value }))
-      // @ts-ignore
       .then(unwrapResult)
       .catch(enqueueError);
 
@@ -52,8 +56,11 @@ const Track = ({ trackId, editAllowed }) => {
           editAllowed={editAllowed}
         />
       </CenteredPaper>
+      <CenteredPaper title="Команды" secondary>
+        <TeamsList ids={teamIdsList} />
+      </CenteredPaper>
     </>
   );
 };
 
-export default withEntityRenderFetch(Track, "trackId", getAllTracks);
+export default withEntityRenderFetch(Track, "trackId", getTrackById);

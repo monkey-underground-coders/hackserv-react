@@ -24,7 +24,8 @@ const EntityRenderFetch = ({
     return <NotFoundPage />;
   }
 
-  const handleFetch = (id) => dispatch(action({ id })).then(unwrapResult);
+  const handleFetch = ({ [idField]: id }) =>
+    dispatch(action({ id: +id })).then(unwrapResult);
 
   const props = {
     [idField]: +idParam,
