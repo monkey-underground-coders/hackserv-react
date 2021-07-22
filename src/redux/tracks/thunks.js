@@ -8,14 +8,14 @@ import {
   deleteTrack as deleteTrackApi,
 } from "@api";
 import { track } from "../schemas";
-import { normalizeToolkitDecode } from "@utils";
+import { normalizeToolkit } from "@utils";
 
 export const getAllTracks = createAsyncThunk(
   "tracks/getAll",
   async (_, { rejectWithValue }) => {
     try {
       const response = await getAllTracksFromAPI();
-      return normalizeToolkitDecode(response.data, [track]);
+      return normalizeToolkit(response.data, [track]);
     } catch (e) {
       return rejectWithValue(e.message || e.response.data);
     }
@@ -27,7 +27,7 @@ export const getTrackById = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const response = await getTrackByIdApi(id);
-      return normalizeToolkitDecode(response.data, track);
+      return normalizeToolkit(response.data, track);
     } catch (e) {
       return rejectWithValue(e.message || e.response.data);
     }
@@ -39,7 +39,7 @@ export const createNewTrack = createAsyncThunk(
   async ({ name }, { rejectWithValue }) => {
     try {
       const response = await createTrack(name);
-      return normalizeToolkitDecode(response.data, track);
+      return normalizeToolkit(response.data, track);
     } catch (e) {
       return rejectWithValue(e.message || e.response.data);
     }
@@ -51,7 +51,7 @@ export const putTrack = createAsyncThunk(
   async ({ trackId, trackName }, { rejectWithValue }) => {
     try {
       const response = await putTrackApi(trackId, { trackName });
-      return normalizeToolkitDecode(response.data, track);
+      return normalizeToolkit(response.data, track);
     } catch (e) {
       return rejectWithValue(e.message || e.response.data);
     }

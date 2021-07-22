@@ -1,7 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { List } from "@material-ui/core";
 
 import { useMySnackbar, useParamSelector } from "@utils/hooks";
 import { getTrackByIdSelector } from "@redux/tracks/selectors";

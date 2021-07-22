@@ -8,10 +8,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     width: "100%",
   },
-  wrapper: {
+  wrapper: ({ fullWidth }) => ({
     margin: theme.spacing(1),
     position: "relative",
-  },
+    width: fullWidth && "100%",
+  }),
   buttonProgress: {
     position: "absolute",
     top: "50%",
@@ -26,7 +27,7 @@ const FormikFormControls = ({
   children,
   ...rest
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ fullWidth: rest.fullWidth || false });
   const { isSubmitting, isValid } = useFormikContext();
   return (
     <div className={classes.root}>

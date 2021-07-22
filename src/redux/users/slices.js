@@ -6,6 +6,7 @@ import {
   userUploadResume,
   userDeleteResume,
   userPutData,
+  emailRequest,
 } from "./thunks";
 
 export const usersAdapter = createEntityAdapter();
@@ -14,11 +15,20 @@ export const users = createSlice({
   name: "users",
   initialState: {
     ...usersAdapter.getInitialState(),
-    loading: false,
-    currentRequestId: null,
+    lastEmailRequestAt: null,
   },
-  reducers: {},
+  reducers: {
+    setLastEmailRequestAt(state, { payload }) {
+      state.lastEmailRequestAt = payload;
+    },
+  },
   extraReducers: (builder) => {
+    builder.addMatcher(
+      isAnyOf(emailRequest.rejected, emailRequest.fulfilled),
+      (state, action) => {
+        state.lastEmailRequestAt = Date.now();
+      }
+    );
     builder.addMatcher(
       isAnyOf(
         userCreate.fulfilled,
@@ -35,5 +45,9 @@ export const users = createSlice({
   },
 });
 
+const actions = users.actions;
+export const setLastEmailRequestAt = actions.setLastEmailRequestAt;
+
 const reducer = users.reducer;
+
 export default reducer;

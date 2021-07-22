@@ -1,5 +1,6 @@
 import { decode } from "html-entities";
 import { normalize } from "normalizr";
+import { find } from "lodash";
 
 export const parseDataSize = (size) => {
   if (/^\d+$/.test(size)) {
@@ -30,7 +31,7 @@ export const generateResumeFilename = ({ fullName, documentResumePath }) => {
   return fileName + extension;
 };
 
-export const parseErrors = (str) => {
+export const parseErrorMessage = (str) => {
   const dict = {
     "Email already exist": "Данный email уже занят",
     "Validation failed for object='createUserRequest'. Error count: 1":
@@ -39,38 +40,26 @@ export const parseErrors = (str) => {
       "Одно из полей ввода некорректно",
   };
 
-  return dict[str] || str;
+  return dict[str];
 };
 
-export const decodeEscapedEntity = (value, deep = false) => {
-  if (value === null || value === undefined) return value;
-  const processEntity = (v) => {
-    if (Array.isArray(v)) {
-      return decodeEscapedEntity(v);
-    }
-    if (typeof v === "object") {
-      return deep ? decodeEscapedEntity(v) : v;
-    }
-    if (typeof v === "string") {
-      return decode(v);
-    }
-    return v;
-  };
-
-  if (Array.isArray(value)) {
-    return value.map(processEntity);
-  } else {
-    return Object.fromEntries(
-      Object.entries(value).map(([k, v]) => [k, processEntity(v)])
-    );
+export const parseError = (err) => {
+  switch (typeof err) {
+    case "number":
+      return `Произошла ошибка с кодом ${err}`;
+    case "object":
+      const variants = [
+        parseErrorMessage(err.response?.data?.message),
+        err.response?.data?.message,
+        err.message,
+      ];
+      return find(variants, (o) => o !== undefined && o !== null);
+    default:
+      return err;
   }
 };
 
 export const normalizeToolkit = (data, schema) => {
   const { entities } = normalize(data, schema);
   return entities;
-};
-
-export const normalizeToolkitDecode = (data, schema, deep = true) => {
-  return normalizeToolkit(decodeEscapedEntity(data, deep), schema);
 };

@@ -23,3 +23,6 @@ export const updateAccessTokenPost = (refreshToken) =>
   });
 
 export const getSelfUser = () => mainAxios.get("/auth/user");
+
+export const invalidate = (refreshToken) =>
+  mainAxios.delete("/auth/invalidate", { refreshToken });

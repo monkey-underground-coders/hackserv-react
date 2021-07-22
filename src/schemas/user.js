@@ -37,3 +37,7 @@ export const userDetailedInfoSchema = yup.object().shape({
   resume: yup.string().max(5000),
   otherInfo: yup.string().max(5000),
 });
+
+export const emailValidateSchema = yup.object().shape({
+  token: yup.number().required().min(100000).max(999999),
+});

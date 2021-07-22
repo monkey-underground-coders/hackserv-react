@@ -30,6 +30,11 @@ export const maxFileSizeSelector = createSelector(
   ({ maxFileSize }) => maxFileSize
 );
 
+export const minEmailReqSelector = createSelector(
+  getConfigSelector,
+  ({ minEmailReq }) => minEmailReq
+);
+
 export const conf = createSlice({
   name: "conf",
   initialState: {

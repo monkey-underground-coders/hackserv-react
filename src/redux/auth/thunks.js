@@ -1,5 +1,6 @@
-import { localStorageSet } from "@utils/tokens";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+
+import { localStorageSet } from "@utils/tokens";
 import { loginPost, updateAccessTokenPost } from "@api/auth";
 import { getSelf } from "@redux/users";
 

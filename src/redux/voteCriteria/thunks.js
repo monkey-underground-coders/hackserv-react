@@ -7,14 +7,14 @@ import {
   deleteCriteria as deleteCriteriaApi,
 } from "@api/voteCriteria";
 import { voteCriteria } from "@redux/schemas";
-import { normalizeToolkitDecode } from "@utils/parse";
+import { normalizeToolkit } from "@utils/parse";
 
 export const createNewCriteria = createAsyncThunk(
   "voteCriteria/create",
   async ({ trackId, name, maxValue }, { rejectWithValue }) => {
     try {
       const response = await createCriteria({ trackId, name, maxValue });
-      return normalizeToolkitDecode(response.data, voteCriteria);
+      return normalizeToolkit(response.data, voteCriteria);
     } catch (e) {
       return rejectWithValue(e.message || e.response.data);
     }
@@ -30,7 +30,7 @@ export const putCriteria = createAsyncThunk(
         maxValue,
         description,
       });
-      return normalizeToolkitDecode(response.data, voteCriteria);
+      return normalizeToolkit(response.data, voteCriteria);
     } catch (e) {
       return rejectWithValue(e.message || e.response.data);
     }

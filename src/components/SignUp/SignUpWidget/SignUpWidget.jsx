@@ -18,7 +18,7 @@ import VkLogo from "@assets/vk-logo.svg";
 import GoogleLogo from "@assets/google-logo.svg";
 import GitLogo from "@assets/GitHub-logo.svg";
 import { userCreate } from "@redux/users";
-import { parseErrors } from "@utils/parse";
+import { parseErrorMessage } from "@utils/parse";
 import { useMySnackbar } from "@utils/hooks";
 import { registrationSchema } from "@schemas";
 
@@ -61,7 +61,7 @@ export default function SignUpWidget() {
       .catch((error) => {
         console.log(error);
         if (error.message === "Email already exist") {
-          enqueueError(parseErrors(error.message));
+          enqueueError(parseErrorMessage(error.message) || error.message);
         } else {
           enqueueError("Что-то пошло не так...");
         }

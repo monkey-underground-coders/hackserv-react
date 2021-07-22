@@ -17,10 +17,11 @@ export const getResume = (userId) =>
     responseType: "blob",
   });
 
-export const putUserInfo = (userId, userInfo) => {
-  return mainAxios.put(`/user/${userId}`, userInfo, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-};
+export const putUserInfo = (userId, userInfo) =>
+  mainAxios.put(`/user/${userId}`, userInfo);
+
+export const emailValidate = (userId, { token }) =>
+  mainAxios.post(`/user/${userId}/email/validate`, { token });
+
+export const emailRequest = (userId) =>
+  mainAxios.post(`/user/${userId}/email/req`);

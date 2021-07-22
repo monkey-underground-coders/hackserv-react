@@ -6,7 +6,11 @@ import {
   deleteResume,
   getSelfUser,
   putUserInfo,
+  emailValidate as emailValidateApi,
+  emailRequest as emailRequestApi,
 } from "@api";
+import { createAsyncThunkWrapped } from "@utils";
+import { setLastEmailRequestAt } from "./slices";
 
 export const userCreate = createAsyncThunk(
   "users/create",
@@ -49,7 +53,7 @@ export const getSelf = createAsyncThunk(
 );
 
 export const userPutData = createAsyncThunk(
-  "user",
+  "user/put",
   async ({ userId, userInfo }, { rejectWithValue }) => {
     try {
       const response = await putUserInfo(userId, userInfo);
@@ -57,5 +61,21 @@ export const userPutData = createAsyncThunk(
     } catch (e) {
       return rejectWithValue(e.message || e.response.data);
     }
+  }
+);
+
+export const emailValidate = createAsyncThunkWrapped(
+  "user/email/validate",
+  async ({ userId, token }, { dispatch }) => {
+    await emailValidateApi(userId, { token });
+    return await dispatch(getSelf());
+  }
+);
+
+export const emailRequest = createAsyncThunkWrapped(
+  "user/email/request",
+  async ({ userId }, { dispatch }) => {
+    await emailRequestApi(userId);
+    dispatch(setLastEmailRequestAt(Date.now()));
   }
 );

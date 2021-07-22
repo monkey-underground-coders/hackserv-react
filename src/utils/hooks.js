@@ -1,6 +1,7 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
+import { parseError } from "./parse";
 
 export const useMySnackbar = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -8,7 +9,9 @@ export const useMySnackbar = () => {
   const enqueueWithVariant = (variant) => (msg, params) =>
     enqueueSnackbar(msg, { ...params, variant });
 
-  const enqueueError = enqueueWithVariant("error");
+  const enqueueError = (msg, params) => {
+    enqueueSnackbar(parseError(msg), { ...params, variant: "error" });
+  };
 
   const enqueueInfo = enqueueWithVariant("info");
 
