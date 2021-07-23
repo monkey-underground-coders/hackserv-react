@@ -1,6 +1,7 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { parseError } from "./parse";
 
 export const useMySnackbar = () => {
@@ -56,4 +57,10 @@ export const useGenericHandleBlurAction = (action, onFulfilled, onError) => {
 
 export const useParamSelector = (selector, params) => {
   return useSelector((state) => selector(state, params));
+};
+
+export const useQueryParams = () => {
+  return Object.fromEntries(
+    new URLSearchParams(useLocation().search).entries()
+  );
 };

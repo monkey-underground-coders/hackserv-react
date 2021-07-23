@@ -1,4 +1,4 @@
-import { mainAxios } from "./utils";
+import { basicAxios, mainAxios } from "./utils";
 
 export const postResume = (file, userId) => {
   const formData = new FormData();
@@ -25,3 +25,6 @@ export const emailValidate = (userId, { token }) =>
 
 export const emailRequest = (userId) =>
   mainAxios.post(`/user/${userId}/email/req`);
+
+export const emailValidateById = (userId, { id }) =>
+  basicAxios().post(`/user/${userId}/email/validate_by_id`, { id });

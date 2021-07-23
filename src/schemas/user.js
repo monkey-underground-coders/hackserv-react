@@ -39,5 +39,9 @@ export const userDetailedInfoSchema = yup.object().shape({
 });
 
 export const emailValidateSchema = yup.object().shape({
-  token: yup.number().required().min(100000).max(999999),
+  token: yup
+    .number()
+    .required()
+    .min(100000, "Ожидается 6-значный код")
+    .max(999999, "Ожидается 6-значный код"),
 });

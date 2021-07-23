@@ -1,7 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 
 import { userIdSelector } from "@redux/auth";
-import { minEmailReqSelector } from "@redux/conf";
 
 export const usersSelector = (state) => state.users;
 

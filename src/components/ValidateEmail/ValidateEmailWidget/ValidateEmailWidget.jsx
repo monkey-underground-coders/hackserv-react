@@ -18,7 +18,6 @@ import {
   emailValidate,
   getSelfUserSelector,
   lastEmailRequestAtSelector,
-  setLastEmailRequestAt,
 } from "@redux/users";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useMySnackbar } from "@utils";

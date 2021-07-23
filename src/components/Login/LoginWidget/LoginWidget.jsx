@@ -9,7 +9,7 @@ import Container from "@material-ui/core/Container";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Field, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import { LinearProgress } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -79,8 +79,8 @@ export default function LoginWidget({ redirectTo = "/dashboard" }) {
           validationSchema={emailPasswordSchema}
           onSubmit={onSubmit}
         >
-          {({ handleSubmit, isSubmitting }) => (
-            <form onSubmit={handleSubmit}>
+          {({ isSubmitting }) => (
+            <Form>
               <Field
                 component={TextField}
                 variant="outlined"
@@ -134,7 +134,7 @@ export default function LoginWidget({ redirectTo = "/dashboard" }) {
                   </Link>
                 </Grid>
               </Grid>
-            </form>
+            </Form>
           )}
         </Formik>
       </div>

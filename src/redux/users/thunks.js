@@ -8,15 +8,19 @@ import {
   putUserInfo,
   emailValidate as emailValidateApi,
   emailRequest as emailRequestApi,
+  emailValidateById as emailValidateByIdApi,
 } from "@api";
 import { createAsyncThunkWrapped } from "@utils";
 import { setLastEmailRequestAt } from "./slices";
+import { login } from "@redux/auth";
+import { setTokens } from "@redux/auth/actions";
 
 export const userCreate = createAsyncThunk(
   "users/create",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password }, { rejectWithValue, dispatch }) => {
     try {
       const response = await signupPost(email, password);
+      await dispatch(login({ email, password }));
       return response.data;
     } catch (e) {
       return rejectWithValue(e.response.data || e.message);
@@ -77,5 +81,14 @@ export const emailRequest = createAsyncThunkWrapped(
   async ({ userId }, { dispatch }) => {
     await emailRequestApi(userId);
     dispatch(setLastEmailRequestAt(Date.now()));
+  }
+);
+
+export const emailValidateById = createAsyncThunkWrapped(
+  "user/email/validateById",
+  async ({ userId, id }, { dispatch }) => {
+    const response = await emailValidateByIdApi(userId, { id });
+    dispatch(setTokens(response.data));
+    await dispatch(getSelf());
   }
 );

@@ -1,4 +1,3 @@
-import { decode } from "html-entities";
 import { normalize } from "normalizr";
 import { find } from "lodash";
 
