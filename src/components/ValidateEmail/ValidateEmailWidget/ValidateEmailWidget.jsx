@@ -107,10 +107,7 @@ const ValidateEmailWidget = () => {
     if (!requestedAtStart) {
       setRequestedAtStart(true);
       setPushingRequest(true);
-      dispatch(emailRequest({ userId }))
-        .then(unwrapResult)
-        .catch((e) => e)
-        .finally(() => setPushingRequest(false));
+      dispatch(emailRequest({ userId })).then(() => setPushingRequest(false));
     }
   }, [requestedAtStart, dispatch, userId]);
 

@@ -14,13 +14,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ValidateEmailById = () => {
+  const dispatch = useDispatch();
+
   const params = useQueryParams();
   const paramsValid = !isNaN(params.user) && typeof params.id === "string";
-  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
   const [redirectTo, setRedirectTo] = useState(paramsValid ? null : "/");
+
   const classes = useStyles();
-  console.log(params, paramsValid, redirectTo, loading);
+
   useEffect(() => {
     if (!loading && redirectTo === null) {
       setLoading(true);
