@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ValidateEmailById = () => {
   const params = useQueryParams();
-  const paramsValid = isNaN(params.userId) && typeof params.id === "string";
+  const paramsValid = !isNaN(params.user) && typeof params.id === "string";
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [redirectTo, setRedirectTo] = useState(paramsValid ? null : "/");
