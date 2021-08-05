@@ -6,13 +6,13 @@ import {
 } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 
-import Dashboard from "@components/Dashboard";
-import { SignUpPage } from "@components/SignUp";
-import { LoginPage } from "@components/Login";
+import Dashboard from "src/pages/Dashboard";
+import { SignUpPage } from "src/pages/SignUp";
+import { LoginPage } from "src/pages/Login";
 import PreloaderWrapper from "@components/PreloaderWrapper";
 import { LoggedInRoute, UserRoute } from "@components/ConditionalRoute";
-import { ValidateEmailPage } from "@components/ValidateEmail";
-import ValidateEmailById from "@components/ValidateEmailById";
+import { ValidateEmailPage } from "src/pages/ValidateEmail";
+import ValidateEmailById from "src/pages/ValidateEmailById";
 
 const App = () => (
   <SnackbarProvider maxSnack={3} autoHideDuration={5000}>

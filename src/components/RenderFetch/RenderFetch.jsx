@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { CircularProgress, makeStyles } from "@material-ui/core";
-import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   progress: {
@@ -12,12 +11,11 @@ const useStyles = makeStyles((theme) => ({
 const RenderFetch = ({ onFetch, render, children }) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
-  const params = useParams();
 
   const fetch = useCallback(() => {
     setLoading(true);
-    return onFetch(params).finally(() => setLoading(false));
-  }, [onFetch, setLoading, params]);
+    return onFetch().finally(() => setLoading(false));
+  }, [onFetch, setLoading]);
 
   useEffect(fetch, [fetch]);
 

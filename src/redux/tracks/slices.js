@@ -22,7 +22,6 @@ export const tracks = createSlice({
   },
   extraReducers: {
     [getAllTracks.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       trackAdapter.removeAll(state);
       trackAdapter.setAll(state, payload.tracks ?? []);
     },

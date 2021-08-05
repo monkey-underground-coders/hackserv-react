@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import NotFoundPage from "@components/NotFoundPage";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
@@ -16,6 +16,11 @@ const EntityRenderFetch = ({
 
   const idParam = params[idField];
 
+  const handleFetch = useCallback(
+    () => dispatch(action({ id: +idParam })).then(unwrapResult),
+    [dispatch, action, idParam]
+  );
+
   if (
     idParam === null ||
     idParam === undefined ||
@@ -23,9 +28,6 @@ const EntityRenderFetch = ({
   ) {
     return <NotFoundPage />;
   }
-
-  const handleFetch = ({ [idField]: id }) =>
-    dispatch(action({ id: +id })).then(unwrapResult);
 
   const props = {
     [idField]: +idParam,
@@ -39,16 +41,14 @@ const EntityRenderFetch = ({
   );
 };
 
-export const withEntityRenderFetch =
-  (Component, idField, action) => (props) => {
-    return (
-      <EntityRenderFetch
-        component={Component}
-        action={action}
-        idField={idField}
-        {...props}
-      />
-    );
-  };
+export const withEntityRenderFetch = (Component, idField, action) => (props) =>
+  (
+    <EntityRenderFetch
+      component={Component}
+      action={action}
+      idField={idField}
+      {...props}
+    />
+  );
 
 export default EntityRenderFetch;

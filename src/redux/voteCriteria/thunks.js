@@ -6,7 +6,7 @@ import {
   putCriteria as putCriteriaApi,
   deleteCriteria as deleteCriteriaApi,
 } from "@api/voteCriteria";
-import { voteCriteria } from "@redux/schemas";
+import { voteCriteria } from "@validation/normalizr";
 import { normalizeToolkit } from "@utils/parse";
 
 export const createNewCriteria = createAsyncThunk(

@@ -15,10 +15,10 @@ const ContentList = ({ content, children, dividers = false }) => {
   const renderedContent = useMemo(
     () =>
       content.map((item, index, array) => (
-        <>
+        <React.Fragment key={index}>
           {dividers && index !== 0 && <Divider />}
           {children(item, index, array)}
-        </>
+        </React.Fragment>
       )),
     [content, children, dividers]
   );

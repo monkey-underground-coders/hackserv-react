@@ -7,7 +7,7 @@ import {
   putTrack as putTrackApi,
   deleteTrack as deleteTrackApi,
 } from "@api";
-import { track } from "../schemas";
+import { track } from "@validation/normalizr";
 import { normalizeToolkit } from "@utils";
 
 export const getAllTracks = createAsyncThunk(

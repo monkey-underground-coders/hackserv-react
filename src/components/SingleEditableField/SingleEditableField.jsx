@@ -38,7 +38,6 @@ const SingleEditableField = ({
   const handleSubmit = (values, bag) => {
     const value = values[name];
     if (value !== initialValue) {
-      console.log(value, initialValue);
       return Promise.resolve($onSubmit(value, bag))
         .then(() => setEdit(false))
         .catch(enqueueError);
