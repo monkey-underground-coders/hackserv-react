@@ -34,7 +34,7 @@ const Tracks = ({ globalAppend = true }) => {
   return (
     <Switch>
       <Route path={`${match.path}/:trackId`}>
-        <Track editAllowed={allowEdit} />
+        <Track editAllowed={allowEdit} showTeams={allowEdit} />
       </Route>
       <Route path={`${match.path}`}>
         <PaperList
@@ -46,10 +46,10 @@ const Tracks = ({ globalAppend = true }) => {
           globalAppend={globalAppend}
         >
           {tracks.map((t, index) => (
-            <div key={t}>
+            <React.Fragment key={t}>
               {index !== 0 && <Divider />}
               <TrackListItem trackId={t} editAllowed={allowEdit} />
-            </div>
+            </React.Fragment>
           ))}
         </PaperList>
         {allowEdit && (

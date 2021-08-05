@@ -1,13 +1,19 @@
-import * as config from "../config"
+import * as config from "../config";
 
-export function IpCheck () {
-    if (typeof config.Ip === 'undefined'){
-        alert('Config error, Ip is undefined')
-    }
-    else if (typeof(config.Ip) !== 'function'){
-        alert('Config error, Ip func is not func')
-    } 
-    else if (typeof(config.Ip()) !== 'string'){
-        alert('Config error, Ip return is not string')
-    }
-}
+const checkStringFunction = (name, value) => {
+  if (typeof value === "undefined") {
+    alert(`Config error, ${name} is undefined`);
+  } else if (typeof value !== "function") {
+    alert(`Config error, ${name} func is not func`);
+  } else if (typeof value() !== "string") {
+    alert(`Config error, ${name} return is not string`);
+  }
+};
+
+const IpCheck = () => {
+  checkStringFunction("Ip", config.Ip);
+};
+
+export const check = () => {
+  IpCheck();
+};

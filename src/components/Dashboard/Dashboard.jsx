@@ -14,7 +14,7 @@ import Container from "@material-ui/core/Container";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Button from "@material-ui/core/Button";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import Copyright from "@components/Copyright";
@@ -22,6 +22,7 @@ import AttendeeForm from "@components/forms/AttendeeForm";
 import { mainListItems, secondaryListItems } from "./listItems";
 import { logout } from "@redux/auth/slices";
 import Tracks from "@components/Tracks";
+import MainPage from "@components/MainPage";
 
 const drawerWidth = 240;
 
@@ -105,6 +106,10 @@ const useStyles = makeStyles((theme) => ({
   logoutButton: {
     marginRight: theme.spacing(2),
   },
+  a: {
+    color: "white",
+    textDecoration: "none",
+  },
 }));
 
 export default function Dashboard() {
@@ -149,7 +154,9 @@ export default function Dashboard() {
             noWrap
             className={classes.title}
           >
-            Dashboard
+            <Link to="/dashboard/" className={classes.a}>
+              Dashboard
+            </Link>
           </Typography>
           <Button
             variant="contained"
@@ -189,6 +196,7 @@ export default function Dashboard() {
               component={AttendeeForm}
             />
             <Route path="/dashboard/tracks" component={Tracks} />
+            <Route component={MainPage} />
           </Switch>
           <Box pt={4}>
             <Copyright />

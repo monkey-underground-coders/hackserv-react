@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { CircularProgress, makeStyles } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
@@ -9,16 +9,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RenderFetch = ({ onFetch, children }) => {
+const RenderFetch = ({ onFetch, render, children }) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const params = useParams();
 
-  useEffect(() => {
-    if (loading) {
-      onFetch(params).finally(() => setLoading(false));
-    }
-  }, [loading, params, onFetch]);
+  const fetch = useCallback(() => {
+    setLoading(true);
+    return onFetch(params).finally(() => setLoading(false));
+  }, [onFetch, setLoading, params]);
+
+  useEffect(fetch, [fetch]);
 
   if (loading) {
     return (
@@ -27,7 +28,7 @@ const RenderFetch = ({ onFetch, children }) => {
       </div>
     );
   }
-  return children;
+  return render ? render(fetch) : children;
 };
 
 export default RenderFetch;

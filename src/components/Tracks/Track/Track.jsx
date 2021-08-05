@@ -13,7 +13,7 @@ import CriteriaList from "./CriteriaList";
 import { titleSchemaTrack } from "@schemas/track";
 import TeamsList from "@components/TeamsList";
 
-const Track = ({ trackId, editAllowed }) => {
+const Track = ({ trackId, editAllowed, showTeams }) => {
   const dispatch = useDispatch();
   const { enqueueError } = useMySnackbar();
 
@@ -55,9 +55,11 @@ const Track = ({ trackId, editAllowed }) => {
           editAllowed={editAllowed}
         />
       </CenteredPaper>
-      <CenteredPaper title="Команды" secondary>
-        <TeamsList ids={teamIdsList} />
-      </CenteredPaper>
+      {showTeams && (
+        <CenteredPaper title="Команды" secondary>
+          <TeamsList ids={teamIdsList} />
+        </CenteredPaper>
+      )}
     </>
   );
 };

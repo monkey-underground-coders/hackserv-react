@@ -5,3 +5,13 @@ export const teamCreate = ({ name, captainId }) =>
     name,
     captainId,
   });
+
+export const getTeams = ({ with: withName = "", page = 0, size = 20, sort = [] }) =>
+  mainAxios.get(`/team`, {
+    params: {
+      with: withName,
+      page,
+      size,
+      sort,
+    },
+  });

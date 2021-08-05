@@ -11,8 +11,9 @@ import ResumeForm from "./ResumeForm";
 import { StepContext, StepperNavBar } from "@components/StepperPage";
 import { userDetailedInfoSchema } from "@schemas";
 import { useDispatch } from "react-redux";
-import { userPutData } from "@redux/users";
+import { setUserFilledForm, userPutData } from "@redux/users";
 import { useMySnackbar } from "@utils/hooks";
+import { UserState } from "@dictionary/user";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,10 +44,15 @@ const PersonForm = ({ user }) => {
     dispatch(
       userPutData({
         userId: user.id,
-        userInfo,
+        userInfo: mapValues(userInfo, (v) => (v ? v.trim() : v)),
       })
     )
       .then(unwrapResult)
+      .then(
+        () =>
+          user.userState === UserState.REGISTERED &&
+          dispatch(setUserFilledForm({ userId: user.id })).then(unwrapResult)
+      )
       .then(() => handleNext())
       .catch(enqueueError);
   // const onSubmit = async () => handleNext();\

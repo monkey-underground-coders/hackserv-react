@@ -1,6 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 
 import { userIdSelector } from "@redux/auth";
+import { UserRole } from "@dictionary/user";
 
 export const usersSelector = (state) => state.users;
 
@@ -19,10 +20,16 @@ export const getUserByIdSelector = createSelector(
 export const isSelfAdmin = createSelector(
   usersSelector,
   userIdSelector,
-  ({ entities }, uid) => entities[uid].userRole === "ADMIN"
+  ({ entities }, uid) => entities[uid].userRole === UserRole.ADMIN
 );
 
 export const lastEmailRequestAtSelector = createSelector(
   usersSelector,
   ({ lastEmailRequestAt }) => lastEmailRequestAt
+);
+
+export const getSelfRole = createSelector(
+  usersSelector,
+  userIdSelector,
+  ({ entities }, uid) => entities[uid]?.userRole
 );

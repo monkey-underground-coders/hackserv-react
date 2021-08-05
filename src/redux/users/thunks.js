@@ -9,6 +9,7 @@ import {
   emailValidate as emailValidateApi,
   emailRequest as emailRequestApi,
   emailValidateById as emailValidateByIdApi,
+  userFilledForm,
 } from "@api";
 import { createAsyncThunkWrapped } from "@utils";
 import { setLastEmailRequestAt } from "./slices";
@@ -90,5 +91,13 @@ export const emailValidateById = createAsyncThunkWrapped(
     const response = await emailValidateByIdApi(userId, { id });
     dispatch(setTokens(response.data));
     await dispatch(getSelf());
+  }
+);
+
+export const setUserFilledForm = createAsyncThunkWrapped(
+  "user/filled_form",
+  async ({ userId }) => {
+    const response = await userFilledForm(userId);
+    return response.data;
   }
 );

@@ -7,6 +7,7 @@ import {
   userDeleteResume,
   userPutData,
   emailRequest,
+  setUserFilledForm,
 } from "./thunks";
 
 export const usersAdapter = createEntityAdapter();
@@ -35,7 +36,8 @@ export const users = createSlice({
         getSelf.fulfilled,
         userUploadResume.fulfilled,
         userDeleteResume.fulfilled,
-        userPutData.fulfilled
+        userPutData.fulfilled,
+        setUserFilledForm.fulfilled
       ),
       (state, { payload }) => {
         const { id, ...changes } = payload;

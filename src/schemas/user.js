@@ -23,9 +23,9 @@ export const registrationSchema = emailPasswordSchema.shape({
 });
 
 export const userDetailedInfoSchema = yup.object().shape({
-  firstName: yup.string().max(200).required(),
+  firstName: yup.string().max(200).trim().required(),
   middleName: yup.string().max(200),
-  lastName: yup.string().max(200).required(),
+  lastName: yup.string().max(200).trim().required(),
   telegram: yup
     .string()
     .matches(/^@(?=\w{5,64}\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*$/, {
@@ -33,7 +33,7 @@ export const userDetailedInfoSchema = yup.object().shape({
     })
     .required(),
   dateOfBirth: yup.date().max(new Date(), "Дата должна быть в прошлом"),
-  workPlace: yup.string().max(200).required(),
+  workPlace: yup.string().max(200).trim().required(),
   resume: yup.string().max(5000),
   otherInfo: yup.string().max(5000),
 });

@@ -1,5 +1,6 @@
 import * as axios from "axios";
 import { Ip } from "@config";
+import Qs from "qs";
 
 const defaultHeaders = {};
 
@@ -21,4 +22,5 @@ export const mainAxios = axios.create({
   baseURL: Ip(),
   headers: defaultBodyHeaders,
   validateStatus: okOnly,
+  paramsSerializer: (params) => Qs.stringify(params, { arrayFormat: "repeat" }),
 });

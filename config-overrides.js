@@ -9,6 +9,7 @@ const aliasMap = {
   "@redux": "src/redux",
   "@schemas": "src/schemas",
   "@validation": "src/validation",
+  "@dictionary": "src/dictionary",
 };
 
 module.exports = alias(aliasMap);

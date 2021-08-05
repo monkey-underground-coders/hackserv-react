@@ -28,3 +28,6 @@ export const emailRequest = (userId) =>
 
 export const emailValidateById = (userId, { id }) =>
   basicAxios().post(`/user/${userId}/email/validate_by_id`, { id });
+
+export const userFilledForm = (userId) =>
+  mainAxios.post(`/user/${userId}/user_filled_form`);

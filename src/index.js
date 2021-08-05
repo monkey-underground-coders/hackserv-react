@@ -8,9 +8,7 @@ import { Provider } from "react-redux";
 import { configChecker } from "@validation";
 import store from "@redux";
 
-configChecker.IpCheck();
-
-console.log(store.getState());
+configChecker.check();
 
 ReactDOM.render(
   <Provider store={store}>

@@ -35,6 +35,9 @@
       ],
       "@validation/*": [
         "./src/validation/*"
+      ],
+      "@dictionary/*": [
+        "./src/dictionary/*"
       ]
     }
   },
