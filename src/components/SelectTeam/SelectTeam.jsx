@@ -29,7 +29,7 @@ export default function SelectTeam() {
             inputProps={{ 'aria-label': 'Without label' }}
             >
                 <MenuItem value="" disabled>
-                    Выбирите команду
+                    Выберите команду
                 </MenuItem>
                 <MenuItem value={1} >Team1</MenuItem>
                 <MenuItem value={2}>Team2</MenuItem>
