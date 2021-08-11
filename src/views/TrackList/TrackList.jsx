@@ -46,7 +46,7 @@ const Tracks = () => {
         />
       )}
       {allowEdit && (
-        <CornerFab onClick={handleAppendClick}>
+        <CornerFab size="large" onClick={handleAppendClick}>
           <AddIcon />
         </CornerFab>
       )}
