@@ -6,5 +6,5 @@ export const teamCreateSchema = yup.object().shape({
 });
 
 export const titleSchemaTeam = yup.object().shape({
-  name: yup.string().required().max(30), 
+  name: yup.string().required().max(30),
 });

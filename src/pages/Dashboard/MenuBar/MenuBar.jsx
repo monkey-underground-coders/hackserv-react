@@ -11,17 +11,32 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "./listItems";
-
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import HomeIcon from "@material-ui/icons/Home";
+import GroupIcon from "@material-ui/icons/Group";
+import GavelIcon from "@material-ui/icons/Gavel";
+import ListAltIcon from "@material-ui/icons/ListAlt";
+import StarsIcon from "@material-ui/icons/Stars";
+import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import CallMadeIcon from "@material-ui/icons/CallMade";
 import { logout } from "@redux/auth";
+import { getSelfTeamSelector } from '@redux/teams/selectors';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
+  linkDecNone: {
+    outline: "none",
+    textDecoration: "none",
+    color: "#000",
+  },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
@@ -107,7 +122,7 @@ const MenuBar = () => {
   const handleLogoutClick = () => {
     dispatch(logout());
   };
-
+  const team = useSelector(getSelfTeamSelector);
   return (
     <>
       <AppBar
@@ -162,9 +177,65 @@ const MenuBar = () => {
             </IconButton>
           </div>
           <Divider />
-          <List>{mainListItems}</List>
+          <List>
+            <ListSubheader inset>Профиль</ListSubheader>
+            <ListItem button>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Мой профиль" />
+            </ListItem>
+            { team  &&
+            (<Link to={`/dashboard/team/${team.id}`} className={classes.linkDecNone}>
+              <ListItem button>
+                <ListItemIcon>
+                  <GroupIcon />
+                </ListItemIcon>
+                <ListItemText primary="Моя команда" />
+              </ListItem>
+            </Link>) }
+          </List>
           <Divider />
-          <List>{secondaryListItems}</List>
+          <List>
+            <ListSubheader inset>Хакатон</ListSubheader>
+            <Link
+              to="/dashboard/registration-profile"
+              className={classes.linkDecNone}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <CallMadeIcon />
+                </ListItemIcon>
+                <ListItemText primary="Подать заявку" />
+              </ListItem>
+            </Link>
+            <ListItem button>
+              <ListItemIcon>
+                <PeopleOutlineIcon />
+              </ListItemIcon>
+              <ListItemText primary="Все команды" />
+            </ListItem>
+            <Link to="/dashboard/tracks" className={classes.linkDecNone}>
+              <ListItem button>
+                <ListItemIcon>
+                  <StarsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Номинации" />
+              </ListItem>
+            </Link>
+            <ListItem button>
+              <ListItemIcon>
+                <ListAltIcon />
+              </ListItemIcon>
+              <ListItemText primary="Расписание" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <GavelIcon />
+              </ListItemIcon>
+              <ListItemText primary="Голосование" />
+            </ListItem>
+          </List>
         </aside>
       </Drawer>
     </>

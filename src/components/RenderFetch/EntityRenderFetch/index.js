@@ -1,1 +1,1 @@
-export { default } from "./EntityRenderFetch";
+export { default, withEntityRenderFetch } from "./EntityRenderFetch";

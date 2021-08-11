@@ -40,8 +40,7 @@ export const users = createSlice({
         setUserFilledForm.fulfilled
       ),
       (state, { payload }) => {
-        const { id, ...changes } = payload;
-        usersAdapter.upsertOne(state, { id, ...changes });
+        usersAdapter.upsertOne(state, payload.entities.users[payload.result]);
       }
     );
   },

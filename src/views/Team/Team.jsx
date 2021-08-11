@@ -5,28 +5,27 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import CenteredPaper from "@components/CenteredPaper";
 import SingleEditableField from "@components/SingleEditableField";
 import TeamMembersList from "./TeamMembersList";
-import { useMySnackbar } from "@utils/hooks";
+import { useMySnackbar, useParamSelector } from "@utils/hooks";
 import { getSelfUserSelector } from "@redux/users";
-import { putTeam, getTeamById } from "@redux/teams";
+import { putTeam, getTeamById, getTeamByIdSelector } from "@redux/teams";
 import { titleSchemaTeam } from "@validation/yup/teams";
-import { withReduxRenderFetch } from "@components/RenderFetch/ReduxRenderFetch/ReduxRenderFetch";
+import { withEntityRenderFetch } from "@components/RenderFetch/EntityRenderFetch";
 
-const MyTeam = () => {
+const Team = ({ teamId }) => {
   const dispatch = useDispatch();
-  const user = useSelector(getSelfUserSelector);
-  const captainId = user.team?.captain;
-  const teamName = user.team?.name;
-  const track = user.team?.track;
-  const teamId = user.team?.id;
-  const isCaptain = captainId === user.id;
-  const teamMembers = user.team?.members;
+  const team = useParamSelector(getTeamByIdSelector, { id: teamId });
   const { enqueueError } = useMySnackbar();
+  console.log(team);
+  const captainId = team.captain;
+  const isCaptain = captainId === useSelector(getSelfUserSelector).id;
+  const teamName = team.name;
+  const track = team.track;
+  const teamMembers = team.members;
 
   const handleTeamNameChange = (teamName) =>
-    console.log('1');
-    // dispatch(putTeam({ teamId, teamName, track }))
-    //     .then(unwrapResult)
-    //     .catch(enqueueError);
+    dispatch(putTeam({ teamId, teamName, track }))
+        .then(unwrapResult)
+        .catch(enqueueError);
 
   return (
     <>
@@ -37,7 +36,7 @@ const MyTeam = () => {
           normalComponentProps={{
             gutterBottom: false,
           }}
-          name="teamName"
+          name="name"
           validationSchema={titleSchemaTeam}
           disableEdit={!isCaptain}
           fullWidth
@@ -54,4 +53,4 @@ const MyTeam = () => {
   );
 };
 
-export default withReduxRenderFetch(MyTeam, () => getTeamById({id: 450}));
+export default withEntityRenderFetch(Team, "teamId", getTeamById);
