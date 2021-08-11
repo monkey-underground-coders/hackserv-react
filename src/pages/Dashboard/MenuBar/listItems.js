@@ -29,12 +29,14 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Мой профиль" />
     </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <GroupIcon />
-      </ListItemIcon>
-      <ListItemText primary="Моя команда" />
-    </ListItem>
+    <Link to="/dashboard/myteam" style={styles.linkDecNone}>
+      <ListItem button>
+        <ListItemIcon>
+          <GroupIcon />
+        </ListItemIcon>
+        <ListItemText primary="Моя команда" />
+      </ListItem>
+    </Link>
   </div>
 );
 
