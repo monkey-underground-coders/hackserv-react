@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
-import Member from "../Team";
+import Member from "../Member";
 import SecondaryTitle from "@components/SecondaryTitle";
 
 const useStyles = makeStyles((theme) => ({
@@ -17,8 +17,6 @@ const useStyles = makeStyles((theme) => ({
 
 const TeamMembersList = ({ teamId, members, isCaptain }) => {
   const classes = useStyles();
-  console.log(members);
-
   return (
     <>
       <div className={classes.root}>

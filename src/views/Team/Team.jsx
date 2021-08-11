@@ -15,7 +15,6 @@ const Team = ({ teamId }) => {
   const dispatch = useDispatch();
   const team = useParamSelector(getTeamByIdSelector, { id: teamId });
   const { enqueueError } = useMySnackbar();
-  console.log(team);
   const captainId = team.captain;
   const isCaptain = captainId === useSelector(getSelfUserSelector).id;
   const teamName = team.name;
