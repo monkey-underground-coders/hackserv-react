@@ -11,6 +11,7 @@ export const useMySnackbar = () => {
     enqueueSnackbar(msg, { ...params, variant });
 
   const enqueueError = (msg, params) => {
+    console.error(msg);
     enqueueSnackbar(parseError(msg), { ...params, variant: "error" });
   };
 

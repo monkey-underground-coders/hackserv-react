@@ -26,24 +26,24 @@ export const tracks = createSlice({
       trackAdapter.setAll(state, payload.tracks ?? []);
     },
     [createNewTrack.fulfilled]: (state, { payload }) => {
-      trackAdapter.addOne(state, Object.values(payload.tracks)[0]);
+      trackAdapter.addMany(state, payload.tracks);
     },
     [putTrack.fulfilled]: (state, { payload }) => {
-      trackAdapter.upsertOne(state, Object.values(payload.tracks)[0]);
+      trackAdapter.upsertMany(state, payload.tracks);
     },
     [createNewCriteria.fulfilled]: (state, { payload }) => {
       const { track, id } = Object.values(payload.criterias)[0];
       state.entities[track].criteriaList.push(id);
     },
     [getTrackById.fulfilled]: (state, { payload }) => {
-      trackAdapter.upsertOne(state, Object.values(payload.tracks)[0]);
+      trackAdapter.upsertMany(state, payload.tracks);
     },
-    [deleteCriteria.fulfilled]: (state, { payload }) => {
-      const { id } = payload;
-      for (const trackId of state.ids) {
-        const track = state.entities[trackId];
-        track.criteriaList = track.criteriaList.filter((i) => i !== id);
-      }
+    [deleteCriteria.fulfilled]: (state, { payload: { id } }) => {
+      state.ids
+        .map((trackId) => state.entities[trackId])
+        .forEach((track) => {
+          track.criteriaList = track.criteriaList.filter((i) => i !== id);
+        });
     },
     [deleteTrack.fulfilled]: (state, { payload }) => {
       const { trackId } = payload;
