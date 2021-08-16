@@ -23,7 +23,7 @@ const TeamsList = ({ ids }) => {
         <ListItem key={id}>
           <ListItemAvatar>
             <Avatar style={toMaterialStyle(name)}>
-              {getFirstCapitalSymbols(name, 3)}
+              {getFirstCapitalSymbols(name, 2)}
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={name} />
