@@ -1,31 +1,28 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
+import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
 
 import Member from "../Member";
 import SecondaryTitle from "@components/SecondaryTitle";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
-  },
-  container: {
-    display: "flex",
-    alignItems: "center",
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
   },
 }));
 
-const TeamMembersList = ({ teamId, members, isCaptain }) => {
+const TeamMembersList = ({ teamId, members, captainId, isCaptain }) => {
   const classes = useStyles();
   return (
     <>
       <div className={classes.root}>
-        <div className={classes.container}>
-          <SecondaryTitle>Члены команды</SecondaryTitle>
-        </div>
-        {members.map((id) => (
-          <Member key={id} id={id} />
-        ))}
+        <SecondaryTitle>Члены команды</SecondaryTitle>
+        <List component="article" aria-label="Team members">
+          {members.map((id) => (
+            <Member key={id} uid={id} teamId={teamId} captainId={captainId} isCaptain={isCaptain}/>
+          ))}
+        </List>
       </div>
     </>
   );

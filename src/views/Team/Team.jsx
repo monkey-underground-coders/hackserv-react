@@ -45,6 +45,7 @@ const Team = ({ teamId }) => {
           <TeamMembersList
               teamId={teamId}
               members={teamMembers}
+              captainId={captainId}
               isCaptain={isCaptain}>
           </TeamMembersList>
       </CenteredPaper>

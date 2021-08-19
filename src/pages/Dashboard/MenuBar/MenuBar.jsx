@@ -27,7 +27,7 @@ import StarsIcon from "@material-ui/icons/Stars";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import CallMadeIcon from "@material-ui/icons/CallMade";
 import { logout } from "@redux/auth";
-import { getSelfTeamSelector } from '@redux/teams/selectors';
+import { getSelfUserSelector } from "@redux/users";
 
 const drawerWidth = 240;
 
@@ -122,7 +122,7 @@ const MenuBar = () => {
   const handleLogoutClick = () => {
     dispatch(logout());
   };
-  const team = useSelector(getSelfTeamSelector);
+  const team = useSelector(getSelfUserSelector).team;
   return (
     <>
       <AppBar
@@ -186,7 +186,7 @@ const MenuBar = () => {
               <ListItemText primary="Мой профиль" />
             </ListItem>
             { team  &&
-            (<Link to={`/dashboard/team/${team.id}`} className={classes.linkDecNone}>
+            (<Link to={`/dashboard/team/${team}`} className={classes.linkDecNone}>
               <ListItem button>
                 <ListItemIcon>
                   <GroupIcon />
