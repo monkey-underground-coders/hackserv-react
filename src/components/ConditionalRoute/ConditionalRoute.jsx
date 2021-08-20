@@ -1,7 +1,8 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect, useRouteMatch } from "react-router-dom";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
+import { useParamSelector } from "@utils";
 
 /**
  * Works like Route from "react-router" but checks a condition.
@@ -18,7 +19,8 @@ const ConditionalRoute = ({
   component,
   redirect,
 }) => {
-  const condition = useSelector(conditionSelector);
+  const match = useRouteMatch({ path, exact });
+  const condition = useParamSelector(conditionSelector, match);
   console.debug(`ConditionalRoute to ${path} decision:`, condition);
 
   return condition ? (
@@ -43,8 +45,11 @@ ConditionalRoute.propTypes = {
    */
   exact: PropTypes.bool,
   /**
-   * The selector function in terms of Redux
+   * The selector function in terms of Redux.
    *
+   * It receives the match object from React Router as a first argument (match of the provided path).
+   *
+   * @param {import("react-router-dom").match} the match object
    * @returns {boolean} whether Route (true) or Redirect (false) should be rendered
    */
   conditionSelector: PropTypes.func.isRequired,
