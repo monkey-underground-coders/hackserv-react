@@ -13,10 +13,15 @@ export const getSelfTeamSelector = createSelector(
   teamsSelector,
   getSelfUserSelector,
   ({ entities }, { team }) => entities[team]
-)
+);
 
 export const getTeamByIdSelector = createSelector(
   teamsSelector,
   (_, { id }) => id,
   ({ entities }, id) => entities[id]
-)
+);
+
+export const haveTeam = createSelector(
+  teamsSelector,
+  getSelfUserSelector,
+);

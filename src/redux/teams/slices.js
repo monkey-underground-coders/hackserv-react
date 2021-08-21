@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { getTrackById } from "@redux/tracks";
-import { teamCreate, getTeamById, putTeam, deleteMember, changeCaptain } from "./thunks";
+import { teamCreate, getTeamById, putTeam, deleteMember, changeCaptain, submitTeam, deleteTeam } from "./thunks";
 import {
   userCreate,
   getSelf,
@@ -23,12 +23,15 @@ export const teams = createSlice({
     builder.addCase(teamCreate.fulfilled, (state, { payload }) => {
       teamAdapter.addOne(state, payload);
     });
+    builder.addCase(deleteTeam.fulfilled, (state, { payload }) => {
+      teamAdapter.removeOne(state, payload);
+    });
     builder.addCase(deleteMember.fulfilled, (state, { payload: { uid, teamId } }) => {
       let newTeamMembers = state.entities[teamId].members.filter((i) => i !== uid);
       state.entities[teamId].members = newTeamMembers;
     });
     builder.addMatcher(
-      isAnyOf(getTeamById.fulfilled, putTeam.fulfilled, getTrackById.fulfilled, changeCaptain.fulfilled),
+      isAnyOf(getTeamById.fulfilled, putTeam.fulfilled, getTrackById.fulfilled, changeCaptain.fulfilled, submitTeam.fulfilled),
       (state, { payload }) => {
         teamAdapter.upsertMany(state, payload.teams ?? []);
       }

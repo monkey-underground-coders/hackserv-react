@@ -9,6 +9,7 @@ import {
   ListItemText,
   makeStyles,
 } from "@material-ui/core";
+import { Icon } from '@iconify/react';
 import { getFirstCapitalSymbols } from "@utils/stringConvert";
 import { Avatar, ListItemAvatar } from "@material-ui/core";
 import toMaterialStyle from "material-color-hash";
@@ -45,13 +46,17 @@ const Member = ({ uid, teamId, captainId, isCaptain }) => {
         primary={name}
       />
       <ListItemSecondaryAction edge="end" >
-        {isCaptain &&
+        {isCaptain && captainId === uid &&
         <IconButton aria-label="Kick from team" disabled={captainId === uid} onClick={handleMakeCaptain}>
-          <DeleteIcon />
+          <Icon icon="mdi:crown" color="yellow" width="24" />
+        </IconButton>}
+        {isCaptain && captainId !== uid &&
+        <IconButton aria-label="Kick from team" disabled={captainId === uid} onClick={handleMakeCaptain}>
+          <Icon icon="mdi:crown" color="black" width="24" />
         </IconButton>}
         {!isCaptain && captainId === uid &&
         <IconButton aria-label="Kick from team" disabled={true}>
-          <DeleteIcon />
+          <Icon icon="mdi:crown" color="yellow" width="24" />
         </IconButton>}
         {isCaptain &&
         <IconButton aria-label="Kick from team" onClick={handleDeleteMember}>

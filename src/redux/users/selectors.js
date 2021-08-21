@@ -11,6 +11,12 @@ export const getSelfUserSelector = createSelector(
   ({ entities }, uid) => entities[uid]
 );
 
+export const getUsersByIdsSelector = createSelector(
+  usersSelector,
+  (_, { ids }) => ids,
+  ({ entities }, ids) => ids.map((id) => entities[id])
+);
+
 export const getUserByIdSelector = createSelector(
   usersSelector,
   (_, { userId }) => userId,

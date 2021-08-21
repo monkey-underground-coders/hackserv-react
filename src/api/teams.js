@@ -1,14 +1,20 @@
 import { mainAxios } from "./utils";
 
-export const changeCaptain = ({ uid, teamId }) => 
+export const changeCaptain = ({ uid, teamId }) =>
   mainAxios.post(`/team/${teamId}/change_captain`, {
     userId: uid,
-  })
+  });
 
-export const deleteMember = ({ uid, teamId }) => 
+export const deleteTeam = ({ teamId }) =>
+  mainAxios.delete(`/team/${teamId}`);
+
+export const deleteMember = ({ uid, teamId }) =>
   mainAxios.delete(`/team/${teamId}/del_member`, { data: {
     userId: uid,
   } });
+
+export const submitTeam = ({ teamId }) =>
+  mainAxios.post(`/team/${teamId}/submit`);
 
 export const teamCreate = ({ name, captainId }) =>
   mainAxios.post(`/team/create`, {
