@@ -6,7 +6,7 @@ import CenteredPaper from "@components/CenteredPaper";
 import SingleEditableField from "@components/SingleEditableField";
 import TeamMembersList from "./TeamMembersList";
 import { useMySnackbar, useParamSelector } from "@utils/hooks";
-import { getSelfUserSelector, getUserByIdSelector, getUsersByIdsSelector } from "@redux/users";
+import { getSelfUserSelector, getUsersByIdsSelector } from "@redux/users";
 import {
   putTeam,
   getTeamById,
@@ -40,8 +40,7 @@ const Team = ({ teamId }) => {
   const teamStatus = selfUser.userState;
   const membersAsUsers = useParamSelector(getUsersByIdsSelector, {ids: teamMembers});
   const isTeamSubmittable = membersAsUsers.reduce((prevState, user) => user.userState === 'FILLED_FORM' && prevState, true);
-  console.log(isTeamSubmittable);
-  let buttonText = 'Отправить заявку';
+  let buttonText;
   switch (teamStatus) {
     case 'FILLED_FORM':
       buttonText = isTeamSubmittable ? 'Отправить заявку' : 'Участник не заполнил форму';

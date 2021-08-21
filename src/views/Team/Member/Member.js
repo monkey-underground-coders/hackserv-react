@@ -1,13 +1,11 @@
 import React from "react";
 
 import { getUserByIdSelector } from "@redux/users";
-import { useMySnackbar, useParamSelector } from "@utils/hooks";
+import { useParamSelector } from "@utils/hooks";
 import {
-  Button,
   IconButton,
   ListItemSecondaryAction,
   ListItemText,
-  makeStyles,
 } from "@material-ui/core";
 import { Icon } from '@iconify/react';
 import { getFirstCapitalSymbols } from "@utils/stringConvert";
@@ -23,7 +21,6 @@ const Member = ({ uid, teamId, captainId, isCaptain }) => {
   const user = useParamSelector(getUserByIdSelector, { userId: uid });
   const name = `${user.firstName} ${user.middleName} ${user.lastName}`;
   const dispatch = useDispatch();
-  const { enqueueError } = useMySnackbar();
 
   const handleDeleteMember = () =>
     dispatch(deleteMember({ uid, teamId })).then(unwrapResult);
