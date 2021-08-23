@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
     textAlign: "center",
+    padding: theme.spacing(1),
     "& > *": {
       padding: theme.spacing(1),
     },
