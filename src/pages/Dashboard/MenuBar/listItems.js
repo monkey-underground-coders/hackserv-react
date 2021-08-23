@@ -5,11 +5,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import HomeIcon from "@material-ui/icons/Home";
 import GroupIcon from "@material-ui/icons/Group";
-import GavelIcon from "@material-ui/icons/Gavel";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import StarsIcon from "@material-ui/icons/Stars";
-import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
-import CallMadeIcon from "@material-ui/icons/CallMade";
 import { Link } from "react-router-dom";
 
 const styles = {
