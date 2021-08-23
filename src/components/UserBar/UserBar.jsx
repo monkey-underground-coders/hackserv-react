@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
   gridContainer: {
     textAlign: "center",
     width: "100%",
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(6),
     "& > *": {
       padding: theme.spacing(1),
     },

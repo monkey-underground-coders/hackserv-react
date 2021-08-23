@@ -15,7 +15,6 @@ import { useMySnackbar } from "@utils/hooks";
 import { UserState } from "@dictionary/user";
 import UrlStepperNavBar from "@components/UrlStepperPage/UrlStepperNavBar";
 import UrlStepContext from "@components/UrlStepperPage/UrlStepContext";
-import UserBar from "@components/UserBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {

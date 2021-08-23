@@ -4,7 +4,6 @@ import Typography from "@material-ui/core/Typography";
 
 import Accordion from "./Accordion";
 import UrlStepperNavBar from "@components/UrlStepperPage/UrlStepperNavBar";
-import UserBar from "@components/UserBar";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
