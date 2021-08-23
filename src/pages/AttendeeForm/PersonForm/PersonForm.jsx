@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
 import { Formik } from "formik";
-import { Grid, LinearProgress } from "@material-ui/core";
+import { LinearProgress } from "@material-ui/core";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { pick, mapValues } from "lodash";
 
@@ -15,7 +15,7 @@ import { useMySnackbar } from "@utils/hooks";
 import { UserState } from "@dictionary/user";
 import UrlStepperNavBar from "@components/UrlStepperPage/UrlStepperNavBar";
 import UrlStepContext from "@components/UrlStepperPage/UrlStepContext";
-import Logout from "@components/Logout";
+import UserBar from "@components/UserBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -88,17 +88,6 @@ const PersonForm = ({ user }) => {
           <Divider variant="fullWidth" className={classes.divider} />
           <ResumeForm user={user} allowUpload={true} />
           <UrlStepperNavBar noNextLink />
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justify="center"
-          >
-            <Grid item xs={3}>
-              <Logout />
-            </Grid>
-          </Grid>
           {isSubmitting && <LinearProgress />}
         </form>
       )}

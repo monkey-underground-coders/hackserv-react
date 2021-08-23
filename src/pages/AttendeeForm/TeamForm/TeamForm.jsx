@@ -4,8 +4,7 @@ import Typography from "@material-ui/core/Typography";
 
 import Accordion from "./Accordion";
 import UrlStepperNavBar from "@components/UrlStepperPage/UrlStepperNavBar";
-import { Grid } from "@material-ui/core";
-import Logout from "@components/Logout";
+import UserBar from "@components/UserBar";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -32,18 +31,6 @@ export default function TeamForm() {
       <Accordion />
 
       <UrlStepperNavBar disableNext />
-
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justify="center"
-      >
-        <Grid item xs={3}>
-          <Logout />
-        </Grid>
-      </Grid>
     </>
   );
 }

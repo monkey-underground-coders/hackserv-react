@@ -5,6 +5,7 @@ import PersonForm from "./PersonForm";
 import TeamForm from "./TeamForm";
 import { getSelfUserSelector } from "@redux/users/selectors";
 import UrlStepperPage from "@components/UrlStepperPage";
+import UserBar from "@components/UserBar";
 
 const steps = [
   {
@@ -21,11 +22,14 @@ export default function AttendeeForm() {
   const user = useSelector(getSelfUserSelector);
 
   return (
-    <UrlStepperPage
-      steps={steps}
-      title="Регистрация"
-      user={user}
-      lastUrl="/dashboard"
-    />
+    <>
+      <UrlStepperPage
+        steps={steps}
+        title="Регистрация"
+        user={user}
+        lastUrl="/dashboard"
+      />
+      <UserBar />
+    </>
   );
 }
