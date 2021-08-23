@@ -3,7 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 
 import Accordion from "./Accordion";
-import { StepperNavBar } from "@components/StepperPage";
+import UrlStepperNavBar from "@components/UrlStepperPage/UrlStepperNavBar";
+import { Grid } from "@material-ui/core";
+import Logout from "@components/Logout";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -29,7 +31,19 @@ export default function TeamForm() {
 
       <Accordion />
 
-      <StepperNavBar />
+      <UrlStepperNavBar disableNext />
+
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+      >
+        <Grid item xs={3}>
+          <Logout />
+        </Grid>
+      </Grid>
     </>
   );
 }

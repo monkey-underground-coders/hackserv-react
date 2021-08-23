@@ -41,20 +41,6 @@ export const mainListItems = (
 export const secondaryListItems = (
   <div>
     <ListSubheader inset>Хакатон</ListSubheader>
-    <Link to="/dashboard/registration-profile" style={styles.linkDecNone}>
-      <ListItem button>
-        <ListItemIcon>
-          <CallMadeIcon />
-        </ListItemIcon>
-        <ListItemText primary="Подать заявку" />
-      </ListItem>
-    </Link>
-    <ListItem button>
-      <ListItemIcon>
-        <PeopleOutlineIcon />
-      </ListItemIcon>
-      <ListItemText primary="Все команды" />
-    </ListItem>
     <Link to="/dashboard/tracks" style={styles.linkDecNone}>
       <ListItem button>
         <ListItemIcon>
@@ -68,12 +54,6 @@ export const secondaryListItems = (
         <ListAltIcon />
       </ListItemIcon>
       <ListItemText primary="Расписание" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <GavelIcon />
-      </ListItemIcon>
-      <ListItemText primary="Голосование" />
     </ListItem>
   </div>
 );

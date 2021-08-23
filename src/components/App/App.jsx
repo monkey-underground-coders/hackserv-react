@@ -1,18 +1,17 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 
-import Dashboard from "src/pages/Dashboard";
-import { SignUpPage } from "src/pages/SignUp";
-import { LoginPage } from "src/pages/Login";
+import Dashboard from "@pages/Dashboard";
+import { SignUpPage } from "@pages/SignUp";
+import { LoginPage } from "@pages/Login";
 import PreloaderWrapper from "@components/PreloaderWrapper";
-import { LoggedInRoute, UserRoute } from "@components/ConditionalRoute";
-import { ValidateEmailPage } from "src/pages/ValidateEmail";
-import ValidateEmailById from "src/pages/ValidateEmailById";
+import { ValidateEmailPage } from "@pages/ValidateEmail";
+import ValidateEmailById from "@pages/ValidateEmailById";
+import AttendeeForm from "@pages/AttendeeForm";
+import StageRedirect from "@components/StageRedirect";
+import StageRoute from "@components/StageRoute";
+import UserRoute from "@components/StageRoute/UserRoute";
 
 const App = () => (
   <SnackbarProvider maxSnack={3} autoHideDuration={5000}>
@@ -21,10 +20,19 @@ const App = () => (
         <Switch>
           <Route path="/user/create" component={SignUpPage} />
           <Route path="/user/login" component={LoginPage} />
-          <LoggedInRoute path="/user/validate" component={ValidateEmailPage} />
+          <StageRoute
+            stage={0}
+            path="/user/validate"
+            component={ValidateEmailPage}
+          />
           <Route path="/user/email-link" component={ValidateEmailById} />
+          <StageRoute
+            stage={[1, 2]}
+            path="/hacker-form"
+            component={AttendeeForm}
+          />
           <UserRoute path="/dashboard" component={Dashboard} />
-          <Redirect from="/" to="/dashboard" />
+          <StageRedirect from="/" />
         </Switch>
       </Router>
     </PreloaderWrapper>

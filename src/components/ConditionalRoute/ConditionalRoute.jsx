@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Redirect, useRouteMatch } from "react-router-dom";
-import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { useParamSelector } from "@utils";
+import StageRedirect from "@components/StageRedirect";
 
 /**
  * Works like Route from "react-router" but checks a condition.
@@ -17,7 +17,7 @@ const ConditionalRoute = ({
   exact = false,
   conditionSelector,
   component,
-  redirect,
+  redirect = false,
 }) => {
   const match = useRouteMatch({ path, exact });
   const condition = useParamSelector(conditionSelector, match);
@@ -25,8 +25,10 @@ const ConditionalRoute = ({
 
   return condition ? (
     <Route path={path} exact={exact} component={component} />
-  ) : (
+  ) : redirect ? (
     <Redirect to={redirect} />
+  ) : (
+    <StageRedirect />
   );
 };
 
@@ -49,6 +51,7 @@ ConditionalRoute.propTypes = {
    *
    * It receives the match object from React Router as a first argument (match of the provided path).
    *
+   * @param {Object} Redux state
    * @param {import("react-router-dom").match} the match object
    * @returns {boolean} whether Route (true) or Redirect (false) should be rendered
    */
@@ -61,8 +64,12 @@ ConditionalRoute.propTypes = {
   component: PropTypes.elementType.isRequired,
   /**
    * The path to be routed if the condition is false
+   *
+   * Uses StageRedirect if empty
+   *
+   * @see StageRedirect
    */
-  redirect: PropTypes.string.isRequired,
+  redirect: PropTypes.string,
 };
 
 export default ConditionalRoute;

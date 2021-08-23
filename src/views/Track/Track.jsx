@@ -12,12 +12,12 @@ import SingleEditableField from "@components/SingleEditableField";
 import CriteriaList from "./CriteriaList";
 import { titleSchemaTrack } from "@validation/yup/track";
 import TeamsList from "@components/TeamsList";
-import { isSelfAdmin } from "@redux/users";
+import { isSelfAdminSelector } from "@redux/users";
 
 const Track = ({ trackId }) => {
   const dispatch = useDispatch();
   const { enqueueError } = useMySnackbar();
-  const admin = useSelector(isSelfAdmin);
+  const admin = useSelector(isSelfAdminSelector);
 
   const track = useParamSelector(getTrackByIdSelector, { trackId });
 

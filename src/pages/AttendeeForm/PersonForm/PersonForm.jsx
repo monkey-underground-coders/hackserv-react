@@ -2,18 +2,20 @@ import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
 import { Formik } from "formik";
-import { LinearProgress } from "@material-ui/core";
+import { Container, Grid, LinearProgress } from "@material-ui/core";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { pick, mapValues } from "lodash";
 
 import UserInfoForm from "./UserInfoForm";
 import ResumeForm from "./ResumeForm";
-import { StepContext, StepperNavBar } from "@components/StepperPage";
 import { userDetailedInfoSchema } from "@validation/yup";
 import { useDispatch } from "react-redux";
 import { setUserFilledForm, userPutData } from "@redux/users";
 import { useMySnackbar } from "@utils/hooks";
 import { UserState } from "@dictionary/user";
+import UrlStepperNavBar from "@components/UrlStepperPage/UrlStepperNavBar";
+import UrlStepContext from "@components/UrlStepperPage/UrlStepContext";
+import Logout from "@components/Logout";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +38,7 @@ const PersonForm = ({ user }) => {
     return date;
   })();
 
-  const { handleNext } = useContext(StepContext);
+  const { handleNext } = useContext(UrlStepContext);
 
   const { enqueueError } = useMySnackbar();
 
@@ -55,7 +57,7 @@ const PersonForm = ({ user }) => {
       )
       .then(() => handleNext())
       .catch(enqueueError);
-  // const onSubmit = async () => handleNext();\
+
   return (
     <Formik
       initialValues={{
@@ -85,7 +87,18 @@ const PersonForm = ({ user }) => {
           <UserInfoForm />
           <Divider variant="fullWidth" className={classes.divider} />
           <ResumeForm user={user} allowUpload={true} />
-          <StepperNavBar jumpOnNextOnClick={false} />
+          <UrlStepperNavBar noNextLink />
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justify="center"
+          >
+            <Grid item xs={3}>
+              <Logout />
+            </Grid>
+          </Grid>
           {isSubmitting && <LinearProgress />}
         </form>
       )}
