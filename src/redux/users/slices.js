@@ -1,3 +1,4 @@
+import { getTeamById, submitTeam, deleteTeam } from "@redux/teams/thunks";
 import { createSlice, createEntityAdapter, isAnyOf } from "@reduxjs/toolkit";
 
 import {
@@ -24,6 +25,21 @@ export const users = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(getTeamById.fulfilled, (state, { payload }) => {
+      usersAdapter.upsertMany(state, payload.users);
+    });
+    builder.addCase(deleteTeam.fulfilled, (state, { payload: { teamId } }) => {
+      console.log(state);
+      state.ids
+        .map((userId) => state.entities[userId])
+        .forEach((user) => {
+          if (user.team === teamId)
+            user.team = null;
+        });
+    });
+    builder.addCase(submitTeam.fulfilled, (state, { payload }) => {
+      usersAdapter.upsertMany(state, payload.users);
+    });
     builder.addMatcher(
       isAnyOf(emailRequest.rejected, emailRequest.fulfilled),
       (state, action) => {
@@ -37,11 +53,10 @@ export const users = createSlice({
         userUploadResume.fulfilled,
         userDeleteResume.fulfilled,
         userPutData.fulfilled,
-        setUserFilledForm.fulfilled
+        setUserFilledForm.fulfilled,
       ),
       (state, { payload }) => {
-        const { id, ...changes } = payload;
-        usersAdapter.upsertOne(state, { id, ...changes });
+        usersAdapter.upsertOne(state, payload.entities.users[payload.result]);
       }
     );
   },

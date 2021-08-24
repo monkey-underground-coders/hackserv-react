@@ -1,5 +1,10 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
-import { deleteTrack, getAllTracks, getTrackById, putTrack } from "@redux/tracks/thunks";
+import {
+  deleteTrack,
+  getAllTracks,
+  getTrackById,
+  putTrack,
+} from "@redux/tracks/thunks";
 import { createNewCriteria, deleteCriteria, putCriteria } from "./thunks";
 
 export const voteCriteriaAdapter = createEntityAdapter({
@@ -25,10 +30,10 @@ export const voteCriteria = createSlice({
       voteCriteriaAdapter.upsertMany(state, payload.criterias ?? []);
     },
     [createNewCriteria.fulfilled]: (state, { payload }) => {
-      voteCriteriaAdapter.addOne(state, Object.values(payload.criterias)[0]);
+      voteCriteriaAdapter.addMany(state, payload.criterias);
     },
     [putCriteria.fulfilled]: (state, { payload }) => {
-      voteCriteriaAdapter.upsertOne(state, Object.values(payload.criterias)[0]);
+      voteCriteriaAdapter.upsertMany(state, payload.criterias);
     },
     [deleteCriteria.fulfilled]: (state, { payload }) => {
       voteCriteriaAdapter.removeOne(state, payload.id);

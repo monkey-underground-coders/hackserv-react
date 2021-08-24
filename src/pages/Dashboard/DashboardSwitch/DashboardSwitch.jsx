@@ -6,10 +6,12 @@ import Track from "@views/Track";
 import AttendeeForm from "@views/AttendeeForm";
 import MainPage from "@views/MainView";
 import Tracks from "@views/TrackList";
+import Team from "@views/Team";
 
 const DashboardSwitch = () => {
   return (
     <Switch>
+      <Route path="/dashboard/team/:teamId" component={Team}/>
       <Route path="/dashboard/registration-profile" component={AttendeeForm} />
       <Route path="/dashboard/track/:trackId" component={Track} />
       <Route path="/dashboard/tracks" component={Tracks} />
