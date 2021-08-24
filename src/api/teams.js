@@ -5,6 +5,9 @@ export const changeCaptain = ({ uid, teamId }) =>
     userId: uid,
   });
 
+export const approveTeam = ({ teamId }) =>
+ mainAxios.post(`/team/${teamId}/approve`);
+
 export const deleteTeam = ({ teamId }) =>
   mainAxios.delete(`/team/${teamId}`);
 

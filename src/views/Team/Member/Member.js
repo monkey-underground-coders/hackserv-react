@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getUserByIdSelector } from "@redux/users";
+import { getSelfUserSelector, getUserByIdSelector } from "@redux/users";
 import { useParamSelector } from "@utils/hooks";
 import {
   IconButton,
@@ -13,13 +13,14 @@ import { Avatar, ListItemAvatar } from "@material-ui/core";
 import toMaterialStyle from "material-color-hash";
 import ListItem from "@material-ui/core/ListItem";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { changeCaptain, deleteMember } from "@redux/teams/thunks";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 const Member = ({ uid, teamId, captainId, isCaptain }) => {
   const user = useParamSelector(getUserByIdSelector, { userId: uid });
   const name = `${user.firstName} ${user.middleName} ${user.lastName}`;
+  const selfUserId = useSelector(getSelfUserSelector).id;
   const dispatch = useDispatch();
 
   const handleDeleteMember = () =>
@@ -44,18 +45,18 @@ const Member = ({ uid, teamId, captainId, isCaptain }) => {
       />
       <ListItemSecondaryAction edge="end" >
         {isCaptain && captainId === uid &&
-        <IconButton aria-label="Kick from team" disabled={captainId === uid} onClick={handleMakeCaptain}>
+        <IconButton aria-label="Kick from team" disabled>
           <Icon icon="mdi:crown" color="yellow" width="24" />
         </IconButton>}
         {isCaptain && captainId !== uid &&
-        <IconButton aria-label="Kick from team" disabled={captainId === uid} onClick={handleMakeCaptain}>
+        <IconButton aria-label="Kick from team" onClick={handleMakeCaptain}>
           <Icon icon="mdi:crown" color="black" width="24" />
         </IconButton>}
         {!isCaptain && captainId === uid &&
-        <IconButton aria-label="Kick from team" disabled={true}>
+        <IconButton aria-label="Kick from team" disabled>
           <Icon icon="mdi:crown" color="yellow" width="24" />
         </IconButton>}
-        {isCaptain &&
+        {(isCaptain || selfUserId === uid) &&
         <IconButton aria-label="Kick from team" onClick={handleDeleteMember}>
           <DeleteIcon />
         </IconButton>}

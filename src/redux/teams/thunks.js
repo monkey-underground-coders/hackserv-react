@@ -6,6 +6,7 @@ import {
   changeCaptain as changeCaptainAPI,
   submitTeam as submitTeamAPI,
   deleteTeam as deleteTeamAPI,
+  approveTeam as approveTeamAPI,
 } from "@api/teams";
 import { team } from "@validation/normalizr";
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -27,10 +28,22 @@ export const teamCreate = createAsyncThunk(
 export const getTeamById = createAsyncThunk(
   "teams/getTeamById",
   async ({ id }, { rejectWithValue }) => {
-    try{
+    try {
       const response = await getTeamByIdApi(id);
       return normalizeToolkit(response.data, team);
-    } catch (e) { 
+    } catch (e) {
+      return rejectWithValue(e.response.data || e.message);
+    }
+  }
+);
+
+export const approveTeam = createAsyncThunk(
+  "teams/approveTeam",
+  async ({ teamId }, { rejectWithValue }) => {
+    try {
+      const response = await approveTeamAPI({ teamId });
+      return normalizeToolkit(response.data, team);
+      } catch (e) {
       return rejectWithValue(e.response.data || e.message);
     }
   }
@@ -40,9 +53,9 @@ export const deleteMember = createAsyncThunk(
   "teams/deleteMember",
   async ({ uid, teamId }, { rejectWithValue }) => {
     try {
-      await deleteMemberAPI({ uid, teamId });
-      return { uid, teamId };
-    } catch (e) {
+      const respornse = await deleteMemberAPI({ uid, teamId });
+      return normalizeToolkit(respornse.data, team);
+      } catch (e) {
       return rejectWithValue(e.response.data || e.message);
     }
   }

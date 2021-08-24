@@ -2,21 +2,22 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 
-import CenteredPaper from "@components/CenteredPaper";
-import SingleEditableField from "@components/SingleEditableField";
-import TeamMembersList from "./TeamMembersList";
 import { useMySnackbar, useParamSelector } from "@utils/hooks";
-import { getSelfUserSelector, getUsersByIdsSelector } from "@redux/users";
+import { getSelfUserSelector, getUsersByIdsSelector, isSelfAdmin } from "@redux/users";
 import {
   putTeam,
   getTeamById,
   getTeamByIdSelector,
   submitTeam,
   deleteTeam,
+  approveTeam,
 } from "@redux/teams";
-import { titleSchemaTeam } from "@validation/yup/teams";
 import { withEntityRenderFetch } from "@components/RenderFetch/EntityRenderFetch";
-import { Button, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
+import { useHistory } from 'react-router-dom';
+import CaptainView from "./TeamVariableView/CaptainView"
+import AdminView from './TeamVariableView/AdminView';
+import MemberView from './TeamVariableView/MemberView';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -29,32 +30,20 @@ const useStyles = makeStyles((theme) => ({
 const Team = ({ teamId }) => {
   const dispatch = useDispatch();
   const team = useParamSelector(getTeamByIdSelector, { id: teamId });
-  const { enqueueError } = useMySnackbar();
-  const captainId = team.captain;
+  const teamMembers = team?.members ?? [];
   const selfUser = useSelector(getSelfUserSelector);
+  const isAdmin = useSelector(isSelfAdmin);
+  const isUserInTeam = teamMembers.includes(selfUser.id);
+  const { enqueueError } = useMySnackbar();
+  const captainId = team?.captain;
   const isCaptain = captainId === selfUser.id;
-  const teamName = team.name;
-  const track = team.track;
-  const teamMembers = team.members;
+  const teamName = team?.name;
+  const track = team?.track;
   const classes = useStyles();
-  const teamStatus = selfUser.userState;
+  const selfStatus = selfUser.userState;
   const membersAsUsers = useParamSelector(getUsersByIdsSelector, {ids: teamMembers});
   const isTeamSubmittable = membersAsUsers.reduce((prevState, user) => user.userState === 'FILLED_FORM' && prevState, true);
-  let buttonText;
-  switch (teamStatus) {
-    case 'FILLED_FORM':
-      buttonText = isTeamSubmittable ? 'Отправить заявку' : 'Участник не заполнил форму';
-      break;
-    case 'SUBMITTED':
-      buttonText = 'Ожидание подтверждения';
-      break;
-    case 'APPROVED':
-      buttonText = 'Команда подтверждена';
-      break;
-    default:
-      buttonText = 'Вы не заполнили форму';
-      break;
-  }
+  const history = useHistory();
 
   const handleTeamNameChange = (teamName) =>
     dispatch(putTeam({ teamId, teamName, track }))
@@ -64,44 +53,44 @@ const Team = ({ teamId }) => {
   const handleSubmitTeam = () =>
     dispatch(submitTeam({ teamId })).then(unwrapResult).catch(enqueueError);
 
-  const handleDeleteTeam = () =>
-    dispatch(deleteTeam({ teamId })).then(unwrapResult).catch(enqueueError);
+  const handleDeleteTeam = () => 
+    dispatch(deleteTeam({ teamId })).then(unwrapResult).then(() => history.push("/dashboard/")).catch(enqueueError);
+  
+  const handleApproveTeam = () => 
+    dispatch(approveTeam({ teamId })).then(unwrapResult).catch(enqueueError);
 
   return (
     <>
-      <CenteredPaper>
-        <SingleEditableField
-          initialValue={teamName}
-          onSubmit={handleTeamNameChange}
-          normalComponentProps={{
-            gutterBottom: false,
-          }}
-          name="name"
-          validationSchema={titleSchemaTeam}
-          disableEdit={!isCaptain}
-          fullWidth
-        />
-      </CenteredPaper>
-      <CenteredPaper>
-        <TeamMembersList
-          teamId={teamId}
-          members={teamMembers}
-          captainId={captainId}
-          isCaptain={isCaptain}
-        ></TeamMembersList>
-      </CenteredPaper>
-      <div className={classes.button}>
-        <Button variant="contained" color="primary" onClick={handleSubmitTeam} disabled={!isTeamSubmittable || !isCaptain}>
-          {buttonText}
-        </Button>
-      </div>
-      {isCaptain && (
-        <div className={classes.button}>
-          <Button variant="contained" color="secondary" onClick={handleDeleteTeam}>
-            Удалить команду
-          </Button>
-        </div>
-      )}
+    {isAdmin && <AdminView
+      teamId={teamId}
+      classes={classes}
+      team={team}
+      teamMembers={teamMembers}
+      teamStatus={membersAsUsers[0].status}
+      handleTeamNameChange={handleTeamNameChange}
+      handleDeleteTeam={handleDeleteTeam}
+      handleApproveTeam={handleApproveTeam}
+      isTeamSubmittable={isTeamSubmittable}
+    />}
+    {isCaptain && !isAdmin && <CaptainView
+      teamId={teamId}
+      classes={classes}
+      team={team}
+      teamMembers={teamMembers}
+      selfStatus={selfStatus}
+      isTeamSubmittable={isTeamSubmittable}
+      handleTeamNameChange={handleTeamNameChange}
+      handleDeleteTeam={handleDeleteTeam}
+      handleSubmitTeam={handleSubmitTeam}
+    />}
+    {!isCaptain && !isAdmin && <MemberView
+      teamId={teamId}
+      classes={classes}
+      team={team}
+      teamMembers={teamMembers}
+      selfStatus={selfStatus}
+      isTeamSubmittable={isTeamSubmittable}
+    />}
     </>
   );
 };
