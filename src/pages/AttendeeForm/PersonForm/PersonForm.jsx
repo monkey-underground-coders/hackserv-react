@@ -8,12 +8,13 @@ import { pick, mapValues } from "lodash";
 
 import UserInfoForm from "./UserInfoForm";
 import ResumeForm from "./ResumeForm";
-import { StepContext, StepperNavBar } from "@components/StepperPage";
 import { userDetailedInfoSchema } from "@validation/yup";
 import { useDispatch } from "react-redux";
 import { setUserFilledForm, userPutData } from "@redux/users";
 import { useMySnackbar } from "@utils/hooks";
 import { UserState } from "@dictionary/user";
+import UrlStepperNavBar from "@components/UrlStepperPage/UrlStepperNavBar";
+import UrlStepContext from "@components/UrlStepperPage/UrlStepContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +37,7 @@ const PersonForm = ({ user }) => {
     return date;
   })();
 
-  const { handleNext } = useContext(StepContext);
+  const { handleNext } = useContext(UrlStepContext);
 
   const { enqueueError } = useMySnackbar();
 
@@ -55,7 +56,7 @@ const PersonForm = ({ user }) => {
       )
       .then(() => handleNext())
       .catch(enqueueError);
-  // const onSubmit = async () => handleNext();\
+
   return (
     <Formik
       initialValues={{
@@ -85,7 +86,7 @@ const PersonForm = ({ user }) => {
           <UserInfoForm />
           <Divider variant="fullWidth" className={classes.divider} />
           <ResumeForm user={user} allowUpload={true} />
-          <StepperNavBar jumpOnNextOnClick={false} />
+          <UrlStepperNavBar noNextLink />
           {isSubmitting && <LinearProgress />}
         </form>
       )}

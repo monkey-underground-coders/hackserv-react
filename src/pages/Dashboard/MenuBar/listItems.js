@@ -5,11 +5,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import HomeIcon from "@material-ui/icons/Home";
 import GroupIcon from "@material-ui/icons/Group";
-import GavelIcon from "@material-ui/icons/Gavel";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import StarsIcon from "@material-ui/icons/Stars";
-import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
-import CallMadeIcon from "@material-ui/icons/CallMade";
 import { Link } from "react-router-dom";
 
 const styles = {
@@ -43,20 +40,6 @@ export const mainListItems = (
 export const secondaryListItems = (
   <div>
     <ListSubheader inset>Хакатон</ListSubheader>
-    <Link to="/dashboard/registration-profile" style={styles.linkDecNone}>
-      <ListItem button>
-        <ListItemIcon>
-          <CallMadeIcon />
-        </ListItemIcon>
-        <ListItemText primary="Подать заявку" />
-      </ListItem>
-    </Link>
-    <ListItem button>
-      <ListItemIcon>
-        <PeopleOutlineIcon />
-      </ListItemIcon>
-      <ListItemText primary="Все команды" />
-    </ListItem>
     <Link to="/dashboard/tracks" style={styles.linkDecNone}>
       <ListItem button>
         <ListItemIcon>
@@ -70,12 +53,6 @@ export const secondaryListItems = (
         <ListAltIcon />
       </ListItemIcon>
       <ListItemText primary="Расписание" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <GavelIcon />
-      </ListItemIcon>
-      <ListItemText primary="Голосование" />
     </ListItem>
   </div>
 );

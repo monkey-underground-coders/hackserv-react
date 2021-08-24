@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 import { useMySnackbar, useParamSelector } from "@utils/hooks";
-import { getSelfUserSelector, getUsersByIdsSelector, isSelfAdmin } from "@redux/users";
+import { getSelfUserSelector, getUsersByIdsSelector, isSelfAdminSelector } from "@redux/users";
 import {
   putTeam,
   getTeamById,
@@ -32,7 +32,7 @@ const Team = ({ teamId }) => {
   const team = useParamSelector(getTeamByIdSelector, { id: teamId });
   const teamMembers = team?.members ?? [];
   const selfUser = useSelector(getSelfUserSelector);
-  const isAdmin = useSelector(isSelfAdmin);
+  const isAdmin = useSelector(isSelfAdminSelector);
   const isUserInTeam = teamMembers.includes(selfUser.id);
   const { enqueueError } = useMySnackbar();
   const captainId = team?.captain;

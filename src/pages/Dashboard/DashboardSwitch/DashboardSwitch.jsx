@@ -3,10 +3,10 @@ import { Route, Switch } from "react-router";
 import { Redirect } from "react-router-dom";
 
 import Track from "@views/Track";
-import AttendeeForm from "@views/AttendeeForm";
 import MainPage from "@views/MainView";
 import Tracks from "@views/TrackList";
 import Team from "@views/Team";
+import AttendeeForm from "@pages/AttendeeForm";
 
 const DashboardSwitch = () => {
   return (

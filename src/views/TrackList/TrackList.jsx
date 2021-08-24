@@ -7,7 +7,7 @@ import TrackListItem from "./TrackListItem";
 import { getAllTrackIdsSelector, getAllTracks } from "@redux/tracks";
 import { useMySnackbar } from "@utils/hooks";
 import CreateTrackDialog from "./CreateTrackDialog";
-import { isSelfAdmin } from "@redux/users";
+import { isSelfAdminSelector } from "@redux/users";
 import CenteredPaper from "@components/CenteredPaper";
 import ContentList from "@components/ContentList";
 import CornerFab from "@components/CornerFab";
@@ -19,7 +19,7 @@ const Tracks = () => {
 
   const tracks = useSelector(getAllTrackIdsSelector);
   const dispatch = useDispatch();
-  const allowEdit = useSelector(isSelfAdmin);
+  const allowEdit = useSelector(isSelfAdminSelector);
 
   const handleGetTracks = () =>
     dispatch(getAllTracks())
