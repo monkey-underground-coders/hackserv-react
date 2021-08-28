@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
+import { useStore } from "react-redux";
 import PropTypes from "prop-types";
 
 import RenderFetch from "../RenderFetch";
@@ -12,12 +12,17 @@ import RenderFetch from "../RenderFetch";
  *
  * @see RenderFetch
  */
-const ReduxRenderFetch = ({ component: Component, action, ...rest }) => {
-  const dispatch = useDispatch();
+const ReduxRenderFetch = ({
+  component: Component,
+  action,
+  selector = () => {},
+  ...rest
+}) => {
+  const { dispatch, getState } = useStore();
 
   const handleFetch = useCallback(
-    () => dispatch(action()).then(unwrapResult),
-    [action, dispatch]
+    () => dispatch(action(selector(getState()))).then(unwrapResult),
+    [action, selector, getState, dispatch]
   );
 
   return (
@@ -33,8 +38,15 @@ ReduxRenderFetch.propTypes = {
    */
   component: PropTypes.elementType.isRequired,
   /**
+   * The selector function in terms of Redux
+   */
+  selector: PropTypes.func,
+  /**
    * The action (thunk) supplier
    *
+   * If selector is provided, action will receive selected value as a parameter
+   *
+   * @param {any} selector's result
    * @returns {Object}
    */
   action: PropTypes.func.isRequired,
@@ -45,9 +57,17 @@ ReduxRenderFetch.propTypes = {
  *
  * @param {React.FC} Component The component to wrap
  * @param {Function} action The action (thunk) supplier
+ * @param {Function} selector The selector
  * @returns React component
  */
-export const withReduxRenderFetch = (Component, action) => (props) =>
-  <ReduxRenderFetch component={Component} action={action} {...props} />;
+export const withReduxRenderFetch = (Component, action, selector) => (props) =>
+  (
+    <ReduxRenderFetch
+      component={Component}
+      action={action}
+      selector={selector}
+      {...props}
+    />
+  );
 
 export default ReduxRenderFetch;

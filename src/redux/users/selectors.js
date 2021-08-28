@@ -66,14 +66,6 @@ export const getUserStageSelector = createSelector(
   }
 );
 
-// export const getSelfUserStageSelector = createSelector(
-//   loggedInSelector,
-//   usersSelector,
-//   getSelfUserSelector,
-//   (loggedIn, users, self) =>
-//     !loggedIn ? -1 : getUserStageSelector(users, { userId: self?.id })
-// );
-
 export const getSelfUserStageSelector = createSelector(
   loggedInSelector,
   (state) =>

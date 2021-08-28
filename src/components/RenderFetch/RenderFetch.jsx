@@ -1,13 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { CircularProgress, makeStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
-
-const useStyles = makeStyles((theme) => ({
-  progress: {
-    display: "flex",
-    justifyContent: "center",
-  },
-}));
+import BigProgress from "@components/BigProgress";
 
 /**
  * Provides a fetch-before-render strategy.
@@ -20,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
  * Render function gets fetch function as a first argument. It can be used for manual fetch.
  */
 const RenderFetch = ({ onFetch, render, children }) => {
-  const classes = useStyles();
   const [loading, setLoading] = useState(true);
 
   const fetch = useCallback(() => {
@@ -31,11 +23,7 @@ const RenderFetch = ({ onFetch, render, children }) => {
   useEffect(fetch, [fetch]);
 
   if (loading) {
-    return (
-      <div className={classes.progress}>
-        <CircularProgress />
-      </div>
-    );
+    return <BigProgress />;
   }
   return render ? render(fetch) : children;
 };

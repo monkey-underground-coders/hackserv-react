@@ -185,15 +185,19 @@ const MenuBar = () => {
               </ListItemIcon>
               <ListItemText primary="Мой профиль" />
             </ListItem>
-            { team  &&
-            (<Link to={`/dashboard/team/${team}`} className={classes.linkDecNone}>
-              <ListItem button>
-                <ListItemIcon>
-                  <GroupIcon />
-                </ListItemIcon>
-                <ListItemText primary="Моя команда" />
-              </ListItem>
-            </Link>) }
+            {team && (
+              <Link
+                to={`/dashboard/team/${team}`}
+                className={classes.linkDecNone}
+              >
+                <ListItem button>
+                  <ListItemIcon>
+                    <GroupIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Моя команда" />
+                </ListItem>
+              </Link>
+            )}
           </List>
           <Divider />
           <List>

@@ -1,7 +1,21 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import {
+  Container,
+  Grid,
+  makeStyles,
+  Paper,
+  Step,
+  StepContent,
+  StepLabel,
+  Stepper,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@material-ui/core";
 import RadioButtonUncheckedIcon from "@material-ui/icons/RadioButtonUnchecked";
+import clsx from "clsx";
 
 import { getSelfUserSelector } from "@redux/users";
 import { UserState } from "@dictionary/user";
@@ -9,29 +23,76 @@ import {
   getSurnameWithInitials,
   getRightBoundByChar,
 } from "@utils/stringConvert";
-import {
-  Step,
-  StepContent,
-  StepLabel,
-  Stepper,
-  Typography,
-} from "@material-ui/core";
 import { secondsUntilNextHour } from "@utils/date";
-import CenteredPaper from "@components/CenteredPaper";
+import Title from "@components/Title";
+import { steps, stepsArray } from "./steps";
+import NextStepButton from "./NextStepButton";
+import VkWidget from "./VkWidget";
 
-const steps = Object.freeze({
-  IN_TEAM: "IN_TEAM",
-  ...UserState,
-});
-
-const stepsArray = Object.freeze([
-  { name: steps.REGISTERED, localized: "Зарегистрирован" },
-  { name: steps.FILLED_FORM, localized: "Анкетирован" },
-  { name: steps.IN_TEAM, localized: "В команде" },
-  { name: steps.SUBMITTED, localized: "Отправлена заявка" },
-  { name: steps.APPROVED, localized: "Одобрен к участию" },
-  { name: steps.CHECKED_IN, localized: "Отмечен на входе" },
-]);
+const useMainStyles = makeStyles((theme) => ({
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  paper: {
+    padding: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+      padding: theme.spacing(3),
+    },
+    "& + *": {
+      marginTop: theme.spacing(3),
+    },
+  },
+  // column: {
+  //   "& > *": {
+  //     height: "100%",
+  //   },
+  // },
+  // secondColumn: {
+  //   display: "flex",
+  //   alignItems: "stretch",
+  // },
+  // newsBlockLargeScreen: {
+  //   flexGrow: 1,
+  // },
+  gridContainer: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gridTemplateRows: "auto auto 1fr",
+    gridTemplateAreas: `
+      "title title"
+      "stepper nextStepButton"
+      "stepper newsBlock"
+    `,
+    width: "100%",
+    height: "100%",
+    gap: theme.spacing(3),
+  },
+  title: {
+    gridArea: "title",
+  },
+  stepper: {
+    gridArea: "stepper",
+    "& > *": {
+      height: "100%",
+    },
+  },
+  nextStepButton: {
+    gridArea: "nextStepButton",
+  },
+  newsBlock: {
+    gridArea: "newsBlock",
+    "& > *": {
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "stretch",
+    },
+    "& > * > div": {
+      flexGrow: 2,
+    },
+  },
+}));
 
 const getCurrentGreeting = () => {
   const hour = new Date().getHours();
@@ -54,7 +115,13 @@ const StepIcon = ({ active, completed }) =>
   );
 
 const AttendeeMainPage = () => {
+  const classes = useMainStyles();
   const [greeting, setGreeting] = useState(getCurrentGreeting());
+
+  const theme = useTheme();
+  const largeScreen = useMediaQuery(
+    theme.breakpoints.up(600 + theme.spacing(4) * 2)
+  );
 
   const { userState, email, firstName, middleName, lastName, team, request } =
     useSelector(getSelfUserSelector);
@@ -92,22 +159,70 @@ const AttendeeMainPage = () => {
     return () => clearTimeout(timer);
   });
 
+  const stepper = (
+    <Paper className={classes.paper}>
+      <Title>Статус</Title>
+      <Stepper activeStep={currentStep} orientation="vertical">
+        {stepsArray.map(({ name, localized }) => (
+          <Step key={name}>
+            <StepLabel StepIconComponent={StepIcon}>{localized}</StepLabel>
+            <StepContent></StepContent>
+          </Step>
+        ))}
+      </Stepper>
+    </Paper>
+  );
+
+  const nextStepButton = (
+    <Paper className={classes.paper}>
+      <NextStepButton currentStep={currentStateStep} />
+    </Paper>
+  );
+
+  const greetingTypography = (
+    <Typography variant="h4" gutterBottom>
+      {greeting}, {userName}
+    </Typography>
+  );
+
+  const vkWidget = (
+    <Paper
+      className={clsx(
+        classes.paper,
+        largeScreen && classes.newsBlockLargeScreen
+      )}
+    >
+      <Title>Новости</Title>
+      <VkWidget />
+    </Paper>
+  );
+
   return (
-    <>
-      <Typography variant="h4" gutterBottom>
-        {greeting}, {userName}
-      </Typography>
-      <CenteredPaper title="Статус">
-        <Stepper activeStep={currentStep} orientation="vertical">
-          {stepsArray.map(({ name, localized }) => (
-            <Step key={name}>
-              <StepLabel StepIconComponent={StepIcon}>{localized}</StepLabel>
-              <StepContent></StepContent>
-            </Step>
-          ))}
-        </Stepper>
-      </CenteredPaper>
-    </>
+    <Container maxWidth="lg" className={classes.container}>
+      {largeScreen ? (
+        <div className={classes.gridContainer}>
+          <div className={classes.title}>{greetingTypography}</div>
+          <div className={classes.stepper}>{stepper}</div>
+          <div className={classes.nextStepButton}>{nextStepButton}</div>
+          <div className={classes.newsBlock}>{vkWidget}</div>
+        </div>
+      ) : (
+        <Grid container spacing={3}>
+          <Grid item sm={12}>
+            {greetingTypography}
+          </Grid>
+          <Grid item xs={12}>
+            {stepper}
+          </Grid>
+          <Grid item xs={12}>
+            {nextStepButton}
+          </Grid>
+          <Grid item xs={12}>
+            {vkWidget}
+          </Grid>
+        </Grid>
+      )}
+    </Container>
   );
 };
 
