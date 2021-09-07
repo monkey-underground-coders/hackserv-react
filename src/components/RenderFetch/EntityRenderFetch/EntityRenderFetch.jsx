@@ -17,7 +17,7 @@ const EntityRenderFetch = ({
   const idParam = params[idField];
 
   const handleFetch = useCallback(
-    () => dispatch(action({ id: +idParam })).then(unwrapResult),
+    () => dispatch(action({ id: +idParam })).then(unwrapResult).catch(error => console.error(error)),
     [dispatch, action, idParam]
   );
 

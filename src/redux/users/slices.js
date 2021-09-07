@@ -26,10 +26,9 @@ export const users = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getTeamById.fulfilled, (state, { payload }) => {
-      usersAdapter.upsertMany(state, payload.users);
+      usersAdapter.upsertMany(state, payload.users ?? []);
     });
     builder.addCase(deleteTeam.fulfilled, (state, { payload: { teamId } }) => {
-      console.log(state);
       state.ids
         .map((userId) => state.entities[userId])
         .forEach((user) => {

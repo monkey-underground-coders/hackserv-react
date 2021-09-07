@@ -31,7 +31,6 @@ export const getTeamById = createAsyncThunk(
   async ({ id, isInternal = true }, { rejectWithValue }) => {
     try {
       const response = isInternal ? await getInternalTeamByIdApi(id) : await getTeamByIdApi(id);
-      console.log(response.data);
       return normalizeToolkit(response.data, team);
     } catch (e) {
       return rejectWithValue(e.response.data || e.message);

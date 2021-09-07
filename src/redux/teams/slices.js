@@ -51,7 +51,6 @@ export const teams = createSlice({
         deleteMember.fulfilled
       ),
       (state, { payload }) => {
-        console.log('payload');
         teamAdapter.upsertMany(state, payload.teams ?? []);
       }
     );

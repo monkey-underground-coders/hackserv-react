@@ -60,6 +60,5 @@ export const parseError = (err) => {
 
 export const normalizeToolkit = (data, schema) => {
   const { entities } = normalize(data, schema);
-  console.log(entities);
   return entities;
 };
