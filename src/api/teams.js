@@ -25,7 +25,7 @@ export const teamCreate = ({ name, captainId }) =>
     captainId,
   });
 
-export const getTeamById = (teamId) =>
+export const getInternalTeamById = (teamId) =>
   mainAxios.get(`/team/${teamId}/internal`);
 
 export const putTeam = ({ teamId, teamName, track }) =>
@@ -33,6 +33,9 @@ export const putTeam = ({ teamId, teamName, track }) =>
     name: teamName,
     trackId: track,
   });
+
+export const getTeamById = (teamId) =>
+  mainAxios.get(`/team/${teamId}`);
 
 export const getTeams = ({
   with: withName = "",

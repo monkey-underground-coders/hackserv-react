@@ -1,6 +1,15 @@
 import { createEntityAdapter, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { getTrackById } from "@redux/tracks";
-import { teamCreate, getTeamById, putTeam, deleteMember, changeCaptain, submitTeam, deleteTeam, approveTeam } from "./thunks";
+import {
+  teamCreate,
+  getTeamById,
+  putTeam,
+  deleteMember,
+  changeCaptain,
+  submitTeam,
+  deleteTeam,
+  approveTeam,
+} from "./thunks";
 import {
   userCreate,
   getSelf,
@@ -32,8 +41,17 @@ export const teams = createSlice({
       state.exception = payload;
     });
     builder.addMatcher(
-      isAnyOf(getTeamById.fulfilled, approveTeam.fulfilled , putTeam.fulfilled, getTrackById.fulfilled, changeCaptain.fulfilled, submitTeam.fulfilled, deleteMember.fulfilled),
+      isAnyOf(
+        getTeamById.fulfilled,
+        approveTeam.fulfilled,
+        putTeam.fulfilled,
+        getTrackById.fulfilled,
+        changeCaptain.fulfilled,
+        submitTeam.fulfilled,
+        deleteMember.fulfilled
+      ),
       (state, { payload }) => {
+        console.log('payload');
         teamAdapter.upsertMany(state, payload.teams ?? []);
       }
     );

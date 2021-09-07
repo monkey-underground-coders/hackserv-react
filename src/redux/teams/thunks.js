@@ -7,6 +7,7 @@ import {
   submitTeam as submitTeamAPI,
   deleteTeam as deleteTeamAPI,
   approveTeam as approveTeamAPI,
+  getInternalTeamById as getInternalTeamByIdApi,
 } from "@api/teams";
 import { team } from "@validation/normalizr";
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -27,9 +28,10 @@ export const teamCreate = createAsyncThunk(
 
 export const getTeamById = createAsyncThunk(
   "teams/getTeamById",
-  async ({ id }, { rejectWithValue }) => {
+  async ({ id, isInternal = true }, { rejectWithValue }) => {
     try {
-      const response = await getTeamByIdApi(id);
+      const response = isInternal ? await getInternalTeamByIdApi(id) : await getTeamByIdApi(id);
+      console.log(response.data);
       return normalizeToolkit(response.data, team);
     } catch (e) {
       return rejectWithValue(e.response.data || e.message);
@@ -108,3 +110,15 @@ export const deleteTeam = createAsyncThunk(
     }
   }
 );
+
+// export const getTeamByIdWithoutMembers = createAsyncThunk(
+//   "teams/getTeamByIdWithoutMembers",
+//   async ({ id }, {rejectWithValue}) => {
+//     try {
+//       const response = await getTeamByIdWithoutMembersAPI({teamId: id});
+//       return normalizeToolkit(response.data, team);
+//     } catch (e) {
+//       return rejectWithValue(e.response.data || e.message);
+//     }
+//   }
+// )
