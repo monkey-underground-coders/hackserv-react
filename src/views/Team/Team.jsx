@@ -7,6 +7,7 @@ import { withEntityRenderFetch } from "@components/RenderFetch/EntityRenderFetch
 import WithoutExceptionTeamComp from "./WithoutExceptionTeamComp";
 import { useSelector } from "react-redux";
 import NotFoundPage from '@components/NotFoundPage';
+import { getSelfUserSelector, isSelfAdminSelector } from "@redux/users";
 
 const Team = ({ teamId }) => {
   const exception = useSelector(getExceptionSelector);
@@ -20,4 +21,8 @@ const Team = ({ teamId }) => {
   }
 };
 
-export default withEntityRenderFetch(Team, "teamId", (idObj) => getTeamById({id: idObj.id, isInternal: true}));
+export default withEntityRenderFetch(Team, 
+  "teamId", 
+  (idObj, isInternal) => getTeamById({id: idObj.id, isInternal: isInternal}), 
+  (state, id) => (getSelfUserSelector(state).team === id || isSelfAdminSelector(state))
+);
