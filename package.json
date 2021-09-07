@@ -9,6 +9,7 @@
     "@reduxjs/toolkit": "1.5.0",
     "axios": "^0.21.1",
     "axios-auth-refresh": "^3.1.0",
+    "clsx": "^1.1.1",
     "formik": "^2.2.6",
     "formik-material-ui": "^3.0.1",
     "html-entities": "^2.3.2",
@@ -24,12 +25,14 @@
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-vk": "^5.0.2",
     "redux": "^4.1.0",
+    "sweetalert": "^2.1.2",
     "web-vitals": "^1.1.2",
     "yup": "^0.32.9"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "cross-env PORT=80 react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
@@ -53,6 +56,7 @@
     ]
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "react-app-rewire-alias": "1.0.0",
     "react-app-rewired": "2.1.8"
   }

@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 
 import Accordion from "./Accordion";
-import { StepperNavBar } from "@components/StepperPage";
+import UrlStepperNavBar from "@components/UrlStepperPage/UrlStepperNavBar";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -29,7 +29,7 @@ export default function TeamForm() {
 
       <Accordion />
 
-      <StepperNavBar />
+      <UrlStepperNavBar disableNext />
     </>
   );
 }

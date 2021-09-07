@@ -1,29 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { loggedInSelector } from "@redux/auth/selectors";
-import ConditionalRoute from "../ConditionalRoute";
+import StageRoute from "../StageRoute";
 
 /**
  * Works like Route from "react-router".
  *
- * If the user is logged in, renders Route.
- * Otherwise, it renders Redirect to the login page.
+ * If the user is fully activated (logged in, filled form, got a team), renders Route.
+ * Otherwise, it renders Redirect to the email validation page or the login page.
  *
  * @see Route
  * @see Redirect
  */
-const LoggedInRoute = ({ path, exact = false, component }) => (
-  <ConditionalRoute
-    path={path}
-    exact={exact}
-    conditionSelector={loggedInSelector}
-    component={component}
-    redirect="/user/login"
-  />
+const UserRoute = ({ path, exact = false, component }) => (
+  <StageRoute stage={3} path={path} exact={exact} component={component} />
 );
 
-LoggedInRoute.propTypes = {
+UserRoute.propTypes = {
   /**
    * The path to be routed
    *
@@ -45,4 +38,4 @@ LoggedInRoute.propTypes = {
   component: PropTypes.elementType,
 };
 
-export default LoggedInRoute;
+export default UserRoute;
