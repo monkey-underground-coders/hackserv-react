@@ -25,3 +25,8 @@ export const haveTeam = createSelector(
   teamsSelector,
   getSelfUserSelector,
 );
+
+export const getExceptionSelector = createSelector(
+  teamsSelector,
+  ({ exception }) => exception
+);

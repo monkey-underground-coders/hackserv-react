@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 
 import RenderFetch from "../RenderFetch";
 import NotFoundPage from "@components/NotFoundPage";
+import { useStore } from "react-redux";
 
 /**
  * Provides a fetch-before-render strategy with Redux and React Router addition.
@@ -53,16 +54,20 @@ const EntityRenderFetch = ({
   component: Component,
   idField,
   action,
+  selector = () => {},
   ...rest
 }) => {
   const params = useParams();
   const dispatch = useDispatch();
-
+  const { getState } = useStore();
   const idParam = params[idField];
 
   const handleFetch = useCallback(
-    () => dispatch(action({ id: +idParam })).then(unwrapResult),
-    [dispatch, action, idParam]
+    () =>
+      dispatch(action({ id: +idParam, selectorResult: selector({state: getState(), id: +idParam}) }))
+        .then(unwrapResult)
+        .catch((error) => console.error(error)),
+    [dispatch, action, idParam, selector, getState]
   );
 
   if (
@@ -97,8 +102,15 @@ EntityRenderFetch.propTypes = {
    */
   idField: PropTypes.string.isRequired,
   /**
+   * The selector function in terms of Redux
+   */
+  selector: PropTypes.func,
+  /**
    * The action (thunk) supplier
    *
+   * If selector is provided, action will receive selected value as a parameter
+
+   * @param {any} selector's result
    * @returns {Object}
    */
   action: PropTypes.func.isRequired,
@@ -110,16 +122,19 @@ EntityRenderFetch.propTypes = {
  * @param {React.FC} Component The component to wrap
  * @param {String} idField The identifier of a param from Route path
  * @param {Function} action The action (thunk) supplier
+ * @param {Fucntion} selector The selector
  * @returns React component
  */
-export const withEntityRenderFetch = (Component, idField, action) => (props) =>
-  (
-    <EntityRenderFetch
-      component={Component}
-      action={action}
-      idField={idField}
-      {...props}
-    />
-  );
+export const withEntityRenderFetch =
+  (Component, idField, action, selector) => (props) =>
+    (
+      <EntityRenderFetch
+        component={Component}
+        action={action}
+        idField={idField}
+        selector={selector}
+        {...props}
+      />
+    );
 
 export default EntityRenderFetch;

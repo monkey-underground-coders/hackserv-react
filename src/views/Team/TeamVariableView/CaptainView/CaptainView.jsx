@@ -6,8 +6,10 @@ import { titleSchemaTeam } from "@validation/yup/teams";
 import { Button } from "@material-ui/core";
 import TeamMembersList from '../../TeamMembersList';
 
-const CaptainView = ({ teamId, classes, team, teamMembers, selfStatus, isTeamSubmittable, handleTeamNameChange, handleSubmitTeam, handleDeleteTeam }) => {
+const CaptainView = ({ classes, team, selfStatus, isTeamSubmittable, handleTeamNameChange, handleSubmitTeam, handleDeleteTeam }) => {
   const captainId = team?.captain;
+  const teamId = team.id;
+  const teamMembers= team?.members ?? [];
   const teamName = team?.name;
   const buttonText = (() => {switch (selfStatus) {
     case 'FILLED_FORM':
@@ -40,17 +42,17 @@ const CaptainView = ({ teamId, classes, team, teamMembers, selfStatus, isTeamSub
           members={teamMembers}
           captainId={captainId}
           isCaptain={true}
-        ></TeamMembersList>
+        />
       </CenteredPaper>
       <div className={classes.button}>
-      <Button variant="contained" color="primary" onClick={handleSubmitTeam} disabled={!isTeamSubmittable}>
-          {buttonText}
-      </Button>
+        <Button variant="contained" color="primary" onClick={handleSubmitTeam} disabled={!isTeamSubmittable}>
+            {buttonText}
+        </Button>
       </div>
       <div className={classes.button}>
-      <Button variant="contained" color="secondary" onClick={handleDeleteTeam}>
-          Удалить команду
-      </Button>
+        <Button variant="contained" color="secondary" onClick={handleDeleteTeam}>
+            Удалить команду
+        </Button>
       </div>
     </>
   );
