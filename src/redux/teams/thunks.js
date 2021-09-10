@@ -109,15 +109,3 @@ export const deleteTeam = createAsyncThunk(
     }
   }
 );
-
-// export const getTeamByIdWithoutMembers = createAsyncThunk(
-//   "teams/getTeamByIdWithoutMembers",
-//   async ({ id }, {rejectWithValue}) => {
-//     try {
-//       const response = await getTeamByIdWithoutMembersAPI({teamId: id});
-//       return normalizeToolkit(response.data, team);
-//     } catch (e) {
-//       return rejectWithValue(e.response.data || e.message);
-//     }
-//   }
-// )

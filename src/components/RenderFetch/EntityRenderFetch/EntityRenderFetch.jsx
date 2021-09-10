@@ -64,7 +64,7 @@ const EntityRenderFetch = ({
 
   const handleFetch = useCallback(
     () =>
-      dispatch(action({ id: +idParam }, selector(getState(), +idParam)))
+      dispatch(action({ id: +idParam, selectorResult: selector({state: getState(), id: +idParam}) }))
         .then(unwrapResult)
         .catch((error) => console.error(error)),
     [dispatch, action, idParam, selector, getState]

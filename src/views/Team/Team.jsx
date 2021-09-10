@@ -24,5 +24,5 @@ const Team = ({ teamId }) => {
 export default withEntityRenderFetch(Team, 
   "teamId", 
   (idObj, isInternal) => getTeamById({id: idObj.id, isInternal: isInternal}), 
-  (state, id) => (getSelfUserSelector(state).team === id || isSelfAdminSelector(state))
+  ({state, id}) => (getSelfUserSelector(state).team === id || isSelfAdminSelector(state))
 );
