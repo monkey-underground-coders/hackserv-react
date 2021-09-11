@@ -123,17 +123,11 @@ const AttendeeMainPage = () => {
     theme.breakpoints.up(600 + theme.spacing(4) * 2)
   );
 
-  const { userState, email, firstName, middleName, lastName, team, request } =
+  const { userState, email, firstName, middleName, lastName, team } =
     useSelector(getSelfUserSelector);
 
   const currentStateStep = (() => {
-    if (
-      userState === UserState.FILLED_FORM &&
-      team === null &&
-      request !== null
-    ) {
-      return steps.REQUESTED_IN_TEAM;
-    } else if (userState === UserState.FILLED_FORM) {
+    if (userState === UserState.FILLED_FORM && team !== null) {
       return steps.IN_TEAM;
     } else {
       return steps[userState];

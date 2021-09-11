@@ -47,12 +47,14 @@ export const parseError = (err) => {
     case "number":
       return `Произошла ошибка с кодом ${err}`;
     case "object":
-      const variants = [
-        parseErrorMessage(err.response?.data?.message),
-        err.response?.data?.message,
-        err.message,
-      ];
-      return find(variants, (o) => o !== undefined && o !== null);
+      return (() => {
+        const variants = [
+          parseErrorMessage(err.response?.data?.message),
+          err.response?.data?.message,
+          err.message,
+        ];
+        return find(variants, (o) => o !== undefined && o !== null);
+      })();
     default:
       return err;
   }

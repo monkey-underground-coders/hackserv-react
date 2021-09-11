@@ -8,7 +8,7 @@ import {
   deleteTrack as deleteTrackApi,
 } from "@api";
 import { track } from "@validation/normalizr";
-import { normalizeToolkit } from "@utils";
+import { createAsyncThunkWrapped, normalizeToolkit } from "@utils";
 
 export const getAllTracks = createAsyncThunk(
   "tracks/getAll",
@@ -22,15 +22,11 @@ export const getAllTracks = createAsyncThunk(
   }
 );
 
-export const getTrackById = createAsyncThunk(
+export const getTrackById = createAsyncThunkWrapped(
   "tracks/getTrackById",
   async ({ id }, { rejectWithValue }) => {
-    try {
-      const response = await getTrackByIdApi(id);
-      return normalizeToolkit(response.data, track);
-    } catch (e) {
-      return rejectWithValue(e.message || e.response.data);
-    }
+    const response = await getTrackByIdApi(id);
+    return normalizeToolkit(response.data, track);
   }
 );
 

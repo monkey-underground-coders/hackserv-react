@@ -32,25 +32,29 @@ const useStyles = makeStyles((theme) => ({
 
 const WithoutExceptionTeamComp = ({ teamId }) => {
   const dispatch = useDispatch();
-  const team = useParamSelector(getTeamByIdSelector, { id: teamId });
-  const teamMembers = team?.members ?? [];
-  const selfUser = useSelector(getSelfUserSelector);
-  const isAdmin = useSelector(isSelfAdminSelector);
-  const isUserInTeam = teamMembers.includes(selfUser.id);
   const { enqueueError } = useMySnackbar();
-  const captainId = team?.captain;
-  const isCaptain = captainId === selfUser.id;
-  const track = team?.track;
   const classes = useStyles();
-  const selfStatus = selfUser.userState;
+  const history = useHistory();
+
+  const { id: selfId, userState: selfStatus } =
+    useSelector(getSelfUserSelector);
+  const team = useParamSelector(getTeamByIdSelector, { id: teamId }) ?? {};
+
+  const teamMembers = team.members ?? [];
+  const isUserInTeam = teamMembers.includes(selfId);
   const membersAsUsers = useParamSelector(getUsersByIdsSelector, {
     ids: teamMembers,
   });
+
+  const isCaptain = team.captain === selfId;
+
+  const isAdmin = useSelector(isSelfAdminSelector);
+
+  const track = team.track;
   const isTeamSubmittable = membersAsUsers.reduce(
     (prevState, user) => user?.userState === "FILLED_FORM" && prevState,
     true
   );
-  const history = useHistory();
 
   const handleTeamNameChange = (teamName) =>
     dispatch(putTeam({ teamId, teamName, track }))

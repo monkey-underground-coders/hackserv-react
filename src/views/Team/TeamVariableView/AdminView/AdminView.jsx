@@ -16,9 +16,9 @@ const AdminView = ({
   teamStatus,
 }) => {
   const teamId = team.id;
-  const teamMembers = team?.members ?? [];
-  const captainId = team?.captain;
-  const teamName = team?.name;
+  const teamMembers = team.members ?? [];
+  const captainId = team.captain;
+  const teamName = team.name;
   const buttonText = isTeamSubmittable
     ? "Команда не отправила заявку"
     : (() => {

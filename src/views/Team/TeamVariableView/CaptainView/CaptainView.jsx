@@ -4,23 +4,35 @@ import CenteredPaper from "@components/CenteredPaper";
 import SingleEditableField from "@components/SingleEditableField";
 import { titleSchemaTeam } from "@validation/yup/teams";
 import { Button } from "@material-ui/core";
-import TeamMembersList from '../../TeamMembersList';
+import TeamMembersList from "../../TeamMembersList";
 
-const CaptainView = ({ classes, team, selfStatus, isTeamSubmittable, handleTeamNameChange, handleSubmitTeam, handleDeleteTeam }) => {
-  const captainId = team?.captain;
+const CaptainView = ({
+  classes,
+  team,
+  selfStatus,
+  isTeamSubmittable,
+  handleTeamNameChange,
+  handleSubmitTeam,
+  handleDeleteTeam,
+}) => {
+  const captainId = team.captain;
   const teamId = team.id;
-  const teamMembers= team?.members ?? [];
-  const teamName = team?.name;
-  const buttonText = (() => {switch (selfStatus) {
-    case 'FILLED_FORM':
-      return isTeamSubmittable ? 'Отправить заявку' : 'Участник не заполнил форму';
-    case 'SUBMITTED':
-      return 'Ожидание подтверждения';
-    case 'APPROVED':
-      return 'Команда подтверждена';
-    default:
-      return 'Вы не заполнили форму';
-  }})();
+  const teamMembers = team.members ?? [];
+  const teamName = team.name;
+  const buttonText = (() => {
+    switch (selfStatus) {
+      case "FILLED_FORM":
+        return isTeamSubmittable
+          ? "Отправить заявку"
+          : "Участник не заполнил форму";
+      case "SUBMITTED":
+        return "Ожидание подтверждения";
+      case "APPROVED":
+        return "Команда подтверждена";
+      default:
+        return "Вы не заполнили форму";
+    }
+  })();
 
   return (
     <>
@@ -45,13 +57,22 @@ const CaptainView = ({ classes, team, selfStatus, isTeamSubmittable, handleTeamN
         />
       </CenteredPaper>
       <div className={classes.button}>
-        <Button variant="contained" color="primary" onClick={handleSubmitTeam} disabled={!isTeamSubmittable}>
-            {buttonText}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSubmitTeam}
+          disabled={!isTeamSubmittable}
+        >
+          {buttonText}
         </Button>
       </div>
       <div className={classes.button}>
-        <Button variant="contained" color="secondary" onClick={handleDeleteTeam}>
-            Удалить команду
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleDeleteTeam}
+        >
+          Удалить команду
         </Button>
       </div>
     </>

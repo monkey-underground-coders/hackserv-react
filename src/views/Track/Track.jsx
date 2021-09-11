@@ -2,28 +2,31 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 
-import { useMySnackbar, useParamSelector } from "@utils/hooks";
+import {
+  useMySnackbar,
+  useParamSelector,
+  useEntityLoading,
+} from "@utils/hooks";
 import { getTrackByIdSelector } from "@redux/tracks/selectors";
 import CenteredPaper from "@components/CenteredPaper";
-import NotFoundPage from "@components/NotFoundPage";
 import { getTrackById, putTrack } from "@redux/tracks";
-import { withEntityRenderFetch } from "@components/RenderFetch/EntityRenderFetch/EntityRenderFetch";
 import SingleEditableField from "@components/SingleEditableField";
 import CriteriaList from "./CriteriaList";
 import { titleSchemaTrack } from "@validation/yup/track";
 import TeamsList from "@components/TeamsList";
 import { isSelfAdminSelector } from "@redux/users";
+import LoadingAndError from "@components/LoadingAndError";
 
-const Track = ({ trackId }) => {
+const Track = () => {
   const dispatch = useDispatch();
   const { enqueueError } = useMySnackbar();
   const admin = useSelector(isSelfAdminSelector);
+  const { bundle, value, trackId } = useEntityLoading("trackId", getTrackById);
 
-  const track = useParamSelector(getTrackByIdSelector, { trackId });
+  const track = useParamSelector(getTrackByIdSelector, { trackId }) ?? {};
 
-  if (!track?.id) {
-    return <NotFoundPage />;
-  }
+  console.log(bundle, track, value);
+
   const {
     trackName,
     criteriaList: criteriaIdsList,
@@ -36,7 +39,7 @@ const Track = ({ trackId }) => {
       .catch(enqueueError);
 
   return (
-    <>
+    <LoadingAndError bundle={bundle}>
       <CenteredPaper>
         <SingleEditableField
           initialValue={trackName}
@@ -62,8 +65,8 @@ const Track = ({ trackId }) => {
           <TeamsList ids={teamIdsList} />
         </CenteredPaper>
       )}
-    </>
+    </LoadingAndError>
   );
 };
 
-export default withEntityRenderFetch(Track, "trackId", getTrackById);
+export default Track;

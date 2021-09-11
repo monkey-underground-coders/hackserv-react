@@ -3,18 +3,13 @@ import React from "react";
 import CenteredPaper from "@components/CenteredPaper";
 import { Button } from "@material-ui/core";
 import TeamMembersList from "../../TeamMembersList";
-import Title from '@components/Title';
+import Title from "@components/Title";
 
-const MemberView = ({
-  classes,
-  team,
-  selfStatus,
-  isTeamSubmittable,
-}) => {
-  const teamMembers = team?.members ?? [];
+const MemberView = ({ classes, team, selfStatus, isTeamSubmittable }) => {
+  const teamMembers = team.members ?? [];
   const teamId = team.id;
-  const captainId = team?.captain;
-  const teamName = team?.name;
+  const captainId = team.captain;
+  const teamName = team.name;
   const buttonText = (() => {
     switch (selfStatus) {
       case "FILLED_FORM":
@@ -33,9 +28,7 @@ const MemberView = ({
   return (
     <>
       <CenteredPaper>
-        <Title gutterBottom={false}>
-          {teamName}
-        </Title>
+        <Title gutterBottom={false}>{teamName}</Title>
       </CenteredPaper>
       <CenteredPaper>
         <TeamMembersList

@@ -1,5 +1,4 @@
-import React from "react";
-import { withReduxRenderFetch } from "@components/RenderFetch/ReduxRenderFetch/ReduxRenderFetch";
+import React, { useCallback } from "react";
 import Title from "@components/Title";
 import { getSelfTeamSelector, getTeamById } from "@redux/teams";
 import { getSelfUserSelector } from "@redux/users";
@@ -7,6 +6,8 @@ import { useSelector } from "react-redux";
 import { steps } from "../steps";
 import { Box, makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { useLoading } from "@utils";
+import LoadingAndError from "@components/LoadingAndError";
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -16,8 +17,19 @@ const useStyles = makeStyles((theme) => ({
 
 const NextStepButton = ({ currentStep }) => {
   const team = useSelector(getSelfTeamSelector);
-  const { id } = useSelector(getSelfUserSelector);
+  const {
+    id,
+    team: teamId,
+    request: requestTeamId,
+  } = useSelector(getSelfUserSelector);
   const classes = useStyles();
+
+  const actionCreator = useCallback(
+    () => getTeamById({ id: teamId || requestTeamId, isInternal: false }),
+    [teamId, requestTeamId]
+  );
+
+  const { bundle } = useLoading(actionCreator);
 
   const { label, link, color, bgcolor } = (() => {
     switch (currentStep) {
@@ -70,7 +82,7 @@ const NextStepButton = ({ currentStep }) => {
   );
 
   return (
-    <>
+    <LoadingAndError bundle={bundle}>
       <Title>Следующее действие</Title>
       {!disabled ? (
         <Link to={link} className={classes.link}>
@@ -79,10 +91,8 @@ const NextStepButton = ({ currentStep }) => {
       ) : (
         box
       )}
-    </>
+    </LoadingAndError>
   );
 };
 
-export default withReduxRenderFetch(NextStepButton, getTeamById, (state) => ({
-  id: getSelfUserSelector(state).team,
-}));
+export default NextStepButton;
